@@ -1,0 +1,224 @@
+w3resource.com 
+6/2019
+https://www.w3resource.com/java-tutorial/
+
+
+- Data types
+  - There are 8 primative data types 
+  - Double
+    //- It's the default decimal type, not float 
+    - All transcendental math functions, such as sin( ), cos( ), and sqrt( ), return double values. 
+  - Char 
+    - Reminder that you can do other things like 
+      char a = '\u0041';  // A
+      char b = 65;        // A
+
+
+
+- Install 
+  - https://www.oracle.com/technetwork/java/javase/downloads/index.html
+  - Download the latest JDK (not JRE)
+  - Install 
+  - Verify:
+      java -version 
+
+
+//- Removing old versions of Java
+  - Delete from 
+      /Library/Java/JavaVirtualMachines
+  
+
+- IDE 
+  - Eclipse - https://www.eclipse.org/downloads/packages/
+  - NetBeans - http://netbeans.org/downloads/
+  - IntelliJ IDEA - http://www.jetbrains.com/idea/download/
+
+- Sample project
+  - This site has useful pages on 
+    - Installing Eclipse
+    - Starting a sample project 
+      //- That's useful: Eclipse let's you pick from a lot of JDKs when you start a new project 
+    - Compile (just by saving)
+    - Run 
+
+
+- Clases 
+  - variables + methods = members
+
+
+- Arrays
+  - Multiple different formats 
+      int[] arr = new int[6];
+      int[] arr = {10, 20, 30, 40};
+      int arr[] = {10, 20, 30, 40};  // Alt format. Officially discouraged. Added to help C developers: https://stackoverflow.com/a/129188
+
+- Wrapper Classes 
+  - Lots of ways to make vars 
+      int  x = 123;
+      Integer  x = new Integer(123); 
+      Integer  x = new Integer("123");  // Strings also work for all wrapper class inits except char  
+  - Can also work with binary, octal, hex, etc 
+      int binary = Integer.valueOf("11011", 2);     // binary to decimal 
+      int hex = Integer.valueOf("D", 16);           // hex to decimal 
+      System.out.println( Integer.toBinaryString(hex) );
+      System.out.println( Integer.toHexString(hex) );
+
+
+- Bitwise 
+  - Bitwise logical operators
+      & | ^ ~ !
+  - Bitwise shift operators 
+      >> << >>>
+
+- Switch statements
+  //- Java did not support switch statements for strings before v7 
+  //- C and C++ don't allow switch and strings 
+  - Weird - default: can go anywhere and it'll still work as it should. (Actually same with JS.)
+  - Weird - Unlike JS, you can't have multiple of same case. (JS just does the first one. Java has compile error.)
+
+
+- for loops 
+  - Weird - multiple declarations, checks, and modifications
+      for(int i=0, j=10; i!=5 || j!=5; i++, j--) { .... }
+
+- continue and break 
+  - Weird - they can be labeled 
+		outer: for (int i = 0; ; i++) {                   // label 
+			inner: for (int j = 0; j < 10; j++) {           // label 
+			  if (j % 2 == 0) {
+          continue inner;                             // continue label 
+        }	
+        System.out.println(" j:" + j);
+      }
+
+      if (i % 2 == 1) {
+        break outer;                                  // break label 
+      }
+      System.out.println("i:" + i);
+		}
+
+
+- Exceptions 
+  - Methods can list what types of exceptions they throw 
+      public String readFile(String filename) throws FileNotFoundException, IOException { .... }
+  - Custom exceptions 
+    - Typically you extend an existing exception class 
+        // Define an exception class 
+        public class MyException extends Exception { ... }
+
+        // Method that throws the exception 
+        public void myMethod() throws MyException { 
+          throw new MyException();        
+        }
+        
+        // Try catch 
+        try { 
+          myMethod();
+        }
+        catch(MyException e) { ... }
+  - Try-with-Resource 
+    - This exists but find a different site that explains it better 
+
+
+- Strings 
+  - Immutable 
+    - Can't change a string once declared. All operations return new strings. 
+  - Objects 
+    - Don't forget they are objects 
+  - Declaration - multiple ways 
+      String name = "Hello";
+      String name = new String(“Hello”);
+  - String comparision. 
+    - A bit weird (Actually same as JS, but you're more likely to encounter these scenarios)
+        "java" == "java";                                 // true
+        new String("java") == "java";                     //   false
+        new String("java") == new String("java")          //   false
+        new String("java").equals(new String("java"));    // true
+        new String("java").equals("java");                // true 
+  - StringBuffer and StringBuilder 
+    - Because strings are immutable and every operation creates a new string, you can waste a lot of time and memory resources. These classes fix that. 
+        - StringBuilder - more efficient. Not thread safe. 
+        - StringBuffer - thread safe (all methods are synchronized)
+
+
+
+- Serialization
+  - Save objects to file so you can restore state later. (Analogous to obj -> JSON -> localStorage)
+
+
+- Collections 
+  - Broad categories
+    - Lists
+      - Ordered, allows duplicates, can traverse bi-directionally 
+      - ArrayList, LinkedList, and vector
+    - Sets 
+      - Unique items, no duplicates
+      - HashSet, LinkedHashSet and TreeSet
+    - Maps 
+      - Key value pairs 
+      - Elements and keys, no duplicate keys
+      - HashMap, HashTable,TreeMap, and LinkedHashMap
+    - Queues
+      - First-in first-out, add to back, remove from front 
+      - Priorities are added to priority queues 
+  - Can be sorted, unsorted, ordered, and unordered.
+    - E.g. an ArrayList is ordered but not necessarily sorted. An alphabetized one is sorted. 
+  - Iterator 
+    - Used to traverse. Interface. Extended for each type of collection. 
+  - Comparator
+    - Used to sort and compare. Interface. Not same as Comparable interface
+    - Returns -1, 0, 1 depending on whether 2 objects are >, =, < 
+
+- Lists 
+  - ArrayList 
+    - Growable array 
+    - Strengths 
+      - ArrayList - fast iteration 
+      - LinkedList - fast insertion and deletion
+      - Vector - legacy, thread-safe version of ArrayList 
+    - Syntax 
+      import java.util.ArrayList;
+      ArrayList arr = new ArrayList();
+  - LinkedList 
+    - Elements are doubly-linked to eachother = new methods 
+    - Great as a stack or queue
+    - Each node has data and knows the next node = faster for insertion and deletion but slower for iteration 
+
+- Sets 
+  - HashSet 
+    - No duplicates. Uses hashcodes to ensure uniqueness. 
+    - Unsorted, unordered 
+  - TreeSet 
+    - Sorted (like TreeMap). You can define a custom sort order when initializing. 
+    - Quite fast for read so good for large amount of sorted data. Slower for frequent add, delete 
+  - LinkedHashSet 
+    - Ordered version of HashSet. Use it when you care about iteration order 
+    - Has doubly-linked list across all elements 
+
+- Maps
+  - HashMap 
+    - Unsorted, unordered. No duplicate keys but an duplicate values 
+    - Newer version of legacy Hashtable which is thread-safe 
+  - LinkedHashMap
+    - Ordered - because it has a linked list of all items 
+  - TreeMap
+    - Sorted and ordered 
+
+- Collections 
+  - Utility class, only static methods, used on collections 
+  - Sort, shuffle, reverse, frequency, synchronizedCollection, etc 
+
+
+- Threads 
+  //- Decided not to take notes. I can skim this and learn it properly when I need it 
+
+
+- BigDecimal
+  - Seems like it might be the way to hadle currencies b/c its float math actually seems accurate 
+    - For example with doubles: 2.00 - 1.1 == 0.8999999999999999
+  - All objects. Need to use methods to do math. 
+    - Use compareTo(), not equals() (Which only checks if they refer to the same object.)
+
+
+
+

@@ -1,0 +1,362 @@
+DOCKER 
+
+MY NOTES ON HOW TO GET STARTED AND MOST USEFUL COMMANDS
+- How to actually use Docker in under a minute 
+  - It seems like most guides/tutorials out there are still an encyclopedia of all the commands and their permutations. 
+  - They don't really seem to answer "I have a Docker project, how do I run it and start doing local development"
+  - Download Docker Desktop from one of these links (no sign up required)
+      https://download.docker.com/mac/stable/Docker.dmg
+      https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe
+  - Download a project with a docker-compose.yml file and multiple layers (e.g. Java, MySQL, Elasticsearch, Node) from Github 
+    - Java / Spring Boot + MySQL 
+      - https://hellokoding.com/registration-and-login-example-with-spring-security-spring-boot-spring-data-jpa-hsql-jsp/
+      - https://github.com/hellokoding/hellokoding-courses/tree/master/springboot-examples/springboot-registration-login
+      - http://localhost:8080
+    - Node + React + MySQL 
+      - https://medium.com/@paigen11/using-docker-docker-compose-to-improve-your-full-stack-application-development-1e41280748f4
+      - https://github.com/paigen11/mySqlRegistration
+      - http://localhost:3031
+    - Python / Flask + Elasticsearch
+      - https://docker-curriculum.com/#docker-compose
+      - https://github.com/prakhar1989/FoodTrucks
+      - http://localhost:5000
+  - Run these commands 
+    - Start ***MOST IMPORTANT COMMAND***
+        docker-compose up
+    - That's literally it. If the docker-compose.yml file is correct you should be able to download and boot up all the requirements to run an app just like that 
+    - Stop 
+        docker-compose down
+  - Restarting after changes 
+    - If you have automatic reloading (e.g. Nodemon, Webpack, or Spring Boot Dev Tools), just make changes an the corresponding Node/Java service should restart 
+    - Also you can run the following
+        docker-compose restart CONTAINER_NAME 
+- Important theoretical understanding...
+  - Why is it useful 
+    - Docker is not as useful for frontend dev b/c you just need Chrome and a fairly recent version of Node
+    - However it's super useful for backend devs who need same version of Java + database + Elasticsearch + Windows vs Linux + etc etc on every dev machine and also the production boxes 
+    - Arguably "infrastructure as code" is even more useful for devops because all the instructions to set up from new-Linux-box to fully-running-app can be checked into source control and run in a standardized way
+  - Pros 
+    - Run the same thing anywhere on any OS
+    - Literally give someone code they can start with Docker + one command 
+    - All devs have same version of everything 
+    - Infrastructure as code - it's all in source control 
+  - Cons 
+    - It's a little slow to boot up b/c of less memory and multiple services (but automatic reloading helps a lot. Also you can restart individual services)
+    ?- How to use IntelliJ debugger?
+  - Basics 
+    - "Docker" is not what you want to learn. You want "Docker Compose". (Later for deployments probably Kubernetes or optionally Docker Swarm which seems less popular)
+    - You don't make one Docker container per app. Each layer/service in your app (Java, DB, Elasticsearch, caching, Node) gets a separate container. This makes things more modular and you can just add more of whichever one needs to scale. 
+    - Seems like most often your code and data live outside the container and the container knows where on the file system they are (This is called "volumes")
+    - The language/metaphors of Docker are a bit confusing and not as consistent as they could be 
+      - Docker 
+        - "Images" are like templates for running something like Linux + Java v8 + Maven v3.5
+        - "Containers" are instances of images. Each time you run (aka start up) an image you get a container. 
+        - These are specified by a textfile called a "Dockerfile"
+      - Docker Compose 
+        - However Docker by itself would not really be practical for running an app. 
+        - You would have to run each image, create a network, add each image to the network so they can talk to each other - see https://docker-curriculum.com/#multi-container-environments
+        - Docker Compose allows you to run all the parts of an app with one command. `docker-compose up`
+        - Allows you to treat your app (multiple containers + a network as one thing)
+        - This is called a cluster
+      - Docker Swarm and Kubernetes 
+        - But Docker Compose isn't enough to run your app in production. Compose only gives you one copy of each container.
+        - Swarm and Kubernetes allow you to add many instances of each service (think many MongoDB or Elasticsearch instances to allow lots of traffic)
+        - Also allows you to automatically restart / reboot / manage all these easily 
+        - Now you can manage all of this as "one thing"
+        - And of course in a microservice architecture, you have many apps each with many services, i.e. many apps/clusters 
+        - Articles indicate Swarm is simpler and easier but Kubernetes (by Google) is more complex but more powerful 
+- List of commands 
+  - Images 
+    - Download 
+        docker pull IMAGE_NAME
+    - List  
+        docker images 
+    - Delete 
+        docker rmi IMAGE_ID
+  - Containers 
+    - List containers currently running 
+        docker ps
+    - List containers stopped 
+        docker ps -a 
+    - Delete stopped container (best practice after you're done)
+        docker rm CONTAINER_ID
+    - Delete all stopped containers 
+        docker container prune 
+  - Running 
+    - Main command. (Will automatically download image if needed)
+        docker run -p 8080:8080 --rm IMAGE_NAME
+    - Most common flags 
+        -p = map ports so you can actually access the container in your browser 
+        --rm = delete the container once stopped 
+    - Connect to the container so you can run shell commands / explore it
+        docker run -it IMAGE_NAME sh
+  - Build an image from a Dockerfile
+        docker build -t USERNAME/PROJECT .
+  - Network 
+    - List 
+        docker network ls 
+    - Delete 
+        docker network rm NETWORK_ID
+
+
+
+
+Getting started
+11/2019
+https://docs.docker.com/get-started/
+- This official getting started doc doesn't really teach you much that is useful 
+- Kubernetes
+  - Basic example
+    - Create your pod
+        kubectl apply -f pod.yaml
+    - Check that your pod is up and running
+        kubectl get pods
+    - Check that you get the logs you’d expect for a ping process
+        kubectl logs demo
+    - Tear down your test pod
+        kubectl delete -f pod.yaml
+- Swarm
+  - Basic example
+    - Initialize Docker Swarm mode
+        docker swarm init
+    - Run a simple Docker service that uses an alpine-based filesystem, and isolates a ping to 8.8.8.8
+        docker service create --name demo alpine:3.5 ping 8.8.8.8
+    - Check that your service created one running container
+        docker service ps demo
+    - Check that you get the logs you’d expect
+        docker service logs demo
+    - Tear down your test service
+        docker service rm demo
+- Why Docker
+  - Containerized development environments are easier to set up than traditional development environments
+  - Local - easy develop for multiple stacks/apps without changing anything on your machine 
+  - Deployed - easy to ensure the same dependencies (e.g. operating system, JDK, database, etc)
+  - Deployed - deploy easily and consistently no matter which data center or provider 
+- Docker 
+  - Basic example 
+      FROM node:6.11.5    
+      WORKDIR /usr/src/app
+      COPY package.json .
+      RUN npm install    
+      COPY . .
+      CMD [ "npm", "start" ] 
+  - Example 
+    - Build your bulletin board image
+        cd node-bulletin-board/bulletin-board-app
+        docker image build -t bulletinboard:1.0 .
+    - Start a container based on your new image
+        docker container run --publish 8000:8080 --detach --name bb bulletinboard:1.0
+    - In your browser, go to 
+        http://localhost:8000
+    - Delete your container when done 
+        docker container rm --force bb
+- Kubernetes
+  - Provides many tools for scaling, networking, securing, and maintaining your containerized apps
+  - All containers in Kubernetes are scheduled as pods, which are groups of co-located containers that share some resources. 
+  - Furthermore, in a realistic application we almost never create individual pods; instead, most of our workloads are scheduled as deployments
+  - Deployments are scalable groups of pods maintained automatically by Kubernetes
+  - Described in Kubernetes YAML files
+  - Example 
+    - Deploy your application to Kubernetes:
+        kubectl apply -f bb.yaml
+    - List your deployments
+        kubectl get deployments
+    - List your services
+        kubectl get services
+    - In your browser, go to 
+        http://localhost:30001 
+    - Tear down your application 
+        kubectl delete -f bb.yaml
+- Swarm 
+  - Provides many tools for scaling, networking, securing, and maintaining your containerized apps, above and beyond the abilities of containers themselves
+  - Check Swarm is active 
+      docker system info
+  - If Swarm isn't active, type 
+      docker swarm init
+  - Swarm workloads are scheduled as services, which are scalable groups of containers with added networking features
+  - Described in stack YAML files 
+  - (Kubernetes Services and Swarm Services are very different! Despite the similar name, the two orchestrators mean very different things by the term ‘service’. In Swarm, a service provides both scheduling and networking facilities, creating containers and providing tools for routing traffic to them. In Kubernetes, scheduling and networking are handled separately: deployments (or other controllers) handle the scheduling of containers as pods, while services are responsible only for adding networking features to those pods.)
+  - Example 
+    - Deploy your application to Swarm
+        docker stack deploy -c bb-stack.yaml demo
+    - List your service 
+        docker service ls
+    - In your browser, go to 
+        http://localhost:8000
+    - Tear down your application:
+        docker stack rm demo
+
+
+
+- Docker Compose vs Docker Swarm 
+  - Compose - manage multiple parts of an app (e.g. Java, UI, DB, Elasticsearch) as ONE unit on ONE machine/host
+  - Swarm - manage and scale these containers across MANY machines/hosts
+- Docker Swarm vs Kubernetes - https://vexxhost.com/blog/kubernetes-vs-docker-swarm-containerization-platforms/
+  - Both help with automating deployment, scaling, and management of containerized apps 
+  - Swam - built by Docker, is easier to set up and use 
+  - Kubernetes - built by Google, is more complex but more powerful 
+
+
+
+Docker for Beginners aka docker-curriculum.com
+11/2019
+https://docker-curriculum.com/
+- This article is very very detail but takes a lont time to get to the punchline of what's actually useful (e.g. docker-compose)
+- Introduction
+  - Examples
+      docker run hello-world
+      docker pull busybox
+      docker run busybox echo "hello from busybox"
+  - Interactive (-it)
+      docker run -it busybox sh
+  - Useful commands
+    - List your images 
+        docker images
+    - Show all containers running current/past
+        docker ps
+        docker ps -a
+    - Clean up container (Good to clean up containers when you're done.)
+        docker rm CONTAINER_ID
+    - Or clean up all containers, run either of the following 
+        docker container prune
+        docker rm $(docker ps -a -q -f status=exited)
+    - Delete an image 
+      docker rmi IMAGE_ID
+  - Important
+    - Images become containers. Analogy is templates and objects, classes and instances 
+- Webapps with Docker 
+  - Static site example
+      docker run -p 8888:80 --rm prakhar1989/static-site
+    - Docker run Flags 
+      -p = map ports 
+      -P = pick random ports 
+      -d = detach (This means you would need to run docker stop CONTAINER_ID to terminate it)
+      -it = interactive mode. Allows you to type shell commands
+      --rm = clean up the contianer after you finish running it 
+  - Docker Images 
+    - Base images (usually operating systems) and child images 
+    - Official images and user images 
+    - "onbuild" images (e.g. python:3-onbuild) have special triggers that do things like COPY a requirements.txt file, RUN pip install on said file, and then copy the current directory into /usr/src/app
+  - Dockerfile
+    - Instructions to create an image 
+    - Almost identical to Linux commands 
+    - Build an image from a Dockerfile 
+        git clone https://github.com/prakhar1989/docker-curriculum.git
+        cd docker-curriculum/flask-app
+        docker build -t prakhar1989/catnip .
+    - Run the iamge you just built. (Note: you need to rebuild every time to see changes)
+        docker run -p 8888:5000 --rm prakhar1989/catnip
+    - Or to explore the container (You can see it might have a different version of Python from you)
+        docker run -it prakhar1989/catnip sh
+        python --version 
+- Multi Container Environments
+  - Best practice is to have separate containers for different layers in your architecture (Java, DB, ES, etc) b/c they will grow at different paces 
+  - Search docker hub via commandline 
+      docker search foo
+  - Manual example (that then shows how we obviously need Docker Compose)
+    - Long example of manually setting up a docker network, running Elasticsearch and running a Python Flask app
+        docker pull docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+        docker run -d --name es -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+        docker container ls
+        docker container logs es
+        curl 0.0.0.0:9200
+        docker build -t prakhar1989/foodtrucks-web .
+        docker run -P --rm prakhar1989/foodtrucks-web
+        docker network ls
+        docker network inspect bridge
+        docker run -it --rm prakhar1989/foodtrucks-web bash
+          curl 172.17.0.2:9200
+        docker network create foodtrucks-net
+        docker container stop es
+        docker container rm es
+        docker run -d --name es --net foodtrucks-net -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+        docker network inspect foodtrucks-net
+        docker run -it --rm --net foodtrucks-net prakhar1989/foodtrucks-web bash
+          curl es:9200
+          python app.py
+        docker run -d --net foodtrucks-net -p 5000:5000 --name foodtrucks-web prakhar1989/foodtrucks-web
+        (In your browser, go to http://localhost:5000)
+    - All of these commands are summed up in his 4-line script setup-docker.sh
+        docker build -t prakhar1989/foodtrucks-web .
+        docker network create foodtrucks-net
+        docker run -d --name es --net foodtrucks-net -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+        docker run -d --net foodtrucks-net -p 5000:5000 --name foodtrucks-web prakhar1989/foodtrucks-web
+    - To stop it and clean up the containers and network 
+        docker stop foodtrucks-web es
+        docker rm foodtrucks-web es
+        docker network rm foodtrucks-net
+  - Docker Compose
+    - Allows you to treat multiple containers + a network as one thing aka cluster. Run "my app"
+    - Uses docker-compose.yml file 
+    - All of the example above can be replaced with...
+        docker-compose up
+        (In your browser, go to http://localhost:5000)
+    - Or run in detached mode and check on some things before shutting it down 
+        docker-compose up -d
+        docker-compose ps
+        docker container ls
+        docker network ls
+        docker-compose run web bash
+        docker-compose down -v
+  - Development Workflow
+    - In docker-compose.yml, make sure to use 
+        build: .
+      instead of 
+        image: prakhar1989/foodtrucks-web
+      so that it picks up changes in your files and doesn't require you to rebuild the image every time  
+    - FYI, if you do this you will need a Docker file so docker can turn your web app into an image/container 
+- Deploying to AWS 
+  - Elastic Beanstalk - for single containers 
+  - Elastic Container Service (ECS) - for managing multiple containers 
+- Note 
+  - Whatever you name your docker service becomes the name you connect to. So for example, instead of connecting to Elasticsearch on "localhost", you connect to "es" in your code 
+
+
+Getting Started with Docker - Scotch.io
+11/2019
+https://scotch.io/tutorials/getting-started-with-docker
+- Not as efficient as a Docker file, but you can start with an OS, connect to it, add stuff, and then save
+    docker run --name my-redis -it ubuntu:latest bash
+      apt-get update
+      apt-get install wget
+      apt-get install build-essential tcl8.5
+      wget http://download.redis.io/releases/redis-stable.tar.gz
+      tar xzf redis-stable.tar.gz
+      cd redis-stable
+      make
+      make install
+      ./utils/install_server.sh
+      service redis_6379 start
+      exit
+    docker commit -m "Added Redis" -a "Your Name" my-redis tlovett1/my-redis:latest
+
+
+
+Using Docker & Docker Compose To Improve Your Full Stack Application Development
+11/2019
+https://medium.com/@paigen11/using-docker-docker-compose-to-improve-your-full-stack-application-development-1e41280748f4
+- Great article for Docker Compose with Node + JS + MySQL 
+- You can use your DB GUIs (e.g. Sequel or TablePlus) to connect to localhost:3306 just like normal (or whatever port is exposed externally from the docker-compose.yml)
+- Note 
+  - Whatever you name your docker service becomes the name you connect to. So for example, instead of connecting to MySQL on "localhost", you connect to "db" in your code. 
+  - Here's an example of JDBC connection string: 
+      https://github.com/callicoder/spring-security-react-ant-design-polls-app/blob/master/docker-compose.yml#L19
+
+
+
+
+
+- Data / volumes 
+    - docker-compose down     - does not clear out datbase / Elasticsearch. Data will be present on restart. 
+    - docker-compose down -v  - clears out data unless you've stored it in an external volume/location 
+- Restarting - super useful 
+  - Spring Boot's dev tools reloading works as normal 
+  - Also you can run 
+      docker-compose restart SERVICE_NAME
+
+
+
+?- How do you run IntelliJ debugger?
+    - See https://training.play-with-docker.com/java-debugging-intellij/
+
+

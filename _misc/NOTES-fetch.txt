@@ -1,0 +1,16 @@
+LEARNED
+2018-07-21
+
+FETCH
+- Fetch sucks. You have to reimplement tons of stuff: 
+  - Status codes: if status >= 200 && status < 300, Promise.reject()
+  - Data: you need to json.stringify(data) when sending
+  - Content-type: you need to determine type when sending
+  - CORS: Send request again after CORS OPTIONS request returns 
+- Needs a polyfill for IE11 anyway
+- Libs like Axios are tiny and solve all this for you
+
+TYPESCRIPT
+- Imports can sometimes be different, e.g. 
+  -import React from 'react';
+  +import * as React from 'react';

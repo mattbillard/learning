@@ -1,0 +1,281 @@
+JAVA FOR JS DEVS
+
+
+- Why study Java 
+  - Be interested in knowing others' experiences but it seems like all the professional programming jobs I've had have been at large (financial) corps that use Java 
+  - Most places I've been at barely use Node and Ruby and Python "don't seem to count" at large corps. Only Java. 
+  - Full-stack usually really means "Java + JavaScript"
+  - Lead a team + a whole project 
+  - Tired of Java devs knowing how to write passable JS but me not knowing how to write really much of any Java 
+
+
+- Intro
+  - Invented by James Gosling from Sun Microsystems in 1995
+  - The goal was to provide a platform-independent alternative to C++
+  - Write once, run anywhere. Huuuuuuuge advantage at the time
+  - Java compiler: compiles all code to same format
+  - Java virtual machine (JVM): different for each platform 
+  - Analygous to same JS but Chrome is slightly different on Mac and PC 
+
+
+- Things Java does well 
+  - Need strong typing. 
+    - In JS you are used to seeing the results in the browser. Pretty easy to QA
+    - In Java, you could have millions of concurrent users getting errors and you wouldn't know it unless you looked at the logs 
+    - (Logs - as a JS dev, I liked nice small errors like Node/Express throw but now I see why Java logs are so verbose. You need to dig through logs to see what failed.)
+  - Evolution / churn 
+    - JS evolves too quickly. Java seems to evolve perhaps a tad too slowly. Would be nice to have skills that stay current for 5 years at a time though!
+  - Concurrency 
+- Things JS does well 
+  - Evolution - adapts (too) rapidly 
+  - Community - seems to have more StackOverflow, Github, blogs, etc 
+
+
+- Tons in common 
+  - C-based language: {}, (), ;, //, /* */, true/false, if, else, for, while, do while, switch
+  - Many similar methods 
+
+
+- Convergence 
+  - Used to be just create a html page and add a <script> tag 
+  - Now you're seeing a kind of convergence
+    - Usually need a transpiler (TS, ES6 -> ES5)
+    - Used to be able to edit easily in the browser. Now not so much.
+    - Also strong types with TypeScript 
+    - Used to maybe type by hand but more and more you need an IDE
+    - Gulp, Grunt, Webpack, Babel are kind of like your compiler 
+    - Browser is your interpreter (e.g. like JVM)\
+    - Packages and import statements  
+    - enum, interface, classes, abstract, public, private, static 
+  - Java 
+    - Java v11 introduced "var" where it will figure out the type for you. 
+
+
+
+- Getting started 
+  - Java 
+    - Need to install JDK (Java Development Kit) to author+run (or Java Runtime Environment aka JRE to run Java)
+    - Just like downloading a browser like, Chrome, you need to get the right one for your environment 
+    - Need to compile. Can do this with 2 commands
+      javac Foo.java  # generates compiled aka class file 
+      java Foo        # must not have .class on the end  
+    - Really, you need a IDE 
+      - Eclipse - https://www.eclipse.org/downloads/packages/
+      - NetBeans - http://netbeans.org/downloads/
+      - IntelliJ IDEA - http://www.jetbrains.com/idea/download/
+    - Always starts with some class with main method, not just whatever you feel like 
+      public static void main(String[] args) {
+        //...
+      }
+  
+
+- Types 
+  - I've actually grown to appreciate this now that I've used TS on large projects. (But still appreciate TS types being optional.)
+  - Strongly typed liked TypeScript
+    - TypeScript (all lowercase, especially string)
+      boolean 
+      string 
+      number (doesn't exist in Java)
+    - Not clases, so lowercase and NO methods, and can't be null 
+      char
+      boolean
+      - And many types of numbers 
+        byte
+        short
+        char
+        int
+        long
+        float
+        double
+    - Classes, so capitalized and has method 
+      String
+    - Then you have wrapper classes, with methods 
+      Boolean 
+      Character (spelled out)
+      Integer (spelled out)
+      etc 
+  String myText = "Hello";     // String- String vs char
+    - "" vs ''
+  - Arrays
+    - Need to be all the same data type 
+    - [] on the left. {} on the right
+      int[] myNum = {10, 20, 30, 40};
+      int[][] myNumbers = { {1, 2, 3, 4}, {5, 6, 7} }; // multi-deminsional 
+    - Do not grow/shrink in size, so use ArrayList instead...
+    - Different from ArrayList. Use them. They are more useful 
+  - void return type
+  - static is much more common 
+
+- Conditionals
+  - Same except for == vs ===
+- Control structures 
+  - Same 
+    - if, else if, else 
+    - while
+    - for 
+    - switch
+    - break, continue 
+  - Different 
+    - for (var value : myArray) 
+      vs 
+      for (var value in myArray)
+      for (var value of myArray)
+
+
+- OOP vs functional 
+  - Classes 
+    - Java 
+      - Java is pretty much only classes
+      - Each file must have a class and only one class 
+      - Class must be PascalCase
+      - Filenames MUST match class name, including case 
+      - Can't even do something like MyClass.test.java 
+    - JS 
+      - Got classes later
+      - JS "objects" are usually called "hashes" in other languages. In many languages, "objects" are instances of classes 
+      - Actually prototype-based language
+  - prototype: doesn't exist 
+  - lose functions: don't exist 
+  - Does have lambdas though 
+  - Block scope (like const, let), not functional scope like var so you can't do this 
+    if (true) {
+      int x = 123;
+    }
+    System.out.println(x);
+
+
+- Error handling 
+  - Has try catch but you can have multiple types of catches based on the error type 
+  - Also has a finally 
+    try { 
+      //...
+    } catch (ArithmeticException e) { 
+      //... Just for ArithmeticExceptions
+    } catch (Exception e) {
+      //... For exceptions not handled by any previous catches 
+    } finally {
+      // Do something regardless of success or failure 
+    }
+  - Throw - throw a specific types of exceptions
+    throw new ArithmeticException("Something math related"); 
+
+- Data structures 
+  - JS 
+    - Pretty much just arrays and objects (aka hashes)
+  - Java 
+    - Many types 
+    // TODO: check 
+    - ArrayList, LinkedList, etc 
+    - Hashmap, Hashset
+
+
+- Minor / miscellaneous 
+  - System.out.println() vs console.log() 
+  - In classes, often don't need to use "this."
+  //- Also don't need to use .bind(this) in classes 
+  - public String fooMethod(int bar) {}
+    vs 
+    public fooMethod(bar: number): string {}
+  - Has null but not undefined. Also basic types always have a default value and can't be null. 
+  - No var keword. Also no const or let. Use the variable type. (Was a hard habbit for me to break.)
+  - final not const 
+  - constructors are same as classname (e.g. "MyClass") vs "constructor" in JS 
+  - Import statements 
+      import package.name.Class;
+      import package.name.*;
+      vs 
+      import foo from 'foo';
+      import * as bar from 'bar';
+      import { baz } from 'baz'; 
+  - Date class vs many types of dates, date-times, etc 
+  - Exceptions - methods can list what types of exceptions they throw 
+        public String readFile(String filename)throws FileNotFoundException, IOException{ .... }
+
+
+- Annoiances 
+  - High barrier to entry and not really very user-friendly
+    - Example: JRE vs JDK
+    - Windows x86 vs Windows x64 (Not clear which is 32-bit and 64-bit, what's the difference, which they recommend)
+    - Eclipse - no help in picking the right version. Awful UI/UX 
+  - Toooooooo many classes. Example: formatting a date needs 2 classes 
+    - Formatted dates needs a separate DateTimeFormatter class 
+      LocalDateTime date = LocalDateTime.now(); 
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"); 
+      System.out.println( date.format(formatter) );  
+    - Sorting an ArrayList needs Collections to do the sort. (Same idea with arrays.)
+      ArrayList<Integer> arr = new ArrayList<Integer>();
+      arr.add(3);
+      arr.add(2);
+      arr.add(1);
+      Collections.sort(arr);
+  - Data structures 
+    - Default array - seems pretty much useless because you can't change size. 
+    - Too many choices - I appreciate the optimization but with today's processing power, sometimes I don't care. :(
+  - Double-quotes - "" vs '' 
+  - Integer vs int (not Int)
+  - Character vs char (not Char)
+  - Boxed types. What do you mean Integer and integer, Boolean and boolean, etc are different???
+    - These are the version with methods. 
+    - Also you need to use these for data structures (e.g. ArrayList, Hashmap, Set, Deque, TreeSet, etc) because they only stores objects. 
+  - .equals() vs == for Strings and boxed types. (Seriously, comparing memory addresses seems like the least common use case.)
+    - And yet sometimes because of Object interning, == does work as expected. e.g. "Hello"=="Hello" and numbers between -127 to 127 can use ==. 
+  - Queues and stacks 
+    - Queue is just an interface. Use ArrayDeque 
+    - Stack is deprecated. Use ArrayDeque 
+    - Once again: arrays suck b/c they can't change size. 
+
+
+- Java developers also have legit complaints about JS 
+  - == vs ===
+  - Only one type of numbers and its not great: 0.1 + 0.2; // 0.30000000000000004
+  - Only run-time errors, not compile vs runtime 
+  - Frameworks that have "the life-span of a fruit fly" LOL 
+  - Everything seems optional, even ; 
+  - localDate is lots better than JS. Has built in methods to add, subtract days, months, etc. Also months and day both start with 1 instead of 0 
+
+
+
+
+
+- Don't bother learning JavaFX and other Java UIs. They were invented before JavaScript UI frameworks like React and Vue 
+  - Wow: https://docs.oracle.com/javase/tutorial/java/javaOO/anonymousclasses.html
+
+
+- TypeScript vs Java
+  - constructor 
+    constructor vs ClassName (Capitalized)  
+  - "this"
+    - TypeScript always uses "this." when referencing fields or methods 
+    - Java only needs it if it's ambigous. 
+  - public, private 
+    - TypeScript: I notice a lot less use of public and/or private 
+    ?- Does TypeScript have all the same ones as Java: public, private, protected, or package-private (no explicit modifier)
+    - I think TypeScript default is public 
+  - constants 
+    - const vs final 
+
+
+
+- QUESTIONS
+  - Data structures 
+    - Which ones are used most often?
+    - List vs ArrayList?
+    - Ever use plain, old array? 
+    - What is deque used for? Could just use ArrayList or LinkedList 
+    - Why use ArrayDeque instead of ArrayList for Queue and Stack 
+    - Why do I see ArrayLists typed as List some times  
+      List<String> list = new ArrayList<String>(c);
+    - What does the ? mean 
+      static void filter(Collection<?> c) { //.... }
+      https://docs.oracle.com/javase/tutorial/collections/interfaces/collection.html
+  - How often does you use...
+    - Abstract classes, inheritance, interfaces 
+    - Files - read, write 
+    - Multi-threading, synchonized 
+    - Streams and buffers 
+    - Serialization (excluding automatically converting to JSON)
+  - What are the topics I should really focus on 
+  - So many classes - does it do this for efficiency b/c utility classes with static methods would take up less memory than putting those methods on all object instances where I think they should be? 
+  - Threads 
+    - Do we use them? 
+    - What are the real reasons to use them? 

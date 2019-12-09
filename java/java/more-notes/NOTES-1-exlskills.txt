@@ -1,0 +1,70 @@
+AMAZING 100% FREE INTRO TO JAVA COURSE:
+https://exlskills.com/learn-en/courses/java-basics-basics_java/
+
+
+- Floats: don't use them for currency 
+- Double: normally use this, but still not recommeneded for currency 
+- Casting: to int does not round. It truncates. 
+- Integer math does not work as expected. 
+  double foo = 3/2; // 1.0
+  double foo = 3/2.0; or 3.0/2; 3.0/2.0; or 3f/2f; // 1.5 
+- final - used for constants 
+
+- for-each 
+  for (int elem : exampleVariableOne)
+- 2D arrays
+  datatype[][] arrayname = new datatype[rows][cols];
+  int[][] exampleVariableTwo = {{0, 1}, {4, 5}};
+- ArrayList
+  - imported from the java.util
+  - Must be object references
+  ArrayList name = new ArrayList();
+  ArrayList<objectType> name = new ArrayList<objectType>();. 
+  add(val) or add(idx, val)
+  remove(idx)
+  set(idx, val)
+  get(idx)
+  size()
+
+- Classes
+  - Every class is a descendant of "Object" from java.lang (automatically-imported)
+- Contructors 
+   - Contstructors have NOOO return type
+   - They are optional. You don't need one
+   - You can have multiple with polymorphism 
+- Casting 
+  - Casting an object does NOT create a new object or alter the contents of an object. (I'm sure this is not true if casting to a primative)
+- Static
+  - Only allocated to memory once, so all instances of a class share the same one. 
+  - Object instances and non-static methods can freely access static fields and methods but...
+  - Static methods can only call other static methods.
+  - Static methods can only access static fields.
+- Inheritance
+  - Private methods cannot be accessed by subclasses
+  - super can be used to access parent's constructor and methods 
+  - super(); has to be the first statement in the subclass' constructor
+- Overriding 
+  - A subclass' method overrides a superclass' method when it has the same signature
+- Abstract class
+  - Is a superclass but can't be instantiated itself 
+  - Syntax is intresting. abstract. ; insted of {}. extends not implements
+    public abstract class AbstractClassTest {
+      abstract void print();
+    }
+    public class Foo extends AbstractClassTest {
+      //...
+    }
+- Interface 
+    - Allows subclass to inherit from multiple 
+    - No constructor 
+    - If an abstract class has no implemented constructors or methods, it is better to make it an interface.
+    - Syntax 
+      public interface Interface1 {
+        int exampleVariableOne = -5;
+        void print();
+      }
+      public class Foo implements Interface1, Interface2 {  // Example of multiple intefaces (i.e. composition)
+        //...
+      }
+- Recursion 
+- Overloading

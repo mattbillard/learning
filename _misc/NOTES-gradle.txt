@@ -1,0 +1,24 @@
+LEARNED-GRADLE
+2017-12-28
+
+- ./gradlew tasks
+- ./gradlew bootRun
+
+- ./gradlew --help
+- ./gradlew --version
+
+- ./gradlew clean
+- ./gradlew --daemon build
+    - jar is placed in /build/libs 
+    - daemon starts a daemon that makes the next one much faster
+    - --refresh-dependencies checks if it needs new dependencies
+- ./gradlew test 
+    - report for tests: /build/reports/tests/test/index.html
+- ./gradlew dependencies 
+
+
+- apply plugin: 'java'
+    - Adds all the tasks I seem to need/use 
+- Dependencies are cached in ~/.gradle/caches/modules-2 
+
+

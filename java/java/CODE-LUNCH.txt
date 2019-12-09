@@ -1,0 +1,58 @@
+CODE LUNCH
+6/2019
+
+
+- Why study Java 
+  - Anybody else interested?
+  - Large corps use it almost exclusively 
+  - Full-stack usually really means "Java + JavaScript"
+  - Lead a team + a whole project 
+
+
+- Intro
+  - Invented by James Gosling from Sun Microsystems in 1995
+  - The goal was to provide a platform-independent alternative to C++
+  - Write once, run anywhere. Huuuuuuuge advantage at the time
+  - Java compiler: compiles all code to same format
+  - Java virtual machine (JVM): different for each platform 
+  - Analygous to same JS but Chrome is slightly different on Mac and PC 
+
+
+- Tons in common 
+  - C-based language: {}, (), ;, //, /* */, true/false, if, else, for, while, do while, switch
+  - Many similar methods 
+
+
+- Convergence 
+  - TypeScript -> convergence 
+    - strong types
+    - compile-time error checking 
+    - enum, interface, classes, abstract, public, private, static 
+
+
+
+- Getting started 
+  - Java 
+    - repl.it - let's try it together 
+    - Need to install JDK (Java Development Kit)
+    - Really, you need a IDE 
+      - IntelliJ IDEA - http://www.jetbrains.com/idea/download/
+      - Eclipse - https://www.eclipse.org/downloads/packages/
+    - Create a file, named correctly
+    - Add main method 
+      public static void main(String[] args) {
+        System.out.println("Hello world");
+      }
+    - Run 
+  
+
+
+- Resources 
+  - Jetbrains / Hyperskill (best course I've found) - https://hyperskill.org/knowledge-map/73?v=table
+  - repl.it - https://repl.it/languages/java
+- Extra resources
+  - Java basics course | EXLskills - https://exlskills.com/learn-en/courses/java-basics-basics_java
+  - w3schools - https://www.w3schools.com/java
+  - w3resource.com - https://www.w3resource.com/java-tutorial/
+  - Oracle Java Tutorials (Great. More depth. A little hard to navigate.)
+    - https://docs.oracle.com/javase/tutorial/tutorialLearningPaths.html

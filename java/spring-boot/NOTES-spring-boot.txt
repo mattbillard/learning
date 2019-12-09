@@ -1,0 +1,638 @@
+SPRING BOOT
+2019-11-01
+
+Building Java Projects with Gradle
+- https://spring.io/guides/gs/gradle/
+- Project from here git clone https://github.com/spring-guides/gs-gradle.git
+- Gradle 
+  - Common commands 
+      gradle 
+      gradle tasks 
+      gradle build
+  - Build 
+    - Compiled .class files are in /build (versus Maven's "out") 
+    - // Run it like this. (It doesn't generate a manifest that specifies the main file so you need the -cp)
+      java -cp build/libs/initial.jar hello.HelloWorld
+  - Make a gradle wrapper 
+    - Guarantees everyone who downloads your project has gradle and the same version. (Seems like this could be different from your Gradle version)
+        gradle wrapper --gradle-version 2.13
+    - Now you can run using the gradle wrapper
+        ./gradlew build
+  - Peek inside the .jar 
+      jar tvf build/libs/gs-gradle-0.1.0.jar
+  - Run the app
+    - Use either (First one guarantees everyone uses same gradle version with your project. Second uses your local verison of gradle)
+        ./gradlew run
+        gradle run 
+  - IMPORTANT NOTE on ./gradlew 
+    - Commands like ./gradlew run or ./gradlew bootRun didn't work on my machine b/c I have Java v12 installed but the tutorial uses 8
+    - I solved this by adding the following to my ~/.bashrc (From https://stackoverflow.com/questions/14702702/how-to-set-java-home-in-mac-permanently)
+        export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home" 
+
+
+Building a RESTful Web Service
+- https://spring.io/guides/gs/rest-service/
+- Gradle 
+  - Spring Boot gradle plugin provides many convenient features:
+      - Collects all jars on classpath into runnable uber-jar 
+      - Searches for all public static void main() methods to flag as a runnable class.
+      - Provides a built-in dependency resolver that sets the version number to match Spring Boot dependencies
+- @RequestMapping
+  - Maps all HTTP verbs (e.g. get, post, put, delete, etc) by default 
+  - You can narrow it down with 
+      @RequestMapping(method=GET, path = "/....")
+    or (from the Jetbrains/Hyperskill courses)
+      @GetMapping(path = "/....")
+- @RequestParam
+  - Note it can have a defaultValue 
+      @RequestParam(value="name", defaultValue="World")
+  - // Seems like value="name" would make more sense as key="name"....
+- JSON 
+  - Unlike traditional MVC, RESTful web service controllers have no views. Just returning JSON 
+  - Spring uses Jackson 2 
+- Make the application executable
+  - You could make a .WAR and deploy it to an existing server or 
+  - You could have Spring make a .JAR that includes a Tomcat servlet for you 
+  - @SpringBootApplication
+    - Same as the following combination
+      @Configuration - tags the class as a source of bean definitions for the application context
+      @EnableAutoConfiguration - tells Spring Boot to start adding beans based on classpath settings, other beans, and various property settings
+      @ComponentScan - tells Spring to look for other components, configurations, and services in the hello package, letting it find the controllers
+  - Run it 
+      ./gradlew bootRun 
+  - Or build and then run the jar
+      ./gradlew build
+      java -jar build/libs/gs-rest-service-0.1.0.jar
+
+
+Accessing Data Reactively with Redis
+- https://spring.io/guides/gs/spring-data-reactive-redis/
+- Lombok saves tons of effort for making boilerplate POJO code - getters, setters, equals, toString, hashCode
+    import lombok.AllArgsConstructor;
+    import lombok.Data;
+    import lombok.NoArgsConstructor;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class Coffee {
+      private String id;
+      private String name;
+    }
+
+
+Consuming a RESTful Web Service with AngularJS
+- https://spring.io/guides/gs/consuming-rest-angularjs/
+- Public 
+  - Seems like you can put web files in /public and they will be served 
+
+
+Caching Data with Spring
+- https://spring.io/guides/gs/caching/
+- Spring Initializr requires the following 
+  - Spring Caching Abstraction 
+- @Cacheable
+  - Automatically caches queries in an in-memory ConcurrentHashMap
+  - You could presumably specify some other type of cache 
+
+
+Building an Application with Spring Boot
+- https://spring.io/guides/gs/spring-boot/
+- To output all the beans in your application 
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+      return args -> {
+        System.out.println("Beans provided by Spring Boot:");
+        String[] beanNames = ctx.getBeanDefinitionNames();
+        Arrays.asList(beanNames).stream().sorted().forEach(System.out::println);
+      };
+    }
+- Unit and integration tests 
+  - This guide also has a little info on unit tests and integration tests 
+- Spring Boot Actuator 
+  - This guide has a little info on Spring Boot Actuator, including health check and shutdown endpoints 
+
+
+Building a RESTful Web Service with Spring Boot Actuator
+- https://spring.io/guides/gs/actuator-service/
+- Spring Initializr requires the following 
+  - Spring Web 
+  - Spring Boot Actuator 
+- Spring Boot Actuator 
+  - Adds a few things for you, including a health check endpoint at 
+      /actuator/health
+- Much of this guide is the same as Building a RESTful Web Service, https://spring.io/guides/gs/rest-service/
+- See your dependencies with either 
+    mvn dependency:tree
+    ./gradlew dependencies
+- Switch to a Different Server Port
+    - src/main/resources/application.properties
+        server.port: 9000
+        management.server.port: 9001
+        management.server.address: 127.0.0.1
+
+
+Accessing Relational Data using JDBC with Spring
+- https://spring.io/guides/gs/relational-data-access/
+- Spring Initializr requires the following 
+  - Spring Data JDBC 
+  - H2 Database 
+- JdbcTemplate
+  - Provided by Spring 
+  - Makes it easy to work with SQL relational databases and JDBC
+  - Saves you from writing lots of boilerplate - resource acquisition, connection management, exception handling, and general error checking
+- This seems to be for writing SQL queries manually. Seems like the JPA guides below are more "automatic"
+  - It has good examples of how to execute() and batchUpdate() and using "?" arguments to avoid SQL injection
+- CommandLineRunner 
+  - public class MyApp implements CommandLineRunner means it will execute the run(....) method after booting up. 
+  - Most of the other guides use a slightly different syntax though. 
+      @Bean
+	    public CommandLineRunner myMethod(....)
+
+
+Accessing Data with JPA
+- https://spring.io/guides/gs/accessing-data-jpa/
+- Spring Initializr requires the following 
+  - Spring Data JPA 
+  - H2 Database 
+- @Entity 
+  - aka should have been called @Table 
+  - JPA entity that maps to a table 
+- @Id and @GeneratedValue
+  - Indicates this class property maps to the table's ID 
+  - Indicate that the ID should be generated automatically
+- Spring Data JPA
+  - Creates repository implementations automatically at runtime from a repository interfaces
+  - Example - note the CrudRepository
+      import org.springframework.data.repository.CrudRepository;
+      public interface CustomerRepository extends CrudRepository<Customer, Long> {
+        List<Customer> findByLastName(String lastName);
+        Customer findById(long id);
+      }
+
+  - // I think you are supposed to use BigInt instead of Longs for IDs 
+  - It writes basic queries for you. You just have to choose the method name carefuly, e.g. 
+      findByLastName()
+  - Seems like repositories have some default methods, e.g. 
+      findAll()
+      findById()
+
+
+Accessing JPA Data with REST
+- https://spring.io/guides/gs/accessing-data-rest/
+- *** IMPORTANT
+  - Unlike the previous lesson this allows you to access the repository directly with get, post, put, etc without having to create a controller that then calls it 
+- Spring Initializr requires the following 
+  - Rest Repositories 
+  - Spring Data JPA 
+  - H2 Database 
+- Example - note the PagingAndSortingRepository, @RepositoryRestResource, @Param
+    import org.springframework.data.repository.PagingAndSortingRepository;
+    import org.springframework.data.repository.query.Param;
+    import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+    @RepositoryRestResource(collectionResourceRel = "people", path = "people")
+    public interface PersonRepository extends PagingAndSortingRepository<Person, Long> {
+      List<Person> findByLastName(@Param("name") String name);
+    }
+- @RepositoryRestResource 
+  - Not required for a repository to be exported. It is used only to change the export details, such as using /people instead of the default value of /persons
+- PUT vs PATCH 
+  - PUT replaces an entire record. Fields not supplied are replaced with null
+  - PATCH updates just the subset of fields specified 
+
+
+Accessing data with MySQL
+- https://spring.io/guides/gs/accessing-data-mysql/
+- *** IMPORTANT
+  - MySQL license is GPL, so any program binary that you distribute with it must use the GPL, too.
+- Spring Initializr requires the following 
+  - Spring Web Starter 
+  - Spring Data JPA 
+  - MySQL Drive 
+- application.properties
+  - Default Spring DB is H2 so you need to override this in application.properties
+- @RequestMapping
+  - Apparently you can put this at the class level was well. It prefixes all URIs in the controller's methods 
+      @Controller
+      @RequestMapping(path="/demo") // This means URL's start with /demo (after Application path)
+      public class MainController { .... }
+- Used Homebrew to install MySQL. It output the following 
+    To have launchd start mysql now and restart at login:
+      brew services start mysql
+    Or, if you don't want/need a background service you can just run:
+      mysql.server start
+- application.properties
+  - spring.jpa.hibernate.ddl-auto can be...
+    - none: The default for MySQL. No change is made to the database structure.
+    - update: Hibernate changes the database according to the given entity structures.
+    - create: Creates the database every time but does not drop it on close.
+    - create-drop: Creates the database and drops it when SessionFactory closes.
+- Make Some Security Changes
+  - It is good security practice to, after your database is in production state, set this to none, revoke all privileges from the MySQL user connected to the Spring application, and give the MySQL user only SELECT, UPDATE, INSERT, and DELETE. You can read more about this at the end of this guide.
+  - You'll want to be careful what priviledges you give the application in production. For example, don't give it the ability to drop tables or delete the DB 
+
+- JDBC vs JPA conflict
+  - Apparently including the dependencies for both JDBC and JPA causes the app to throw the following error 
+      APPLICATION FAILED TO START
+      Description: The bean 'customerRepository', defined in null, could not be registered. A bean with that name has already been defined in null and overriding is disabled.
+      Action: Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding=true
+  - Solution
+    - Add this to src/main/resources/application.properties
+        spring.main.allow-bean-definition-overriding=true
+
+
+Spring Boot Devtools Tutorial (Live Reload)
+- https://howtodoinjava.com/spring-boot2/developer-tools-module-tutorial/
+- Add this to build.gradle's dependencies
+    compile("org.springframework.boot:spring-boot-devtools")
+- Gradle + IntelliJ
+  - IntelliJ conflicts with Gradle. They have 2 different build directories (/out vs /build). Easy solution 
+  - https://stackoverflow.com/questions/45174989/building-with-intellij-2017-2-out-directory-duplicates-files-in-build-director/46035904
+  - File | Settings | Build, Execution, Deployment | Build Tools | Gradle | Runner => Delegate IDE build/run actions to gradle
+  - Run ./gradlew bootRun as normal 
+  - Change a file 
+  - Click the build button (Command+F9) (or run ./gradlew build) to trigger rebuild
+- Maven + IntelliJ
+  - Maven does not seem to have the same conflict. Just change a file and click build. No need to change any settings. 
+
+
+Spring Boot Actuator 
+- https://howtodoinjava.com/spring-boot/actuator-endpoints-example/
+- https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready
+- https://stackoverflow.com/questions/49487134/getting-whitelabel-error-page-running-actuator-health-and-mappings-urls
+- Add the following to gradle.build 
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+- Only health and info are publically available. To expose all (not recommended for production) put this in application.properites
+    management.endpoints.web.exposure.include=*
+    management.endpoint.shutdown.enabled=true
+- Example endpoints 
+    http://localhost:8080/actuator/health
+    http://localhost:8080/actuator/info
+    http://localhost:8080/actuator/beans
+    http://localhost:8080/actuator/env
+    http://localhost:8080/actuator/metrics
+    http://localhost:8080/actuator/threaddump
+- Shutdown - you can even shutdown your app (via POST not GET)
+    curl -i http://localhost:8080/actuator/shutdown -X POST
+
+
+- Miscellaneous 
+  - To start the app with debugging - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-replacing-auto-configuration
+      ./gradlew bootRun --debug
+  - Running your JAR with and without debugging - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-running-as-a-packaged-application
+      java -jar target/myapplication-0.0.1-SNAPSHOT.jar
+      java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar target/myapplication-0.0.1-SNAPSHOT.jar
+  - Custome banner - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-banner
+    - You can customize the text/image shown on start up, e.g. version number, etc 
+  - Configuration in Java code instead of application.properties - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-customizing-spring-application
+  - Start up event hooks - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-application-events-and-listeners
+  - Accessign ApplicationArguments in your code - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-application-arguments
+  - ApplicationRunner or CommandLineRunner - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-command-line-runner
+    - Use these to run code on start up 
+    - I like this syntax from the Spring Boot guides better 
+        // In your main class 
+        	@Bean
+        	public CommandLineRunner methodName() {
+            return (args) -> { .... };
+          }
+    - See docs for ways to ensure multiple runners execute in the order you want
+  - Configuration - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-external-config
+    - You can use properties files, YAML files, environment variables, and command-line arguments to externalize configuration
+    - There's a very specific order of which ones take precedence 
+    - Random values - it can generate random int, long, uuid, etc in your properties file 
+    - YAML - you can use application.yaml instead of application.properties 
+    - Environments - different properties per env/profile - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-external-config-profile-specific-properties
+  - "Profiles" aka how Spring Boot distinguishes properties by environment - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-profiles
+    - Programmatically Setting Profiles - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-programmatically-setting-profiles
+    - Profile-specific Configuration Files - see above 
+  - Logging to file - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-logging-file-output
+  - Internationalization - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-internationalization 
+  - JSON - Jackson is the default - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-json
+  - HTTP server - https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-developing-web-applications
+    - Options are Tomcat, Jetty, Undertow, or Netty
+  - Static files 
+    - HTML, JS, CSS, etc will automatically be served if you put it in these folders (e.g. localhost:8080/example.js)
+      - /src/main/resources/public or /src/main/resources/static 
+        - Will be packaged into final JAR 
+        - Requires server restart for every change (which is obviously be awful)
+          - // Stack overflow recommended adding the following to application.properties but it's the worst of all 
+            // The files are included in the JAR but the JAR doesn't actually use them
+                spring.resources.static-locations[0]=file:src/main/resources/static/
+      - /src/main/webapp 
+        - Will NOT be packaged into final JAR (but does work with WARs)
+        - Doest NOT require restart for every change 
+        - JHipster uses this directory 
+    - Prefixing all resources 
+      - To prefix all fontend files use one of these configs (e.g. localhost:8080/public/example.js)
+        spring.mvc.static-path-pattern=/public/**
+        spring.mvc.static-path-pattern=/static/**
+        spring.mvc.static-path-pattern=/webapp/**
+  - Error pages 
+    - Option 1 
+        - Add to build.gradle - compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        - Create - /src/main/resources/templates/error.html
+        - This one works well with internationalization (See JHipster)
+    - Option 2 
+        - Create files like 
+            /src/main/resources/public/error/5xx.html
+            /src/main/resources/public/error/404.html
+          - Note - it doesn't work if you put these in /src/main/webapp 
+        - This option is ever so slightly simpler as it doesn't require an additional dependency 
+  - WebFlux
+    - Reactive web framework (e.g. event-based like Node/Express)
+    - Add this to build.gradle 
+	      implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    - Do not add this or it will override and remove webflux 
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+    - Can't package as a WAR so you can't use /src/main/webapp 
+  - Login / Security 
+    - compile 'org.springframework.boot:spring-boot-starter-security'
+    - Default is one user 
+      - name: "user"
+      - password (see log output on startup), e.g.: 
+          Using generated security password: e573cd28-8b9f-4743-b4bf-919beadf45bf
+    - Change the defaults 
+        spring.security.user.name
+        spring.security.user.password
+    - It's a complicated topic to do properly (login, register, roles, CSRF). Here are some good tutorials 
+      - https://hellokoding.com/registration-and-login-example-with-spring-security-spring-boot-spring-data-jpa-hsql-jsp/ (Full solution)
+      - https://developer.okta.com/blog/2019/05/15/spring-boot-login-options (Basic solutions)
+      - https://developer.okta.com/blog/2018/07/19/simple-crud-react-and-spring-boot (See CSRF code)
+      - Also try generating a JHipster app 
+  - Spring Boot 2.0
+    - Security - simplified
+    - Reactive / WebFlux
+    - Kotlin 
+    - Other simplifications and improvements 
+  - Databases 
+    - In-memory databases 
+      - Spring Boot supports these - H2 (default), HSQL, and Derby 
+      - Caution - same DB is used by all of your tests. See spring.datasource.generate-unique-name to change this 
+    - HikariCP - used for DB connection pool 
+    - Example DB connection properties 
+        spring.datasource.url=jdbc:mysql://localhost/test
+        spring.datasource.username=dbuser
+        spring.datasource.password=dbpass
+        spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+    - JdbcTemplate
+      - Here's a good example of how much work it saves - https://www.tutorialspoint.com/jdbc/jdbc-sample-code.htm
+        - Code to connect to the DB, create a query, execute it, loop through results extracting info, close results+statement+connection, handle all errors
+    - JPA
+      - Hibernate - one of the most popular JPA implementations
+      - Used with @Entity, @Id, @GeneratedValue, @Column
+      - Don't forget JPA requires your entity to have a constructor with no arguments. (It'll throw an error when you try to boot up)
+      - @Query - used to annotate more complex queries 
+      - JPA repositories can be bootstrapped with defaul, lazy, and deferred 
+    - Creating and dropping JPA databases
+      - By default, JPA databases are automatically created only if you use an embedded database (H2, HSQL, or Derby)
+      - See spring.jpa.hibernate.ddl-auto=create-drop and others 
+    - Respositories
+      - I've used a few so far
+        - CrudRepository - you make a controller for the routes, call the find/update/delete methods you want, and return the data 
+        - PagingAndSortingRepository - all the above is automatic / automatigically done for you 
+    - H2 database  
+      - Has a web console at http://localhost:8080/h2-console/login.jsp
+        - These are the defaults to connect 
+            jdbc_url=jdbc:h2:mem:testdb
+            user=sa
+            password=(blank)
+        - You can enable it with either this property
+            spring.h2.console.enabled=true 
+          or the devtools dependency 
+            org.springframework.boot:spring-boot-devtools
+        - You can change the URL with this property - spring.h2.console.path
+        - Make sure it is not enabled for production 
+  - NoSQL databases 
+    - Spring Boot supports 
+      - MongoDB, Cassandra, Couchbase
+      - Neo4J (graph DB)
+      - Elasticsearch and Solr (search)
+      - Redis (persistent cache)
+      - GemFire, Geode (in memory data-grid)
+      - LDAP (usually corporate user authentication)
+      - InfluxDB (time series like logging)
+    - Embedded 
+      - Some be embedded in your app if you like - MongoDB, Neo4J, LDAP 
+  - Caching 
+    - @EnableCaching
+    - Default "simple cache" is an in-memory ConcurrentHashMap. Pick a proper implementation for production. 
+    - Spring Boot integrates with the following - Generic, JCache, EhCache, Hazelcast, Infinispan, Couchbase, Redis, Caffeine, Simple 
+  - Messaging 
+    - Some of the messaging solutions supported include - RabbitMQ, Kafka 
+    - RabbitMQ - smart broker / dumb consumer 
+    - Kafka - dumb broker / smart consumers. Higher volume but more complicated. - https://content.pivotal.io/blog/understanding-when-to-use-rabbitmq-or-apache-kafka
+  - Validation 
+    - @Validated
+  - Email 
+    - Easy to connect to SMTP servers 
+  - Quartz scheduler
+    - For job scheduling (like Cron jobs)
+  - Testing 
+    - Lots of subcategories about testing 
+  - WebSockets
+  - Rest Services and Web Service
+    - Used to call remote rest services
+    - RestTemplate - blocks the thread until it gets a response. The original way to do this. 
+    - WebClient and WebServices  - non-blocking, responsive. Part of WebFlux
+    - // You can use this to manually cause a delay in a response - Thread.sleep(2000L);
+  - Kotlin 
+    - Kotlin deals with nulls at compile time avoiding NullPointerExceptions and wrappers like Optional 
+  - Deploying 
+    - Works well on Pivotal Cloud Foundry, Heroku, AWS, and more 
+  - Spring Boot CLI
+    - There is a CLI (altenative to Spring Initializr)
+
+- CRUD app 
+  - Repositories 
+    - There are a few types. JpaRepository extends PagingAndSortingRepository which extends CrudRepository
+      - CrudRepository - CRUD 
+      - PagingAndSortingRepository - CRUD + REST endpoints + pagination and sorting 
+      - JpaRepository - all of the above + flushing the persistence context, batch delete
+  - Http responses 
+    - We used this in a past project. (They seem to be better than using @ResponseBody? and just returning the item)
+        ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        ResponseEntity<>(theDocument, HttpStatus.CREATED);
+  - Remember @RestController = @Controller (has REST endpoints) + @ResponseBody (returns JSON) so just use @RestController
+    - Not sure what @RepositoryRestController is
+  - Loading initial data 
+    - Spring Boot will do it automatically if you have a 
+        /src/main/resources/data.sql 
+  - Forms 
+    - Formik - a good React package for painless forms 
+    - Yup - a good package for form validation 
+  - CORS / proxies 
+    - Super easy! Add this annotation above @RestController
+        @CrossOrigin(origins = { "http://localhost:3000" }) // CORS
+    - Or you can use a webpack proxy  
+      - Create React App will automatically proxy your backend if you add the following to package.json 
+          "proxy": "http://localhost:8080"
+      - Or look at JHipster for an example of how to do it with webpack 
+          devServer: {
+            proxy: [{
+              context: [
+                ....
+  - Lombok 
+    - ***Needs a plugin to work with IntelliJ
+    - @Data - generates getters for all fields, toString, hashCode, and equals (So no need for @getter and @setter)
+    - @Builder - lets you instantiate like this - Person.builder().name("Adam Savage").city("San Francisco").job("Mythbusters").job("Unchained Reaction").build();
+    - @AllArgsConstructor - turns out the order of the arguments is the same in which you declare the properties (so be careful adding new properties or changing the order)
+    - @NoArgsConstructor - remember Spring JPA needs a no args constructor 
+    - @RequiredArgsConstructor - Generates a constructor with required arguments (final fields and fields with constraints such as @NonNull)
+    - @Slf4j - Generates a logger - private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LogExample.class);
+  - Maven vs Gradle 
+    - Intellij+Gradle+Lombok - IntelliJ needs extra settings, and more to run its own build when using Lombok+Gradle 
+    - IntelliJ+Gradle+DevTools - There was also the issue where IntelliJ builds to /out, but Gradle builds to /build so dev-tools doesn't hot reload unless you change a preference)
+    - I'm beginning to think that Maven is uglier but easier and more full-proof...
+    - On the other hand, creating a JAR+WAR is much much easier with Gradle 
+  - Flyway 
+    - (For local development, it's definitely way easier to just use H2 and spring.jpa.hibernate.ddl-auto=create-drop to recreate the DB on every reboot. Also it works nicely with resources/data.sql for initial data)
+    - Not quite sure the best way to get started, but this worked for me 
+      - Use 
+          spring.jpa.hibernate.ddl-auto=create-drop
+      - Run the app (and make sure to add a little sample data)
+      - Dump the database 
+          - PostgreSQL 
+              pg_dump testdb > ~/Desktop/pg_dump.sql
+          - MySQL 
+              mysqldump -u root testdb > ~/Desktop/mysqldump.sql
+      - Rename the dump and move to 
+          /src/main/resources/db/migration/V1__initialize.sql
+      - Delete 
+          spring.jpa.hibernate.ddl-auto=create-drop
+      - Add Flyway dependency to pom.xml
+      - Rerun the app 
+    - Note - only H2 seems to use resources/data.sql
+  - Caches 
+    - Some types of caches 
+      - MemeCache - basic in-memory cash 
+      - Redis - in-memory cache that can be persisted 
+      - Hybernate - also has some caching 
+      - Varnish - cache before requests even get to your app 
+    - Implementation 
+      - Add to your main class 
+          @EnableCaching
+      - Cache some methods 
+          @Cacheable("someKey")
+      - Clear the cache when some methods are called 
+          @CacheEvict(value="someKey", allEntries=true)
+          or 
+          @CacheEvict({"someKey1", "someKey2"}, allEntries=true)
+  - Spring Boot annotations 
+    - @Service and @Controller implement @Component so they are discovered by Spring Boot when it starts up 
+    - @Controller - as discussed above - marks app endpoints 
+    - @Service - nothing special. Just @Component but tells the programmer that it's the service layer (i.e. place for business logic)
+    - @Repository - @Component but also automatically translates exceptions 
+    - @Value - default values for fields, e.g. @Value("true")j. Also environment variables and Spring environment properties 
+  - Curl 
+    - Add this to the end to get pretty formatted JSON
+        curl -X GET http://localhost:8080/foo | json_pp
+  - Elasticsearch
+    - localhost:9200
+    - index, type, record/document (versus database, table, row)
+    - Defaults 
+        spring.data.elasticsearch.cluster-name=elasticsearch
+        spring.data.elasticsearch.cluster-nodes=elasticsearch
+    - Useful commands 
+      - Check Elastic is up and running + its version
+          http://localhost:9200
+      - Indeces
+          http://localhost:9200/_cat/indices?v
+      - Indeces and their types
+          http://localhost:9200/_mapping
+      - Types for just one index
+          http://localhost:9200/INDEX/_mapping
+      - Delete index 
+          curl -XDELETE 'localhost:9200/INDEX?pretty'
+      - Listing items
+          http://localhost:9200/INDEX/_search?pretty
+          http://localhost:9200/INDEX/TYPE/_search?pretty
+      - Get one item 
+          http://localhost:9200/INDEX/TYPE/ID?pretty
+      - Basic search example earch 
+          curl -X POST http://localhost:9200/INDEX/_search \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "query": {
+                  "query_string": {
+                      "query": "searching_for",
+                      "fields": ["field1", "field2"]
+                  }
+              }
+          }' | json_pp
+    - List 
+      - It's just a search with no query, aka search and return everything 
+    - ElasticsearchRepository vs RestHighLevelClient
+      - ElasticsearchRepository - much easier / more automatic way to do it
+      - RestHighLevelClient - more manual way. Seems better for more advanced queries 
+
+
+
+
+
+
+
+
+
+LEARN 
+- Big picture 
+  - Spring Boot Actuator + health check endpoint
+  - JDBC, JPA, MySQL 
+  - Dev Tools (hot reloading)
+  - More tutorials 
+  - Documentation
+  - PostgreSQL
+  - CRUD app. (Maybe use JHipster or equivalent?)
+  - Elasticsearch 
+- Details
+  - Basics 
+    - Spring Initializer
+    - REST controllers
+    - JDBC + H2
+    - JPA, Repositories, REST 
+  - Misc 
+    - Hot reloading 
+    - Actuator, health endpoints 
+    - Configuration + yaml
+    - Logging 
+    - Static assets 
+    - Error pages 
+    - Lombok - @Builder, @Data, @AllArgsConstructor,  @NoArgsConstructor, @RequiredArgsConstructor
+    - @Service, @Repository, @Controller, @Component 
+  - JHipster 
+    - Generate something and figure it out 
+    - Is there a simpler full-stack app generator? (Didn't find one)
+  - Data 
+    - MySQL 
+    - PostgreSQL
+    - Flyway
+    - Caching 
+    - Elasticsearch 
+    - Paging and sorting
+    - Persistence - @ManyToMany, @ManyToOne, @OneToMany
+  - Apps 
+    - Login
+
+>>>
+
+    - Principal
+    - Roles 
+  - Tests 
+    - Unit 
+    - Integration 
+  - Extras
+    - Errors
+    - XML, SOAP  
+    - Profiles, environments 
+    - Projection 
+    - QueryDSL
+    - Gateway 
+    - Error templates (and Thymeleaf)
+    - CrudRepository methods 
+    - Guava 
+    - @ModelAttribute, @Transient
+    - Jackson - @JsonIgnore, @JsonProperty("foo")
+    - WebFlux
+    - More about JPA repositories - https://docs.spring.io/spring-data/data-jpa/docs/current/reference/html/#reference
+
+

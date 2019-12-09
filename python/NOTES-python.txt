@@ -1,0 +1,1137 @@
+PYTHON
+11/2019
+
+
+https://hyperskill.org/knowledge-map/331?v=table
+
+
+// - Format on save - https://donjayamanne.github.io/pythonVSCodeDocs/docs/formatting/
+
+
+- Homebrew 
+    - Installing Python with Homebrew (both v2 and v3)
+        brew install python
+        brew install python@2
+    - Use - then you have to use it like 
+        python3 ....
+        python2 ....
+        pip3 ....
+        pip2 ....
+
+
+- Data types and operations
+    - Variable types
+        - str 
+        - int 
+        - float 
+        - bool - True/False     # Capitalized 
+        - None                  # Not "null". Capitalized. 
+    - Types 
+        type('hello')  # <class 'str'>
+        type(100))  # <class 'int'>
+        type(3.14)  # <class 'float'>
+    - Multi-line strings 
+        print("""....""")
+        print('''....''')
+    - Referencing an undeclared variable throws a "NameError"
+    - Operators 
+        - Symbol used for integer division is //
+            77 // 10  # 7
+        - Symbol for power is ** 
+            10 ** 2  # 100
+    - Boolean logic 
+        - Booleans (bool) start with a capital letter - True / False 
+        - Boolean opperators 
+            - "and", "or", "not" (versus other languages that use &&, ||, !)
+            - Ascending priority - or, and, not
+        - Falsey - None, False, 0, 0.0, '', [], {} (Note the empty collections)
+    - Typing 
+        - Python is dynamically typed (vs statically) and strongly typed (vs weakly)
+        - JavaSCript is dynamically and weakly typed (meaning it will try to convert types for you. See below)
+        - Throws an error in Python 
+            print("2 + 2 =" + 4)  # error 
+        - (In Python, use a comma insted)
+            print("2 + 2 =", 4)  # 2 + 2 = 4
+        - Works in Python 
+            print("125" * 4)  # "125125125125". This would be 500 in JS.
+            - This illustrates the difference between strong typing (Python) and weak typing (JavaScript)
+    - Type casting 
+        my_int =    int(my_str)
+        my_float =  float(my_int)
+        my_str =    str(my_int)   # str, not string
+        my_bool =   bool(my_int)  # bool, not boolean 
+    - Escape sequences 
+        - repr - returns a printable representation of this string
+            print('Hello\tWorld!')  # Hello   World!
+            print(repr('Hello\tWorld!'))  # 'Hello\tWorld!'
+        - \b - backslash character 
+            print('abc\b')  # ab
+        - \t – horizontal tabulation
+        - \v – vertical tabulation (like \n, \t)
+        - \n – newline
+    - Comparison
+        <, <=, >, >=, ==, !=
+        is - object identity
+        is - not negated object identity
+        - Chaining. The following is valid. (Doesn't work quite properly in JS)
+            1 < 2 < 3  # True 
+    - String formatting
+        - Syntaxes
+            '%.2f' % 33.333333
+        
+                
+            '{} {} {}         '.format('aaa', 'bbb', 'ccc')
+            '{0} {1} {2}      '.format('aaa', 'bbb', 'ccc')
+            '{foo} {bar} {baz}'.format(foo='aaa', bar='bbb', baz='ccc')
+        
+                
+            # These are called Formatted string literals (f-strings) 
+            foo='aaa'
+            bar='bbb'
+            baz='ccc'
+            f'{foo} {bar} {baz}'
+
+    
+        - You can also format numbers
+            'Your grade was {:.2f}     '.format(90.33333)
+            'Your grade was {0:.2f}    '.format(90.33333)
+            'Your grade was {grade:.2f}'.format(grade=90.33333)
+
+        
+            grade = 90.33333
+            f'Your grade was {grade:.2f}'
+
+  
+  - String methods
+        - Replace 
+            .replace(old, new[, count]) - unlike JS, it replaces all occurrences, not just first one 
+        - Capitalization 
+            .upper()
+            .lower()
+            .title()
+            .capitalize() - first letter caps. **All others lowercase***
+            .swapcase() - swaps all letters' cases
+        - Trimming white space (note it's called "strip" not "trim" in Python)
+            .lstrip([chars]) - removes chars - or whitespace - from left
+            .rstrip([chars]) - removes chars - or whitespace - from right
+            .strip([chars]) - removes chars - or whitespace - from both 
+        - Boolean search 
+            .startswith()
+            .endswith()
+        - Interesting example 
+            'robot'.replace("", " ")  # ' r o b o t '
+
+  
+  - Identity testing
+        - Each object has a different ID
+        - id() 
+        - Example 
+            a = [1, 2, 3]
+            b = [1, 2, 3]
+            c = a
+        
+            a == b  # True, they contain the same value
+                
+            id(a)  # 4558721352
+            id(b)  # different from a
+            id(c)  # same as a 
+        - is 
+            - To see if 2 variables refer to the same object you can compare IDs or use "is" or "is not"
+                a = [1, 2, 3]
+                b = [1, 2, 3]
+                c = a
+                    
+                a == b          # True
+                a is b          # False
+                c is not a      # False
+            - id(a) == id(b) is the same as "a is b"
+            - Careful. Don't use "is" with primitives because like Java Python interns a range of small primitive values 
+            - It is most frequently used to test if an argument is None 
+                def say_hello(name=None):
+                    if name is None:
+                        ....
+    - Split and join
+        - split()
+            - Examples 
+                text.split()
+                text.split(delimeter, maxsplit)
+                name, surname = input().split()  # Only works if you can guarantee the number of inputs
+        - join()
+            - Only works on iterables of strings so you'd need to convert numbers to strings before hand
+            - Examples 
+                pets  = ["dog", "cat", "rabbit", "parrot"]
+                " ".join(pets)      # "dog cat rabbit parrot"
+                "".join(pets)       # "dogcatrabbitparrot"
+                "_".join(pets)      # "dog_cat_rabbit_parrot"
+                " and ".join(pets)  # "dog and cat and rabbit and parrot"
+        - splitlines()
+            - Splits on /r, /n, etc 
+            - Examples
+                text = 'first line\nsecond line\rthird line\r\nforth line'
+                text.splitlines()
+                text.splitlines(keepends=True)
+        - Chaining 
+            - Most string methods return new strings so it's easy to chain methods 
+                text.lower().split()
+    
+    - Hashable
+        - Remember that only hashable objects can be dictionary keys or set members 
+        - To be hashable objects need methods __hash__() and __eq__()
+        - Summary 
+            - Hashable (because immutable) - int, float, str
+            - Not hashable (because mutable) - list, dict, set
+            - Sometimes hashable - tuple (if contents is hashable)
+                - This means 2 tuples with the same content can have different IDs but same hashes 
+        - Examples 
+            hash(foo)
+            foo.__hash__()
+        - How to check if something is hashable 
+            import collections
+            
+            obj = ...  # some object
+            isinstance(obj, collections.Hashable)  # True or False
+
+            isinstance(3.14, collections.Hashable)      # True
+            isinstance("3.14", collections.Hashable)    # True
+            isinstance((3.14), collections.Hashable)    # True - because tuples are immutable
+
+            isinstance({3.14: "Pi number"}, collections.Hashable)   # False - because dictionaries are mutable
+            isinstance([3.14], collections.Hashable)                # False - because lists are mutable 
+        
+        - Custom classes
+            - Custom classes are hashable by default because the parent class "object", has both __hash__() and __eq__() methods 
+            - Their hash values are derived from their ID's and not their data
+
+
+
+
+
+
+
+- Control statements 
+    - If statement 
+        - Python uses : at the end of the line. (Also indentation is typically 4 spaces)
+            if x > 0:
+                ....
+            elif x < 0:
+                ....
+            else:
+                ....
+        - Shortcut (This is very different from other langauges)
+            print("aaa" if my_bool else "bbb")
+    - While 
+        while x < 0:
+            ....
+    - For loop 
+        - Example 
+            for variable in iterable:
+                ....
+        - Strings count as iterables 
+            for char in 'magic':
+                print(char)      
+    - Range 
+        - Syntax 
+            range(num)
+            range(min, max, step)
+        - Example 
+            for i in range(5):
+                print(i)                # 0, 1, 2, 3, 4
+            for i in range(5,30,5):
+                print(i)                # 5, 10, 15, 20, 25
+    - Loop else
+        - Python has a weird loop else 
+            for pet in pets:
+                ....
+            else:
+                # If no break statement was used 
+
+
+
+
+- Collections 
+    - Lists (aka "Arrays" in other languages)
+        - Example 
+            numbers = [1, 2, 3, 4, 5]
+        - Or make a list from another iterable 
+            letters = list('abc')  # ['a', 'b', 'c']
+        - Can have different types of vars in them 
+            different_objects = ['a', 1, True]
+        - len() 
+            - Method to find length/size of a list 
+
+    - Indexes
+        - Sequences = lists and strings 
+        - Negative indexes - use lst[-1] and string[-1] to access elements starting from the back 
+
+    - Slicing
+        - Example 
+            sequence[start, stop]         
+            sequence[start, stop, step]
+        - IMPORTANT 
+            - It's easy to forget the 2nd number is exclusive, i.e. [a,b)
+        - More examples
+            sequence[:end]    # element from the 1st element to end-1
+            sequence[start:]  # elements from start to the last element
+            sequence[:]       # the full copy of the sequence
+            sequence[::step]  # every element with a given step
+        - Clone - useful for creating a copy 
+            sequence[:]
+            sequence[::]
+        - Reverse clone - will copy list in reverse order 
+            sequence[::-1]
+        - Slice in reverse order - note start > stop 
+            sequence[7:2:-1]
+
+    - Operations with list
+        - NOTE 
+            - These modify the list and return None, so don't try to assign the result to a var 
+            - And definitely don't do something like list = list.sort() which will set your list to None
+        - Methods 
+            .append()
+            .extend([10, 20, 30])       # Adds all items
+            .remove('aaa')              # Only removes the first occurence 
+            .insert(position, element)
+            .reverse() 
+            .sort()
+            .sort(reverse=True)         # Sort descending 
+
+    - Tuple
+        - Immutable - unlike lists 
+        - Similarities - ordered, indexed, duplicates allowed, can mix var types 
+        - Empty tuple 
+            ()
+            tuple()
+            tuple('')
+        - Example
+            tup = ('aaa', 'bbb', 'ccc')
+        - Common mistake - it's the comma that makes a tuple, not the parenthesis 
+            tup = ('aaa')     # No
+            tup = ('aaa',)    # Yes 
+            tup = 'aaa',      # Yes 
+        - tuple() 
+            - converts strings, lists, and other iterables into a tuple
+            - Example 
+                tuple('meow')  # ('m', 'e', 'o', 'w')
+        - Advantages over lists 
+            - Because of immutability 
+                - faster and more memory-efficient = better with large data sets 
+                - Can be used as a dictionary key (unlike a list)
+
+    - Dictionary 
+        - Empty dict 
+            {}
+            dict()
+        - Example 
+            {'aaa':0, 'bbb':'string', 'ccc':True}
+            dict(aaa=0, bbb='string', ccc=True)       # IMPORTANT - super weird. Notice no quotes around strings
+        - Insertion order is maintained in > Python v3.7
+        - Any type of var can be a value 
+        - Some types of vars can be keys 
+        - get()
+            - Using .get() will not throw an error if the key doesn't exist 
+            - Examples 
+                get('key')
+                get('key', 'default value')
+        - del - delete 
+            - Examples 
+                del dictionary('key')
+            - Throws an error if it doesn't exist 
+        - More 
+            .keys()
+            .values()
+            .items()    # Collection of key,value tuples 
+        - More examples 
+            for keys in dictionary.keys():
+                ...
+
+            # or 
+            for key in dictionary:                  # Notice just "key", unlike values 
+                ....
+
+            for value in dictionary.values():
+                ....
+
+            for key, value in dictionary.items():   # Notice the key,value pair 
+                ....
+
+
+    - Set
+        - Unordered collection of hashable objects 
+        - Only immutable objects can be part of a set 
+        - Empty set 
+            set()
+        - Does not work 
+            {}  # This creates a dict instead 
+        - Examples 
+            s = {'rose', 'lilac', 'daisy'}
+            s = set('aaabbbccc')  # {'a', 'b', 'c'} - NOTE: no duplicates
+            s = {i*2 for i in range(5)}  # {0, 2, 4, 6, 8}
+        - Ordering doesn't matter 
+            set1 = {'A', 'B', 'C', 'B'}
+            set2 = {'B', 'C', 'A'}
+            print(set1 == set2)  # True
+        - len(), for, in / not in all work 
+            1 in {1,2,2,3}  # True
+        - Methods 
+            .add()
+            .discard()
+            .remove()   # Throws an error if element doesn't exist 
+            .pop()      # Remove a random element 
+            .clear()
+
+    - List comprehension
+        - Easy syntax to make new list from a collection 
+        - Example 
+            new_list = [x for x in some_iterable]
+
+            # Is the same as 
+            new_list = []
+            for x in some_iterable:
+                new_list.append(x)
+        - "map"
+            - Usually used with some sort of map code 
+            - Examples 
+                square_list = [x * x for x in numbers]
+
+                integers = [int(num) for num in input().split()]
+
+        - "filter"
+            - Use if to filter 
+            - Examples 
+                odd_list = [x for x in numbers if x % 2 == 1]
+
+                starts_with_q = [word for word in input().split() if word.startswith("q")]
+        
+        - Apparently this possible (See nested list comprehension below)
+            new_list = [x for a in other_list for x in a]
+
+    - Nested lists
+        - Nested list comprehension
+            - Example 
+                school = [["Mary", "Jack", "Tiffany"], 
+                          ["Brad", "Claire"],
+                          ["Molly", "Andy", "Carla"]]
+
+                student_list = []
+                for class_group in school:
+                    for student in class_group:
+                        student_list.append(student)                      
+
+                # Equivalent to 
+                student_list = [student for class_group in school for student in class_group]
+
+            - Example 
+                for a in x:
+                    for el in a:
+                        if el > 0:
+                            els.append(el)
+
+                # Equivalent to 
+                els = [el for a in x for el in a if el > 0]
+
+        - Apparently this is possible as well 
+            matrix = [[j for j in range(5)] for i in range(2)]  # [[0, 1, 2, 3, 4], [0, 1, 2, 3, 4]]
+
+    - Defaultdict and Counter
+        - dict.setdefault()
+            - Useful for avoiding boilerplate if conditions / error handling when working with dictionaries 
+            - Example 
+                text = ("Gambit is a chess opening in which a player risks one or more pawns or a minor piece to gain an advantage in position")
+                text_list = text.lower().split()
+
+                freq_dict = {}
+                for word in text_list:
+                    freq_dict.setdefault(word, 0)
+                    freq_dict[word] += 1
+
+            - If a key has already been set, setdefault() will return the actual value 
+                index_dict = {}
+                
+                for index, word in enumerate(text_list):
+                    index_dict.setdefault(word, []).append(index)
+                
+                print(index_dict["or"])  # [11, 14]
+
+        - collections.defaultdict
+            - Intialize it with a function 
+                - Example - note, int()'s default return value is 0 which is perfect for our scenario
+                    from collections import defaultdict
+                    
+                    freq = defaultdict(int)
+                    for word in text_list:
+                        freq[word] += 1
+                    
+                    print(freq["chess"])  # 1                
+                    print(freq_defaultdict["python"])  # 0
+
+        - collections.Counter
+            - Dictionary-like object used specifically for counting the elements of an iterable object
+            - Also default value for a missing key is 0
+            - Example 
+                from collections import Counter
+                
+                freq_counter = Counter(text_list)
+                print(freq_counter) # Counter({'a': 3, 'in': 2, 'or': 2, 'gambit': 1, 'is': 1, 'chess': 1, 'opening': 1, 'which': 1, 'player': 1, 'risks': 1, 'one': 1, 'more': 1, 'pawns': 1, 'minor': 1, 'piece': 1, 'to': 1, 'gain': 1, 'an': 1,             # 'advantage': 1, 'position': 1})
+            - Has useful methods 
+                most_common(n)
+                - Example 
+                    print(freq_counter.most_common(5))
+
+    - Datetime
+        - Datetime module has several classes
+            datetime.date - standard date
+            datetime.time - standard time, independent from the date
+            datetime.timedelta - the difference between two points in time
+            datetime.tzinfo - timezones
+            datetime.datetime - both time and date together
+        - Example 
+            import datetime
+            datetime.datetime(year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None)
+        - Useful 
+            datetime.datetime.today() 
+            datetime.datetime.now(tz=None)  # Same as .today() if tz is not specified 
+        - Convert 
+            datetime.datetime.time()        # Convert to time 
+            datetime.datetime.date()        # Convert to date 
+
+    - Bytes basics
+        - // Good article on Python2 vs Python3, ASCII, Unicode, UTF-8, encoding, decoding, converting between strings and bytes - https://medium.com/better-programming/strings-unicode-and-bytes-in-python-3-everything-you-always-wanted-to-know-27dc02ff2686
+        - Introduced in Python 3
+        - Strings, easily understandable by a human reader, and easy to process by the computer
+        - Converting between Unicode characters and code points
+            - ord() - unicode character -> integer code point  (Also use by the computer when comparing 2 strings)
+            - chr() - integer code point -> unicode character
+        - Bytes 
+            - 0-255 (i.e. 2^8) or 256 possibilities
+            - Example 
+                foo = b'123'
+                len(foo)        # 3
+            - They are not strings. They are objects represented as strings for us to read
+                print(foo[0])       # 49 == ord('1')
+                print(foo[1])       # 50 == ord('2')
+                print(foo[2])       # 51 == ord('3')
+            - Only those with values 32-126 are printed as unicode. Otherwise it prints a hexadecimal escape sequence
+                characters = bytes([55, 255])
+                print(characters)   # b'7\xff' 
+
+    - Creating bytes
+        - Why do bytes exist?
+            - Useful in dealing with relatively low-level applications, where binary data is needed
+            - Examples - http and socket modules only send/receive data in byes 
+        - Creating bytes
+            - Use b'....' prefix. But this only works for characters that fit in one byte, i.e. Unicode 0-255
+            - Examples
+                english_hello = b'hello bytes'                        # Works 
+
+                # Can't create non-english characters with b'...'
+                chinese_hello = b'你好，世界'                           # Error     
+                
+                # Use bytes('...') for these instead 
+                chinese_hello = bytes('你好，世界', encoding='utf-8')   # Works
+                print(chinese_hello) # The output is b'\xe4\xbd\xa0\xe5\xa5\xbd\xef\xbc\x8c\xe4\xb8\x96\xe7\x95\x8c'
+
+                # Or you can use lists of numbers if characters are 0-255
+                english_hello = bytes([104, 101, 108, 108, 111, 32, 98, 121, 116, 101, 115])    # b'hello bytes'
+
+                # You can also create empty bytes with a specified length 
+                zero_bytes = bytes(4)
+                print(zero_bytes) # The output is b'\x00\x00\x00\x00'
+
+                # bytes() is the same as string.encode()
+                chinese_hello = '你好，世界'.encode()
+                
+                # to_bytes (not clear how this is useful)
+                (100).to_bytes(1, byteorder='little')   # b'd'
+                (1024).to_bytes(2, byteorder='little')  # b'\x00\x04'
+                (1024).to_bytes(2, byteorder='big')     # b'\x04\x00'
+    - Decoding 
+        - Examples 
+                bye_bytes = b'bye bytes'
+
+                # str()
+                hello_str = str(bye_bytes, encoding='utf-8')
+
+                # Same as .decode()
+                hello_str = bye_bytes.decode()
+
+                # to_bytes, from_bytes
+                (1024).to_bytes(2, 'little')            # The output is b'\x00\x04'
+                int.from_bytes(int_to_bytes, 'little')  # The output is 1024
+
+
+
+
+- Functions 
+    - Example 
+        def my_function(arg0, arg1):
+            ....
+    - Scope 
+        - Considered global if it is defined at the top-level of the module
+        - Global and nonlocal
+          - Python will read but not write to outer variables unless you use the keyword "global" or "nonlocal"
+              x = 1
+
+              def works():
+                  global x
+                  x = x + 1
+                  print(x)
+
+              def does_not_work():
+                  x = x + 1  # Throws an error
+                  print(x)
+
+    - Lambdas 
+        - Does not have a function name or "return"
+        - Example 
+            answer = (lambda x, y: x + y)(1, 2)
+
+            # or 
+            func = lambda x, y: x + y
+            answer = func(1, 2)
+        - Most frequently used for creating a series of convenient functions. (Note closure remembers n as expected)
+            def create_function(n):
+                return lambda x: n * x
+
+            doubler = create_function(2)
+            tripler = create_function(3)
+
+            doubler(2)  # Outputs 4
+            tripler(2)  # Outputs 6
+
+        - Can actually be written on more than one line, but not really 
+            (lambda x, y:
+                (x + y)**2)
+
+    - Arguments 
+        - Named arguments 
+            def func(x, y):
+                ....
+            
+            func(0, 1)
+            func(x=0, y=1)
+            func(y=1, x=0)
+            func(0, y=1)
+            func(x=0, 1)  # Throws an error
+        - Defaults 
+            def location(place, planet="Earth"):
+                ....
+            
+            location("Craters", "Mercury")
+            location("Breakfast", planet="Pluto")
+            location("Berlin")
+        - *args and **kwargs 
+            - Used when you need an unspecified number of arguments 
+            - Args - example 
+                def my_print(*args):
+                    for i in args:
+                        print(i)
+
+            - Kwargs - example 
+                def capital(**kwargs):
+                    for key, value in kwargs.items():
+                        print(value, "is the capital city of", key)
+                
+                capital(Canada="Ottawa", Estonia="Tallinn", Venezuela="Caracas", Finland="Helsinki")
+
+            - Both (the order is important)
+                def func(x, y, *args, **kwargs):
+                    ....
+
+        - Python allows you to turn lists and dicts into individual args easily 
+            def func(x, y):
+                ....
+
+            list = [0, 1]
+            func(*list)
+
+            dict = {'y' : 0, 'x' : 1}
+            func(**dict)
+
+
+- Simple programs 
+    - input("Please enter your name: ")
+        - It takes an optional argument to prompt the user 
+    - Compound assignment operators
+        -=, *=, /=, //=, %=, **=
+    - Program execution
+        - Python interpreters 
+            - CPython - standard interpreter written in C 
+            - PyPy - subset of Python called RPython. Runs faster but has lots of tradeoffs - https://stackoverflow.com/a/12867428
+            - Jython - translates Python code into Java-compatible byte code, which is later executed by JVM
+            - IronPython - Python for the .NET framework
+        - Interpretation = compilation, byte code, virtual machine 
+        - Python bytcode 
+            - More efficient. Platform independent. 
+            - Looks like this - https://opensource.com/article/18/4/introduction-python-bytecode
+                2           0 LOAD_GLOBAL              0 (print)
+                            2 LOAD_CONST               1 ('Hello, World!')
+                            4 CALL_FUNCTION            1
+              (This article also mentions how compiled .py files have .pyc as an extension and Python3 stores them in a folder called __pycache__)
+        - Python Virtual Machine (PVM)
+    - Errors 
+        - Traceback - the general name for errors in Python 
+        - Python stops compiling after the first error 
+
+    - Exceptions
+        - Reminder: errors stop a program from running. Exceptions happen during runtime 
+
+    - Exception handling 
+        try:
+            ....
+        except ZeroDivisionError:
+            ....
+        except (ValueError, TypeError):
+            ....
+        except Exception:      # Use this instead of just "exception:" which will catch GeneratorExit, KeyboardInterrupt, SystemExit
+            ....
+        else:
+            # Seems kind of useless. Just put it in the try block
+        finally:
+            ....
+
+    - Command line arguments
+        - sys module - provides access to functions, variables, Python interpreter
+        - sys.argv - user arguments as a list of strings
+            - Don't forget to convert strings to numbers where necessary 
+            - sys.argv[0] - name of our python file
+            - Good practice to check len(sys.argv) to make sure you got all the arguments you were expecting 
+        - Example of running a file (IMPORTANT - if you installed Python3 with Homebrew, this command is instead "python3")
+            python script.py foo bar baz 
+
+
+- Modules and packages
+    - Load module
+        - Example 
+            import module_name 
+            module_name.var += 1
+            module_name.func(foo)
+
+            # or 
+
+            from module_name import var, func           # NOTE - the word order is pretty much the opposite of JavaScript / TypeScript 
+            var += 1
+            func(foo)
+
+        - Not recommended. Can cause side-effects 
+            from module_name import *
+        - Some common standard modules 
+            import math 
+            import string 
+            import random 
+
+    - Create module
+        - Avoid these mistakes 
+            - Import a module into itself - it will execute all code twice 
+            - Name shadowing - don't name your files the same as standard modules (e.g. math, string, socket) or you won't be able to use the standard one
+        - "__main__"
+          - __name__ - name of the module 
+          - "__main__" - the original python file called from the commandline 
+          - Common practice to indicate code to be run only when the file is called directly, not imported 
+              name = "George"
+              
+              def main():
+                  print("Hello,", name)
+              
+              if __name__ == "__main__":
+                  main()
+
+    - Packages
+        - Package = group of modules 
+        - __init__.py
+            - Each package / subpackage needs a __init__.py file. It can be blank or have code 
+        - Example 
+            import package.subpackage.file
+            package.subpackage.file.func()
+
+            # or 
+
+            from package.subpackage.file import func
+            func()
+        - Import * 
+            - Generally you should not use from package.subpackage import *
+            - If you must do this, put the following in your __init__.py 
+                __all__ = ["submodule1", "submodule10"]
+        - Importing parent and sibbling packages 
+            - Examples 
+                # package.subpackage.self.py
+                from . import file                  # import from current package/subpackage
+                from .. import subpackage2          # import from parent package/subpackage
+                from ..subpackage2 import module    # import from sibbling package 
+            - Seems like best practice is to generally use absolute references and relative references less often 
+                from package.subpacke2 import module 
+
+    - Pip
+        - PIP = "Pip Installs Packages"
+        - Comes preinstalled with > Python v3.4
+        - Examples (IMPORTANT - if you installed Python3 with Homebrew, all these commands instead start with "pip3")
+            pip install some_package
+            pip install some_package==1.1.2       # Note the double ==
+            pip install "some_package>=1.1.2"
+            pip show some_package
+            pip list
+            pip list --outdated
+            pip list -o
+            pip uninstall some_package
+            pip install -r requirements.txt
+            pip freeze > requirements.txt
+
+
+- Math
+    - Math functions
+        - There are some built-ins commonly used 
+            abs(x)
+            round(x, ndigits)
+            pow(x, y)
+            max(a, b, c, ...)
+            min(a, b, c, ...)
+        - Math module 
+            - Common methods 
+                import math 
+                math.fabs(x)        # same as abs() but returns a float 
+                math.pow(x, y)      # same as pow() but returns a float 
+                math.exp(x)         # e^x
+                math.floor(a)
+                math.ceil(a)
+                math.sqrt(x)
+            - Geometry
+                math.pi
+                math.cos(a)         # returns the cosine of a radians
+                math.sin(a)         # returns the sine of a radians
+                math.degrees(a)     # returns angle a converted from radians to degrees
+                math.radians(a)     # returns angle a converted from degrees to radians
+    - Random
+        - Generates psueuo-random numbers 
+        - Example
+            import random
+            random.random()                     # 0 to 1
+        - Setting the seed 
+            - For a chosen seed, you will always get the same sequence of numbers in a row every time you run your app
+                random.seed(5)
+                random.random()                 # 0.6229016948897019
+                random.random()                 # 0.7417869892607294
+                random.random()                 # 0.7951935655656966
+            - Or use system time 
+                random.seed()                   # No argument
+        - Methods
+            # float or int in range 
+            random.uniform(a, b)                # Random float between a-b inclusive
+            random.randint(a, b)                # Random int between a-b inclusive
+
+            # random choice
+            random.choice('Voldemort')          # 'm'
+            random.choice([0,1,2])              # 2
+            random.choice(['heads', 'tails'])   # 'tails'
+
+            # number in range with step 
+            random.randrange(0, 100, 2)         # 84
+
+            # shuffle 
+            random.shuffle(sequence)            # Only works if mutable. Changes the original
+
+            # random subset 
+            random.sample(sequence, 3)
+
+            # others
+            random.gammavariate(alpha, beta)    # gamma distribution
+            random.gauss(mu, sigma)             # gaussian distribution
+
+
+- Builtins
+    - Sep and end arguments of print
+        - sep
+            print('a', 'b', 'c', sep='-')       # a-b-c
+        - end
+            print('a', 'b', 'c', end='.')       # a b c.  (Period instead of newline)
+        - Unpacking
+            print(*['a', 'b', 'c'])             # a b c
+
+    - Flush and file arguments of print
+        - file - where to write the output. Default is sys.stdout
+            - Make sure to open the file before and close it afterwards
+            - Example
+                my_file = open('testfile.txt', 'w')
+                print('...........', file=my_file)
+                my_file.close()
+            
+            - Or out put to sys.stderr
+                if 'some error':
+                    print("Error.......", file=sys.stderr)
+        - flush 
+            - Make sure to specify the file argument 
+            - flush=False - The default. Write to the file every time the buffer is full (or the file is closed)
+            - flush=True - write after every print statement 
+            - Example 
+                import time
+
+                # Will take 15 seconds before it closes file and writes everything
+                slow = open('slow.txt', 'w')
+                for i in range(3):
+                    print(i, file=slow)
+                    time.sleep(5)
+                slow.close()
+
+                # Will write after each print
+                fast = open('fast.txt', 'w')
+                for i in range(3):
+                    print(i, file=fast, flush=True)
+                    time.sleep(5)
+                fast.close()
+        - Print vs Write
+            - print() - has all the arguments discussed above: sep, end, flush
+            - file.write() - only writes when buffer is full. Needs numbers, etc converted to strings 
+
+    - Any and all
+        - all() - checks if all values are True 
+            all([True, False])                          # False 
+        - any() - checks if any values are True 
+            any([True, False])                          # True 
+        - Often used like this 
+            scores = [1, 2, 3, 4]
+            scores_boolean = [i >= 3 for i in scores]   # [False, False, True, True, True]
+            print(any(scores_boolean))                  # True
+            print(all(scores_boolean))                  # False
+        - It's meant to work on lists of booleans so watch the edge cases 
+            print(all(['non boolean']))                 # True
+            print(all([]))                              # True
+            
+            print(any(['non boolean']))                 # True            
+            print(any([]))                              # False
+
+    - Map and filter
+        - Can usually be replaced with list comprehension 
+        - An iterator is returned, so you need to use list() on the result 
+        - map(function, iterable)
+            - Example 
+                nums = [0, 1, 2, 3]
+                doubled = list(map(lambda x: 2*x, nums))
+                print(doubled)
+
+            - You can even pass multiple lists 
+                x_list = [1, 2, 3] 
+                y_list = [4, 5, 6]
+                z_list = [7, 8, 9] 
+                
+                s = list(map(lambda x, y, z: x + y + z, x_list, y_list, z_list))
+                
+                print(s)    # The output is [12, 15, 18]            
+        - filter(boolean_function, iterable)
+            - Example 
+                odd_numbers = list(filter(lambda x: x % 2, numbers))
+                print(odd_numbers)    # The output is [1, 3, 5, 7, 9]
+        - Useful examples 
+            - Converting input to list of ints using list comprehension and map statement 
+                # sample input - 8 11 15 15 15 12
+                numbers = [int(x) for x in input().split()]
+                numbers = list(map(lambda x: int(x), input().split()))
+
+
+
+- Object-oriented programming
+    - Intro
+        - Named with PascalCase (aka "CapWords")
+        - Syntax 
+            class TextBook:
+                n_books = 0
+                all_books = []                          # Class attribute. No "static" keyword 
+
+                def __init__(self, title):              # Contructors are called __init__. Methods use the "def" keyword just like functions. 
+                    self.title = title                  # Instance attribute. Also "self", not "this"
+            
+                def myMethod(self):                     # Weird that self is an argument to a method 
+                    ....
+
+            
+            text_book = TextBook('Math')                # No "new" keyword. Also snake_case = PascalCase()
+    - Nuances - class vs instance attributes
+        - Class (aka static) attributes *should* only be accessed from the class. Accessing them from instances can lead to unpredictable behavior
+            # Good - editing the Class.classVar
+            TextBook.n_books += 1
+            TextBook.all_books.append(aaa)
+            print(TextBook.n_books,   aaa.n_books)        # 1, 1
+            print(TextBook.all_books, aaa.all_books)      # ['aaa'], ['aaa']
+
+            # Bad - editing the instance.classVar
+            aaa.n_books += 1
+            aaa.all_books.append(aaa)
+            print(TextBook.n_books,   aaa.n_books)        # 0, 1 - now they are different
+            print(TextBook.all_books, aaa.all_books)      # ['aaa'], ['aaa']  - same b/c they point to the same object
+
+        - Technically there are 2 ways to call a method 
+            # 1) the normal way 
+            book.myMethod()
+
+            # 2) also works (but not best practice)
+            Book.myMethod(book) 
+
+    - Magic methods aka dunders
+        - __new__ vs __init__
+            - When you create a new object, it calls __new__ which calls __init__
+            - __new__(cls): where cls is the Class 
+            - Here's an example of enforcing a singleton 
+                class Sun:
+                    instance = None
+                
+                    def __new__(cls):
+                        if cls.instance is None:
+                            cls.instance = object.__new__(cls)
+                        return cls.instance
+        - __str__ vs __repr__
+            - str 
+                - str(instance) calls instance.__str__()
+                - It should print out the object in a human-readable format 
+            - repr aka "representation"
+                - repr(instance) calls instance.__repr__()
+                - It should print out the object for developers with more info for debugging 
+            - Example 
+                today = datetime.datetime.now()
+                str(today)      # 2019-12-06 17:54:01.028336
+                repr(today)     # datetime.datetime(2019, 12, 6, 17, 54, 1, 28336)
+
+            - Example - note it returns a string, not prints it 
+                class Transaction:
+                    ....
+                    def __repr__(self):
+                        return f"Transaction {self.number}. Amount: {self.funds}. Status: {self.status}"
+
+    - Inheritance
+        - Example 
+            class ChildClass(ParentClass):
+                ....
+        - If no parent class is specified, it is object
+        - type() vs isinstance()
+            - Same for builtins. Different for inheritance 
+            - If Dog is a child of Animal...
+                type(puppy) == Animal)      # False
+                type(puppy) == Dog)         # True
+                isinstance(puppy, Animal)   # True
+                isinstance(puppy, Dog)      # True
+
+    - Math magic methods
+        - You can also redifine all the following (e.g. you had a class for complex numbers and wanted to do math with +,-,*,/ etc instead of .add(), .subtact() etc)
+        - Arithmetic operations
+            __add__()       # +
+            __sub__()       # -
+            __mul__()       # *
+            __truediv__()   # /
+            __pow__()       # **
+            and more....
+        - Augmented assignment
+            __iadd__()      # +=
+            __isub__()      # -=
+            __imul__()      # *=
+            __itruediv__()  # /=
+            __ipow__()      # **=
+            and others...
+        - Comparison operators
+            __eq__()        # ==
+            __ne__()        # !=
+            __lt__()        # <
+            __gt__()        # >
+            __le__()        # <=        # Shouldn't this be lte?
+            __ge__()        # >=        # Shouldn't this be gte?
+        - Examples 
+            class ComplexNumber:
+                def __init__(self, real_part, im_part):
+                    self.real_part = real_part
+                    self.im_part = im_part
+            
+                def __add__(self, other):
+                    """Addition of complex numbers."""
+                    real = self.real_part + other.real_part
+                    imaginary = self.im_part + other.im_part
+                    return ComplexNumber(real, imaginary)
+
+                def __iadd__(self, other):
+                    """Addition with assignment (+=) for complex numbers."""
+                    self.real_part += other.real_part
+                    self.im_part += other.im_part
+                    return self
+
+                def __eq__(self, other):
+                    """Compare two complex numbers for equality (==)."""
+                    return ((self.real_part == other.real_part) and
+                        (self.im_part == other.im_part))
+
+    - Method overriding
+        - Example
+            class Animal:
+                def __init__(self, species):
+                    self.species = species
+                
+                def speak():
+                    print("hello")
+            
+            class Cat(Animal):
+                def __init__(self, name):
+                    super().__init__("cat")     # Using super() to call parent constructor)
+                    self.name = name
+
+                def speak():                    # overrides parent method 
+                    print("meow")
+
+    - Multiple inheritance
+        - Python has multiple inheritance 
+        - Example   
+            class ChildClass(ParentClass1, ParentClass2. ParentClass3):
+                ....
+        - The diamond problem 
+                a 
+              /  \
+             b   c 
+              \ /
+               d 
+            - If we call a method on d that is implemented in a,b,c which parent method gets called 
+            - Answer, we search from left to right until we find what we want 
+                class StudentProgrammer(Student, Programmer):   # Student's methods are preferred over Programmer's 
+                    ....
+            - super() calls first parent, not all parents 
+                - If StudentProgrammer called super().something(), only student.something()would be called 
+
+
+- Algorithms
+    - Algorithms in Python
+        - collections - Python has a collections module that provides improved version of list and tuple 
+            - e.g. deque
+
+
+
+
+
+USEFUL
+- String to list of letters 
+    letters = list('hello')
+
+
+
+
+
+
+
+
+LIKE 
+- Simple, clean, fun 
+- Collections and lists are easy 
+- Always so much more userfriendly than Java
+    - Easy to remember how to make lists
+
+DON'T LIKE 
+- My personal preference 
+    - White-space instead of {}
+    - Snake_case booooo 
+- Ternary operator 
+    'even' if x % 2 == 0 else 'odd'
+- No strong-typing 
+- npm is better than pip
+    - Saves to package.json automatically
+    - Don't need multiple virtualenvs 
+    - At least it doesn't have 2 like Java: Maven and Gradle 
+?- Is there no basic for loop?
+- Functional programming is awkward
+    - Need lambda keyword 
+    - Need to convert results of map() and filter() back into lists 
+    - List comprehension gets pretty messy pretty quickly 
+    - Map and filter are functions, not methods so no fluid API so you can't chain them and read them from left to right 
+
+
+
+lambda x: x % 2 and 'odd' or 'even'  # Wow actually works 

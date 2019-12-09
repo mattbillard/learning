@@ -1,0 +1,79 @@
+----
+---- PostgreSQL database dump
+----
+--
+---- Dumped from database version 11.5
+---- Dumped by pg_dump version 11.5
+--
+--SET statement_timeout = 0;
+--SET lock_timeout = 0;
+--SET idle_in_transaction_session_timeout = 0;
+--SET client_encoding = 'UTF8';
+--SET standard_conforming_strings = on;
+--SELECT pg_catalog.set_config('search_path', '', false);
+--SET check_function_bodies = false;
+--SET xmloption = content;
+--SET client_min_messages = warning;
+--SET row_security = off;
+--
+----
+---- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: myuser
+----
+--
+--CREATE SEQUENCE public.hibernate_sequence
+--    START WITH 1
+--    INCREMENT BY 1
+--    NO MINVALUE
+--    NO MAXVALUE
+--    CACHE 1;
+--
+--
+--ALTER TABLE public.hibernate_sequence OWNER TO myuser;
+--
+--SET default_tablespace = '';
+--
+--SET default_with_oids = false;
+--
+----
+---- Name: todos; Type: TABLE; Schema: public; Owner: myuser
+----
+--
+--CREATE TABLE public.todos (
+--    id bigint NOT NULL,
+--    description character varying(255),
+--    is_done boolean NOT NULL
+--);
+--
+--
+--ALTER TABLE public.todos OWNER TO myuser;
+--
+----
+---- Data for Name: todos; Type: TABLE DATA; Schema: public; Owner: myuser
+----
+--
+--COPY public.todos (id, description, is_done) FROM stdin;
+--1	aaa	f
+--2	bbb	f
+--3	ccc	f
+--\.
+--
+--
+----
+---- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: myuser
+----
+--
+--SELECT pg_catalog.setval('public.hibernate_sequence', 3, true);
+--
+--
+----
+---- Name: todos todos_pkey; Type: CONSTRAINT; Schema: public; Owner: myuser
+----
+--
+--ALTER TABLE ONLY public.todos
+--    ADD CONSTRAINT todos_pkey PRIMARY KEY (id);
+--
+--
+----
+---- PostgreSQL database dump complete
+----
+--

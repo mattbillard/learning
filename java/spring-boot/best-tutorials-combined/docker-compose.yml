@@ -1,0 +1,43 @@
+version: '3'
+services:
+  es-service:
+    container_name: ${ES_HOST}
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+    volumes:
+      - ./docker/data/es:/usr/share/elasticsearch/data
+
+  mysql-service:
+    container_name: ${MYSQL_HOST}
+    image: mysql/mysql-server:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+    - "3306:3306"
+    volumes:
+      - ./docker/data/db:/var/lib/mysql
+    
+  app-service:
+    container_name: app-container
+    depends_on:
+      - es-service
+      - mysql-service
+    build: .
+    environment:
+      ES_HOST: ${ES_HOST}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+    - .:/app
+    - ~/.m2:/root/.m2
+    working_dir: /app
+    ports:
+    - 8080:8080
+    command: mvn clean spring-boot:run

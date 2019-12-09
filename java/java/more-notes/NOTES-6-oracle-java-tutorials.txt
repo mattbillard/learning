@@ -1,0 +1,701 @@
+Offical Oracle Java Tutorials
+6/2019
+https://docs.oracle.com/javase/tutorial/index.html
+https://docs.oracle.com/javase/tutorial/tutorialLearningPaths.html
+
+
+- Data types 
+  - Int 
+    - Hex and binary 
+        int hexVal = 0x1a;  // =26
+        int binVal = 0b11010; // =26
+  - Decimals 
+    - IMPORTANT: the default is double, not float 
+  - Underscore
+    - Cool! You can use _ in numbers to improve legibility. Won't change the meaning
+      - int oneMillion = 1_000_000;
+      - long creditCardNumber = 1234_5678_9012_3456L;
+
+
+- instanceof
+  - Used to test if something is an instance of a certain class 
+  - Syntax 
+    foo instanceof Foo;   // true 
+    bar instanceof Bar;   // false 
+
+
+- for loop 
+  // infinite loop
+  for ( ; ; ) { .... }
+
+
+- Classes 
+  - Constructor 
+    - Reminder: constructor is exact same name as the class, with Capitalized first letter 
+    - Constructor is usuallly public but doesn't have to be if you don't want other classes to instantiate it 
+    - Reminder: constructors have no return type. Kind of obvious if you think about it. 
+  - Parameters 
+    - Reminder: parameters are the definitions of the types passed into a method. Arguments are the actual values passed in. 
+    - varargs
+      - Use this when you don't know the number of arguments 
+      - Automatically creates an array for you 
+      - syntax 
+        myMethod(String name, int... scores)    // zero or more ints 
+  - Methods 
+    - Return types 
+      - If you are returning a class, you can return something of that type or something that is a sublcass of that 
+          public Object myMethod() {
+            return "Test";    // String is a subclass of Object 
+          }
+  - "this"
+    - Constructors can call other constructors with "this(.....)"
+        public class FullName {
+          String first;
+          String last;
+
+          public void FullName() {
+            this("John", "Doe");
+          }
+
+          public void FullName(String first, String last) {
+            this.first = first;
+            this.last = last;
+          }
+        }
+  - Access level modifiers
+    - public, private, protected, or package-private (no explicit modifier)
+    - Recommend using protected for fields unless there's a good reason not to. This means you are not locked into a particular implementation and also limit other classes changing stuff unexpectedly 
+  - Static 
+    - Reminder: static fields are shared by ALL instances of that class. If it's changed on one, it's changed for all. 
+    - You can refer to static fields/methods to ways, but one is unclear and discouraged
+      MyClass.static;   // Good 
+      myClassInstance.static;   // Bad. Not clear it is static. Looks like a non-static field 
+    - Class methods can't refer to "this" or non-static fields b/c it's unclear which instance 
+  - Constants 
+    - Reminder: the keyword is "final" not "const" and use ALL_CAPS 
+    - Usually used with "static final" b/c it's mean to be a constant everything relies on 
+  - Initializing fields besides using a constructor 
+    - The site mentioned a couple things without any really useful details. Would be good to research more 
+      - Static Initialization Blocks
+      - initializer blocks 
+      - final methods (Apparently useful to allow subclasses to reuse code )
+  - Garbage collection 
+    - A program doesn't destroy objects. Just set all references to an object to null and the garbage collector will take care of it 
+
+
+- Interfaces (implements interface)
+  - Unlike subclasses, interfaces can extend multiple other interfaces 
+      public interface GroupedInterface extends Interface1, Interface2, Interface3 { .... } 
+  - A class can both extend (a class) and implement (interface(s)). 
+  - If you add more methods to an interface, it will break all classes that implement it. Solutions:
+    - Provide a default implementation of the new method 
+        default int NewMethod() { ... }
+    - Create a static method 
+        static int NewMethod() { ... }
+    - Make a second interface that extends the original. People can switch to that one when they want. 
+
+
+- Inheritance (extend superClass)
+  - All classes inherit from the Object class which is the only class with no superClass 
+  - Subclasses inherit all members except constructors (which can be referenced via "super()")
+  - Overriding - you can use the inherited members as is, replace them, hide them, or supplement them with new members
+  - Private memebers are not inherited (but you can use any public getters and setters)
+  - Casting
+      Object obj = new MountainBike();          // OK because a MountainBike is also an object 
+      MountainBike myBike = obj;                // Compile time error 
+      MountainBike myBike = (MountainBike)obj;  // Will use a runtime check 
+      // Use a check to avoid runtime errors 
+      if (obj instanceof MountainBike) {
+        MountainBike myBike = (MountainBike)obj;
+      }
+  - Classes vs interfaces 
+    - Classes can have fields. Interfaces cannot 
+  - Overriding
+    - If you intend to override a method, it's recommended to use the @Override annotation so a compile time error will be generated if you mess up 
+    - Overriding static methods
+      - A subclass with a static method with the same signature as the parent actually hides, not overrides the parent. 
+      - It is still possible to invoke the parent's static method by typing Parent.staticMethod() instead of Child.staticMethod();
+      - Static methods in interfaces are never inherited.
+    - The access specifier for an overriding method can allow more, but not less, access than the overridden method
+    - You cannot override an instance method to be a static method or vice versa. 
+  - Hiding fields 
+    - It's possible but not recommended. You can even change the type of the field 
+  - Super 
+    - Use "super." to reference an overridden method 
+    - Also use super(....); to use the superClass's constructor before adding some of your own initialization.
+    - Rule: has to be the first line in the subclass constructor. 
+    - Note: if a subclass does not call super(....) in the constructor, then the compiler will automatically call the parent's constructor with no arguments 
+  - Object ancestor class 
+    - Has many important methods 
+      - equals 
+        - You probably want to override this most of the time. If you do, don't forget to override the hashCode method 
+      - finalize 
+        - Called by the garbage collector before destroying the object
+        - Override this if you want to do some clean up like closing file handlers 
+      - getClass
+        - Returns a Class object you can use to get info about the class. 
+        - Many useful methods like: getSimpleName(), getSuperclass(), getInterfaces(), getFields(), getMethods()
+      - hashCode()
+        - Returns the object's memory address in hexadecimal
+      - toString()
+        - Used when you System.out.print the class. 
+        - Very useful for debugging, so you should always consider overriding this. 
+  - Final 
+    - Use final on fields that are constants 
+    - Methods can be final if they should not be changed or overrridden 
+    - Classes can be final if you don't want them to be subclassed 
+- Abstract 
+  - Abstract classes - Cannot be instantiated but can be subclassed 
+  - Abstract method - declared but no implementation 
+    - Syntax - no {}. Has ;
+      abstract void foo(int x);
+  - Subclass must either also be abstract, or implement all methods 
+  - Abstract Classes vs Interfaces
+    - Both 
+      - Cannot be instantiated 
+      - May contain a mix of methods declared with or without an implementation
+    - Differences
+      - Interface 
+        - You can extend any number of interfaces but only implement one class 
+        - All fields are automatically public, static, and final
+        - All methods are public 
+      - Abstract classes 
+        - Fields are not just public, static, final.
+        - Methods can also be protected or private 
+    - How to pick 
+      - Interface
+        - Need multiple inheritance 
+        - Just want to specify the behavior. Don't care about who implements. 
+        - Example
+          - HashMap - implements the interfaces Serializable, Cloneable, and Map<K, V>. (It also extends AbstractMap)
+      - Abstract 
+        - You want to share code 
+        - You want to have fields other than public, static, final 
+        - Example 
+          - AbstractMap - Its subclasses (which include HashMap, TreeMap, and ConcurrentHashMap) share many methods
+    ?- Need to spend more time looking at inheritance vs interfaces vs abstract 
+- Questions and exercises 
+  public class ClassA {
+    public void methodOne(int i) {}
+    public void methodTwo(int i) {}
+    public static void methodThree(int i) {}
+    public static void methodFour(int i) {}
+  }
+  public class ClassB extends ClassA {
+    public static void methodOne(int i) {}    // compile error 
+    public void methodTwo(int i) {}           // overrides 
+    public void methodThree(int i) {}         // compile error 
+    public static void methodFour(int i) {}   // hides 
+  }
+
+
+- Generics 
+  - Generics enable types (classes and interfaces) to be parameters when defining classes, interfaces and methods
+  - Example - collections are coded in a way where they can contain any type of object, but when instantiated you can promise to use them with a single type 
+  - Avoids lots of casting 
+      List list = new ArrayList();
+      list.add("hello");
+      String s = (String) list.get(0);   // with cast 
+    vs 
+      List<String> list = new ArrayList<String>();
+      list.add("hello");
+      String s = list.get(0);   // no cast
+  - Example 
+    - Bad - no type checking. Could have virtually anything (except primitives) inside of it 
+        public class Box {
+          private Object object;
+          public void set(Object object) { this.object = object; }
+          public Object get() { return object; }
+        }
+    - Good - strong types and easier to read 
+        public class Box<T> {
+          private T t;      // T stands for "Type"
+          public void set(T t) { this.t = t; }
+          public T get() { return t; }
+        }
+  - Naming conventions - common examples 
+      E - Element (used extensively by the Java Collections Framework)
+      K - Key
+      N - Number
+      T - Type
+      V - Value
+      S,U,V etc. - 2nd, 3rd, 4th types
+  - Terms 
+    - Parameter T - Foo<T> 
+    - Argument String - Foo<String> foo 
+    - (Remember params are the definition. Arguments are what are actually passed in. "Arguments become parameters")
+  - Exmaple instantiation 
+        Box<Integer> integerBox = new Box<Integer>();
+      or
+        Box<Integer> integerBox = new Box<>();    // Use "the diamond". More concise 
+  - Primatives vs objects 
+    - Typings need to be objects, never primitives
+    - But due to auto-boxing, you can pass in primitives and they will be converted for you 
+        - Verbose:      Box<Integer> box = new Box<Integer>(123);   // Don't need 2nd "Integer"
+        - Correct:      Box<Integer> box = new Box<>(123);
+        - Unnecessary:  Box<Integer> box = new Box<>(new Integer(123));     // Don't need to make Integer. int is OK.
+        - Error:        Box<int> box = new Box<>(123);              // Can't use int 
+        - "Raw type":   Box box = new Box(123);                     // Back to no typing. Often used to work with legacy code 
+  - Nesting is possible 
+    HashMap<String, Box<Integer>> hashmap
+  - Generic methods 
+    - Methods can be generic too 
+      public static <K, V> boolean compare(Pair<K, V> p1, Pair<K, V> p2) {....}
+  - Bounded Type Parameters
+    - You can have generics but limit yourself to numbers for example 
+      public <U extends Number> void inspect(U u) {....}
+    - Another example 
+      public static <T extends Comparable<T>> int greaterThan(T[] anArray, T elem) {....}
+    - Multiple bounds 
+      <T extends B1 & B2 & B3>
+  - Wildcards
+    - The question mark (?), called the wildcard, represents an unknown type.
+  //- There are many more pages but they are overly specific for now 
+
+
+- Annotations
+  - Form of metadata, provide data about a program that is not part of the program itself. 
+  - Uses 
+    - Information for the compiler — Annotations can be used by the compiler to detect errors or suppress warnings.
+    - Compile-time and deployment-time processing — Software tools can process annotation information to generate code, XML files, and so forth.
+    - Runtime processing — Some annotations are available to be examined at runtime.
+  - Examples 
+    No args = no ()s 
+      @Override
+      void mySuperMethod() { ... }
+    
+    or when there is one param 
+      @SuppressWarnings("unchecked")
+      void myMethod() { ... }
+
+    or many  
+      @Author(
+        name = "Benjamin Franklin",
+        date = "3/27/2003"
+      )
+      class MyClass() { ... }
+  
+    or multiple even of the same type (aka repeating annotation)
+      @EBook
+      @Author(name = "Jane Doe")
+      @Author(name = "John Smith")
+      class MyClass { ... }
+
+  - Where Annotations Can Be Used
+    - Declarations of classes, fields, methods, and more
+    - Can even be applied to types
+      - new @Interned MyObject();
+      - myString = (@NonNull String) str;
+      - @Readonly List<@Readonly T> { ... } // on field 
+      - void monitorTemperature() throws @Critical TemperatureException { ... }
+  - Creating and using a custom annotation 
+    @interface ClassPreamble {
+      String author();
+      int currentRevision() default 1;  // Notice the default 
+    }
+    @ClassPreamble (
+      author = "John Doe",
+      currentRevision = 6,
+    )
+  - Predefined annotations 
+    - @Deprecated
+    - @Override
+    - @SuppressWarnings.
+  - Other (predefined annotations?)
+    - @SafeVarargs
+    - @FunctionalInterface
+  - meta-annotations
+    - meta-annotations - Annotations that apply to other annotations 
+    - Examples 
+      - @Retention
+      - @Documented
+      - @Target
+      - @Inherited
+      - @Repeatable
+  - Type Annotations and Pluggable Type Systems
+    - See examples of type annotations above 
+    - Good example 
+      - @NonNull - make sure a var is never null so it can't throw a NullPointerException
+  - Repeating Annotations
+    - Example 
+      @Alert("Manager")
+      @Alert("Administrator")
+      public class Something { ... }
+    - Annotation declaration must be marked with @Repeatable
+  - Retrieving Annotations
+    - Reflection - Can be used to inspect what annotations are applied to something 
+
+
+
+
+
+
+
+- The Platform Environment
+  - Properties
+    - Key vaue pairs. Both are always strings 
+    - Extends Hashtable
+  - Command-Line Arguments
+    - Example 
+      java App foo bar baz 
+    - Passed into args in...
+      public static void main (String[] args)
+  - Environment variables 
+    - Syntax
+      Map<String, String> env = System.getenv();
+      or 
+      String val = System.getenv(key);
+  - System Properties
+    - System.getProperty(key);
+    - System.getProperties();
+  - The Security Manager
+    - An object that defines a security policy for an application. Specifies actions that are unsafe or sensitive.
+    //- This might only be applicable for Java applets 
+  - Miscellaneous Methods in System
+    - System.currentTimeMillis() - useful for profiling times to execute stuff
+    - System.exit(int) - shutsdown JVM. 0=success. Other=error 
+
+- Regular Expressions
+  -*** This is probably the best and most thorough explanation of regex I have found yet 
+  - Really good explanation of how regex [] works 
+    https://docs.oracle.com/javase/tutorial/essential/regex/char_classes.html
+    [abc]	a, b, or c (simple class)
+    [^abc]	Any character except a, b, or c (negation)
+    [a-zA-Z]	a through z, or A through Z, inclusive (range)
+    [a-d[m-p]]	a through d, or m through p: [a-dm-p] (union)
+    [a-z&&[def]]	d, e, or f (intersection)
+    [a-z&&[^bc]]	a through z, except for b and c: [ad-z] (subtraction)
+    [a-z&&[^m-p]]	a through z, and not m through p: [a-lq-z] (subtraction)
+  - More 
+    https://docs.oracle.com/javase/tutorial/essential/regex/pre_char_classes.html
+    .	Any character (may or may not match line terminators)
+    \d	A digit: [0-9]
+    \D	A non-digit: [^0-9]
+    \s	A whitespace character: [ \t\n\x0B\f\r]
+    \S	A non-whitespace character: [^\s]
+    \w	A word character: [a-zA-Z_0-9]
+    \W	A non-word character: [^\w]
+  - More 
+    https://docs.oracle.com/javase/tutorial/essential/regex/quant.html
+    Greedy	Reluctant	Possessive	Meaning
+    X?	X??	X?+	X, once or not at all
+    X*	X*?	X*+	X, zero or more times
+    X+	X+?	X++	X, one or more times
+    X{n}	X{n}?	X{n}+	X, exactly n times
+    X{n,}	X{n,}?	X{n,}+	X, at least n times
+    X{n,m}	X{n,m}?	X{n,m}+	X, at least n but not more than m times
+  - Backreferences are interesting 
+    https://docs.oracle.com/javase/tutorial/essential/regex/groups.html
+
+
+- Collections 
+  //- See w3resource notes
+  - Also other types...
+    - Deque (double queue)
+    - SortedSet 
+    - SortedMap - think phonebook or dictionary. It's a map AND sorted 
+  - Syntax 
+    - Save some typing by leaving out the second type 
+      List<String> list = new ArrayList<>(c);
+      // I think they use List on left as a best practice so it's easy to swap out specific types later if needed. https://docs.oracle.com/javase/tutorial/collections/interfaces/set.html
+  - 3 ways to traverse collections: 
+    - Aggregate operations 
+      - Streams 
+        - Preferred method for iterating over a collection after Java 8
+        - Typically used with lambdas 
+        - TODO: learn more about Streams 
+        - Functional: do not mutate the existing collection 
+    - For-each 
+    - Iterators
+      - Enables you to traverse through a collection and to remove elements from the collection selectively, if desired
+      - Also good when you want to iterate over multiple collections in parallel
+  - Bulk operations 
+    - containsAll
+    - addAll
+    - removeAll
+    - retainAll - retains only those elements in the target Collection that are also contained in the specified Collection
+    - clear
+  - Array Operations
+    - toArray - provides as a bridge between collections and older APIs that expect arrays on input
+    - Syntax 
+      Object[] a = c.toArray();
+      or 
+      String[] a = c.toArray(new String[0]);  // This syntax sucks 
+  - Sets 
+    - No duplicates 
+    - Types 
+      - HashSet - best performance. No guarantee of order. 
+      - TreeSet - ordered, sorted. Worse performance
+      - LinkedHashSet - orderd by insert order 
+    - Trick to create a generic collection with no duplicates
+      Collection<Type> noDups = new HashSet<Type>(c);
+      or 
+      Collection<Type> noDups = new LinkedHashSet<Type>(c); // preserve ordering
+      or 
+      c.stream().collect(Collectors.toSet());
+  - Lists 
+    - Ordered 
+    - Has indexes 
+    - Types 
+      - ArrayList - usually better performance
+      - LinkedList - better performance under certain circumstances 
+    - To concatenate
+      list1.addAll(list2);
+    - Convert an array to a list 
+      List<String> list = Arrays.asList(args);
+      //Much better than...
+        List<String> list = new ArrayList<String>();
+        for (String a : args) { list.add(a); }
+    - subList
+      - You can make a temporary view of a subset to easily operate on 
+  - Queue
+    - Methods 
+      - Insert
+        - add(e) - throws error if size-restricted and full 
+        - offer(e) - returns false if "
+      - Remove
+        - remove() - throws error if size-restricted and full 
+        - poll() - returns null if "
+      - Examine
+        - element()
+        - peek()
+  - Deque
+    - Double-ended-queue, i.e. stack+queue 
+    - Pronounced "deck"
+    - Types 
+      - ArrayDeque
+      - LinkedList
+    - Methods 
+      - Add 
+        - addfirst -  throws error if size-restricted and full  
+        - offerFirst
+        - addLast - throws error if size-restricted and full  
+        - offerLast
+      - Remove 
+        - removeFirst 
+        - pollFirst 
+        - removeLast 
+        - pollLast 
+      - Retrieve 
+        - getFirst 
+        - peekFirst
+        - getFirst 
+        - peekLast
+  - Map 
+    - Can't have duplicate keys. Also, one value per key. 
+    - Types 
+      - HashMap
+      - TreeMap
+      - LinkedHashMap
+    - Syntax to make a map from another type of map 
+      Map<K, V> copy = new HashMap<K, V>(m);
+    - Useful methods 
+      - keySet — set of keys
+      - values — list of values 
+      - entrySet — set of key-value pairs 
+      - putAll - replaces all values with something 
+  - Ordering
+    - Comparable - interface your objects need to implement to work with Collections.sort() 
+    - compareTo() returns -1,0,1 depending on whether it's smaller, same, larger 
+    - Example syntax 
+        public class Name implements Comparable<Name> { 
+          public int compareTo(Name n) { .... }
+          public interface Comparator<T> { ... }
+          //....
+        }
+    - If you redefine the equals method, you'll also need to redefine the hashCode method 
+    //- This page has good explanations and more details on implementing this inteface 
+  - SortedSet
+  - SortedMap 
+
+
+- Nested Classes
+  - You can make classes inside of other classes, both static and non-static 
+  - Syntax 
+    class OuterClass {
+      ...
+      class NestedClass {
+        ...
+      }
+      static class StaticNestedClass {
+          ...
+      }
+    }
+  - Non-static nested classes have access to other members of the enclosing class, even if they are declared private
+  - Reasons to use 
+    - Classes that are only used in one place, especially helper classes 
+    - Encapsulation - innerClass is hidden but still has access to private members 
+    - Organization and clean, readable code 
+  - Static inner classes 
+    - Same limitation as static methods: can't access non-static stuff 
+    - Syntax 
+      OuterClass.StaticNestedClass
+  - Non-static inner classes 
+    - Syntax for newing up looks a little odd b/c of the space
+      outerObject.new InnerClass()
+  - Special kinds of inner classes 
+    - local classes - inner class WITH a name declared within the body of a method 
+    - anonymous classes - inner class WITHOUT a name declared within the body of a method 
+  - Shadowing
+    - Members can be shadowed if the outer and inner classes use the same names for fields or methods 
+  - Serialization
+    - Serialization of inner classes, including local and anonymous classes, is strongly discouraged.
+  - Local Classes
+    - You can define a local class inside any block, e.g. method, for loop, or if clause
+    - Limitations 
+      - Seem to be a lot of limitations on which things can be static or access static/non-static methods except when they are final or effectively final 
+      - Can't declare an interface in a block (but you can inside of a class)
+  - Anonymous Classes
+      - Concise code: declare and instantiate a class at the same time
+      - Syntax (notice the "new" and the class declaration together.)
+          pubic class outerClass {
+
+            interface HelloWorld { .... }
+
+            public void sayHello() {
+              HelloWorld frenchGreeting = new HelloWorld() {
+                // fields 
+                // methods 
+              };  // semicolon b/c it's an expression 
+            }
+          }
+      - Limitations 
+        - They have limitations around what types of enclosed members they can access and static/non-static stuff 
+      - Often used for UIs written in JavaFX (Which no one in their rigth mind would use over a JavaScript UI framework)
+      - Use lambdas instead of anonymous classes that only have one method
+  - Lambda Expressions
+    - Created partly because anonymous classes can often have lots of boilerplate 
+    - Use when you want to pass a method/function into something else 
+    - Think of them as anonymous methods 
+    - Page has many examples of alternate approaches to solve 1 problem but they're not very useful. 
+    - Syntax is extremely similar to JS but arrow is like this ->
+      ***- Notice types are not required
+      - Full syntax 
+        (foo, bar) -> {
+          doSomething;
+          return something;
+        }
+      - One-liners can omit {} and return 
+        (foo, bar) -> something;
+      - One-arg can omit ()s 
+        foo -> something; 
+    - Scope  
+      - Have access to parent's fields, methods, variables 
+      - Lexically scoped 
+        - Means don't introduce a new scope 
+        - So it doesn't shadow anything outside of it 
+        - So you have to make sure variable names in the lambda don't conflict with outer scope 
+        - There are limitations though on only accessing things that are final or effectively final 
+    - Serialization 
+      - You can serialize under certain conditions but as with inner classes, it is strongly discouraged 
+    - More short-hand syntax 
+          Arrays.sort(rosterAsArray, (a, b) -> Person.compareByAge(a, b));
+        is the same as 
+          Arrays.sort(rosterAsArray, Person::compareByAge);
+
+- Enums 
+  - Think of it like a type where you have to pick one from a set of constants. (e.g. North, South, East, West or days of the week)
+  - Syntax. (Pascal case, then ALL_CAPS)
+      public enum Direction {
+        NORTH, SOUTH, EAST, WEST
+      }
+  - Good for any time where you know all valid choices at compile time 
+  - Unlike other langs, they have methods 
+    - values() returns an array of the values that you could use like this:
+      for (Planet p : Planet.values()) { .... }
+  - An enum can't extend anything else b/c it already extends Enum 
+  - They can have lots of things inside them 
+      public enum Planet {
+        MERCURY (3.303e+23, 2.4397e6),
+        VENUS   (4.869e+24, 6.0518e6),
+        EARTH   (5.976e+24, 6.37814e6),
+        ....
+
+        // properites 
+        private final double mass;
+        private final double radius;
+        public static final double G = 6.67300E-11;
+
+        // constructor
+        Planet(double mass, double radius) { .... }
+
+        // getters
+        private double mass() { return mass; }
+        private double radius() { return radius; }
+
+        // methods 
+        double surfaceGravity() { .... }
+        double surfaceWeight(double otherMass) { .... }
+
+        // even main!!!
+        public static void main(String[] args) { .... }
+      }
+
+- JAR files 
+  - Zipped files for Java projects. 
+  - Can contain lots of things: .java, .class, audio and image files, etc 
+  - Commandline tool with typical commands to create, view, extract, update 
+  - Creates a manifest at META-INF/MANIFEST.MF
+  - Running 
+    java -jar app.jar
+    // Manifest needs to specify which the main file is - Main-Class: classname
+  - Jars can be signed and verified to ensure authenticity and security 
+
+
+- Aggregate Operations
+  - Streams need: source, intermediate operations, terminal operation (something that produces something other than yet another stream)
+  - Examples
+      double guysAverageAge = roster
+        .stream()
+        .filter(p -> p.getGender() == Person.Sex.MALE)
+        .mapToInt(Person::getAge)
+        .average()
+        .getAsDouble();
+
+      List<String> guysNames = roster
+        .stream()
+        .filter(p -> p.getGender() == Person.Sex.MALE)
+        .map(p -> p.getName())
+        .collect(Collectors.toList());
+
+      Map<Person.Sex, List<Person>> byGender = roster
+        .stream()
+        .collect(
+          Collectors.groupingBy(
+            Person::getGender
+          )
+        );
+
+      Map<Person.Sex, List<String>> namesByGender = roster
+        .stream()
+        .collect(
+          Collectors.groupingBy(
+            Person::getGender, 
+            Collectors.mapping(Person::getName, Collectors.toList())
+          )
+        );
+
+      List<Album> sortedFavs = albums
+        .stream()
+        .filter(a -> a.tracks.anyMatch(t -> (t.rating >= 4)))
+        .sorted(Comparator.comparing(a -> a.name))
+        .collect(Collectors.toList());
+
+  - Reduction operations 
+    - Some are terminal operations (average, sum, min, max, and count) that return one value by combining the contents of a stream
+    - Some are non-terminal operations - return a smaller collection 
+    - Stream.reduce
+      - General-purpose reduction operation
+      - Similar to JS's reduce method. Takes an operation and a value 
+  - Parallelism
+      - Parallel computing involves dividing a problem into subproblems, solving those problems simultaneously (in parallel, with each subproblem running in a separate thread), and then combining the results of the solutions to the subproblems. 
+      - Uses .parallelStream()
+      //- Lots of info but too much for right now 
+
+
+- JavaBeans 
+  - Components - reusable code where you don't need to understand the inner functionality 
+  - Example - someone on a car assembly line doesn't need to build a radio from scratch. They get one and plug it in 
+  - Need to write a class and follow some conventions 
+
+

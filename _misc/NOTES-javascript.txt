@@ -1,0 +1,10 @@
+
+
+var x = 123;
+console.log(typeof x);                          // number
+console.log(typeof x.__proto__);                // object
+
+var func = function() {}
+console.log(typeof func);                       // function 
+console.log(typeof func.__proto__);             // function 
+console.log(typeof func.__proto__.__proto__);   // object 

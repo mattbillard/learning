@@ -1,0 +1,276 @@
+PYTHON
+11/2019
+
+
+https://hyperskill.org/knowledge-map/331?v=table
+
+
+
+- Some thoughts on Django 
+    - Seems like one of those classic frameworks with MVC, ORM, login, admin interface etc 
+    - Comparison to other frameworks 
+        - Flask - much simpler MVC than Django but no ORM, admin, extra security, etc 
+        - Java Spring Boot - has more magic code (e.g. JPA repositories) than Django
+        - Ruby on Rails - ???
+        - PHP Laravel - ???
+    - The nomenclature is not as clear as other frameworks. 
+        - 1 project, multiple apps??? 
+        - views.py is actually more like "controllers" in other frameworks
+        - Routes are kept in a separate file from controllers
+    - Growing or shrinking? (Google Trends shows it as basically flat since 2012)
+
+
+
+
+- Django
+    - Intro
+        - Made with Django - Pinterest, Bitbucket, Disqus
+        - Named after jazz guitarist Django Reinhardt
+        - Created in 2008
+        - Install 
+            - Global 
+                pip3 install Django==2.2
+            - With virtualenv
+                # If you don't have virtualenv yet
+                pip3 install virtualenv
+                
+                # Unix
+                python3 -m venv hyperskill-django
+                source hyperskill-django/bin/activate
+                pip3 install Django==2.2
+                
+                # Windows
+                python3 -m venv hyperskill-django
+                hyperskill-django\Scripts\activate
+                pip3 install Django==2.2
+                
+                # If you want to deactivate a virtual environment
+                deactivate
+            - Check install 
+                django-admin version
+
+    - Django MVC
+        - Each Django "project" can have multiple "apps". (???) 
+        - Create a project 
+            django-admin startproject magazine
+            cd magazine
+            django-admin startapp blog
+        - Model
+            - models.py - for business logic 
+            - Users and Groups (of users) - from django.contrib.auth.models
+        - Make templates
+            # Unix
+            mkdir templates
+            mkdir -p blog/templates/blog
+            
+            # Windows
+            mkdir templates
+            mkdir blog\templates\blog
+        - Views 
+            - urls.py - routes 
+            - views.py - controllers?
+
+    - Launching web server
+        - Changes 
+            - templates/index.html - need to create this
+            - view.py - connect the template 
+            - urls.py - add the route
+            - settings.py - add localhost, maybe comment out SQLite DB, add the app to the list 
+        - Start the server (Not as simple as 'npm start' or even './mvnw spring-boot:run')
+            python3 manage.py runserver
+
+    - Django template language
+        - Templates can work with primitives, lists, dicts, and classes 
+        - Variable 
+            {{ blog_name }}
+        - Method - (I really don't think that's clear b/c the method doesn't have parenthesis)
+            {{ blog_name.upper }} 
+        - If, else, endif
+            {% if post.theme %}
+                ....
+            {% else %}
+                ....
+            {% endif %}
+        - Loop 
+            {% for comment in post.comments %}
+                ....
+            {% endfor %}
+        - Loop counters
+            {{ forloop.counter0 }}  # zero-based
+            {{ forloop.counter }}   # one-based
+        - Filters - (They can be chained like pipes in the shell)
+            {{ post.text.split|length }}
+            {{ post.comments|join:"<br />" }}
+            {{ post.created_at|date:"Y.m.d" }}
+            {{ post.likes|default:0|add:1 }}
+        - Blocks 
+            {% block content %} Hello {% endblock %}
+
+            {% extends 'base.html' %}
+            {% block content %} {{ block.super }} world! {% endblock %}
+
+    - Django ORM - (I think Java / Spring Boot does this better with strong typing and annotations)
+        - models - describe the data schema 
+        - fields - adapter classes used to convert Python primitives to database types 
+        - Object-Relational Mapping / Fields
+            - Map class attributes to database columns 
+            - Example - (Why do models not have IDs???)
+                from django.db import models
+
+                class Player(models.Model):
+                    height= models.FloatField()
+                    name = models.CharField(max_length=64)
+                    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+
+        - Migrations 
+            - To apply the structure of our Models to the database tables (Spring Boot does this automatically)
+                python3 manage.py makemigrations
+                python3 manage.py migrate
+
+    - Queries and filters - (This is more explicit and less magical than Spring Boot's JPA Repositories)
+        - Model Object Manager - class that gets objects from DB and allows you to modify them 
+            - Example 
+                class Player(models.Model):
+                    height= models.FloatField()
+                    name = models.CharField(max_length=64)
+                    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+                
+                player_model_manager = Player.objects
+
+                Player.objects.create(name="Karl Broadmoor", height=180, team=falmouth_falcons)
+        - Get an Object
+            - Throws an error if your query matches more than one record
+            - Example 
+                falcons = Team.objects.get(name="Falmouth Falcons")
+        - Filter and first
+            - Unlike get(), it doesn't throw an error when multiple matches are found 
+            - Returns a QuerySet, a type of iterable 
+            - Example
+                falcons = Team.objects.filter(name="Falmouth Falcons")
+                if len(falcons) == 1:
+                    falcons_team = falcons[0]
+                falcon_player = Player.objects.filter(team=falcons).first()
+
+    - Field lookups
+        - For queries like >, >=, <, <=, substrings, etc 
+        - Exlude 
+            Team.objects.exclude(home_team=falmouth_falcons)
+        - Greater than, etc 
+            Game.objects.filter(home_team_points__gt=12)                                    # points >= 12 
+            Game.objects.filter(date__gte=date(1900, 1, 1), date__lte=date(1999, 12, 31))   # 1900 <= date < 2000
+            Game.objects.filter(date__year__range=(1900, 1999))                             # 1900 <= date < 2000
+        - Chaining 
+            Game.objects.exclude(home_team=tutshill_tornados).exclude(home_team=appleby_arrows)
+        - Collections 
+            Game.objects.filter(home_team__in=[falmouth_falcons, montrose_magpies])
+        - Foreign Keys
+            - foreign_key_field_name__foreign_key_model_field
+                Game.objects.filter(home_team__name="Falmouth Falcons")
+        - Contains 
+            Game.objects.filter(home_team__name__contains="Falcons")
+
+    - Object modification with ORM
+        - Create and save 
+            laser = Weapon.objects.create(type='laser', power=100)
+
+            # or 
+            laser = Weapon(type='laser', power=100)
+            laser.save()
+        - Delete
+            laser.delete()
+        - Update
+            laser.quantity -= 1
+            laser.save()
+        - Update multipe 
+            Alien.objects.filter(type='Space Bug').update(
+                distance=50,
+                threat=10
+            )
+        - Delete multiple
+            Alien.objects.filter(type='Space Bug').delete()
+
+    - Aggregations and Ordering
+        - Ordering
+            DayWeather.objects.order_by('temperature')[:3]      # 3 coldest days 
+            DayWeather.objects.order_by('-temperature')[:3]     # 3 hotest days 
+        - Aggregations
+            DayWeather.objects.filter(....).count()             # count 
+            DayWeather.objects.filter(....).aggregate(average=Avg('temperature'))['average']    # Average 
+        - Group By Aggregations
+            - Django aggregation functions - Avg, Count, Max, Min, StdDev, Sum, Variance
+            - Example 
+                DayWeather.objects.filter(date__year=last_year) \
+                    .values('date__month') \
+                    .annotate(sum=Sum('precipitation'))
+        - Count Function vs Count Method
+            DayWeather.objects.filter(date__year=last_year) \
+                .filter(temperature__gte=20) \
+                .values('date__week') \
+                .annotate(count=Count('date'))
+
+    - Using models with templates
+        - This lesson is super random and disorganized 
+        - There were a few interesting pieces of code 
+            {{ song.favorite_by.all|random }}
+            {{ song.favorite_by.all|slice:5|unordered_list }}
+
+    - Processing requests
+        - GET requests and Not Found Pages
+            class CandyView(View):
+                def get(self, request, candy_name, *args, **kwargs):
+                    if candy_name not in candies:
+                        raise Http404
+                    html =  "\n".join(f"<div>{candy}</div>" for candy in candies)
+                    return HttpResponse(html)
+
+        - URL Routing - (Hmmm... I don't like keeping these separate from the methods. Spring Boot and Express do this better)
+            # In settings.py 
+            urlpatterns = [
+                path("candies/", MainPageView.as_view()),
+                re_path("candies/(?P<candy_name>[^/]*)/?", CandyView.as_view()),
+            ]
+
+    - Submitting data
+        - POST and DELETE requests 
+            class WishListView(View):
+                wishlist = defaultdict(list)
+            
+                def post(self, request, *args, **kwargs):
+                    author = request.user.username if request.user else 'Anonymous'
+                    wish = request.POST.get('wish')
+                    self.wishlist[author].append(wish)
+                    return redirect('/')
+ 
+                def delete(self, request, wish, *args, **kwargs):
+                    author = request.user.username if request.user else 'Anonymous'
+                    if wish in self.wishlist[author]:
+                        self.wishlist[author].remove(wish)
+                    return redirect('/')
+
+    - Forms and validation
+        - Declare a form 
+            from django import forms
+            class PostcardForm(forms.Form):
+                address = forms.CharField(label='Destination Address')
+                author = forms.CharField(min_length=3)
+                compliment = forms.CharField(max_length=1024)
+                date_of_delivery = forms.DateField(input_formats=['%Y/%m/%d'])
+                email = forms.EmailField()
+        - Convert data to HTML automatically 
+            <table>{{ postcard_form.as_table }}</table>
+            form.as_p
+            form.as_ul
+        - Server-side validation 
+            postcard_form = PostcardForm(request.POST)
+            if postcard_form.is_valid():
+                data = postcard_form.cleaned_data  # data is an usual dictionary
+                ...
+            elif 'date_of_delivery' not in postcard_form.cleaned_data:
+                postcard_form.add_error('date_of_delivery', 'User YYYY/MM/DD format')
+
+
+
+
+        
+            
+

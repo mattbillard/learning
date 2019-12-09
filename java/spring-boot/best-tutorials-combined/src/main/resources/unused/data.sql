@@ -1,0 +1,10 @@
+-- INSERT INTO todos (id, description, is_done)
+-- VALUES (1, 'aaa', false);
+--
+-- INSERT INTO todos (id, description, is_done)
+-- VALUES (2, 'bbb', false);
+--
+-- INSERT INTO todos (id, description, is_done)
+-- VALUES (3, 'ccc', false);
+--
+--

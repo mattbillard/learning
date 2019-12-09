@@ -1,0 +1,54 @@
+REACT UI FRAMEWORK RESEARCH
+2019-10-23
+
+ANT DESIGN (web)
+- Pros 
+  - Great clean white design
+  - Lots of extra features
+    - Rate (stars)
+    - Calendar 
+    - Timeline 
+    - Back to top 
+    - Afix 
+    - Number input 
+    - @mention 
+    - Result ("Yay purchase complete" page)
+- Cons 
+  - Typography - sometimes needs components (but it seems only required if you want it)
+  - No clear documentation on navbar (or dark navbar) but it does exist 
+
+
+ANT DESIGN MOBILE 
+- Pros 
+  - Designed for mobile
+  - Some extra features
+    - Bottom navigation (aka tabbar)
+    - Mobile elements look perfect 
+- Cons 
+  - Doesn't seem as polished. (e.g. there is no base font. Everything is browser default "Times")
+  - Documentation is partly in Chinese...???
+
+
+REACT BOOTSTRAP 
+- Pros 
+  - Many existing boostrap themes
+  - Many people already know bootstrap 
+  - Some extra features
+    - List groups 
+    - Utitlities - fade and collapse 
+- Cons
+  - No typeahead, datepicker, star rater, transfer list, range slider, calendar, drawer, stepper
+  - Lame toast
+  - Lame switch
+
+
+MATERIAL UI
+- Pros
+  - Designed for mobile
+  - Some extra features
+    - Mobile friendly datepicker and timepicker 
+    - Bottom navigation
+- Cons 
+  - Typography - always requires components even for <p> tags! (e.g. <Typography component="p">)
+  - JSS is very awkward and annoying
+  - Need to do a lot of CSS yourself for padding and margins 

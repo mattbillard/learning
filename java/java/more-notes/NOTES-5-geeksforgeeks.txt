@@ -1,0 +1,43 @@
+geeksforgeeks
+6/2019
+https://www.geeksforgeeks.org/java-how-to-start-learning-java/
+
+//- Skipping everything except a few interesting topics 
+
+- Threads
+  - Can either extend thread class or implement runable interface (better)
+    class Demo1 extends Thread { 
+      public void run() { 
+        //...
+      } 
+    } 
+    class Demo2 implements Runnable { 
+      public void run() { 
+        //...
+      } 
+    } 
+
+//- Pages I read. Some I took notes on...
+
+- File Handling in Java with CRUD operations
+
+- Comparison of Exception Handling in C++ and Java
+  - Java can't throw just anything. Must be of type throwable 
+
+- Myth about the file name and class name in Java
+  - Syntax to have 1 file with many classes. Good for experimenting
+    /* File name: Test.java */
+
+- Packages In Java
+
+- Introduction to Spring Framework
+  - JavaBeans helped develop web UI's but no services like transactions or security, so...
+  - EJB (Enterprise Java Beans) but complicated and difficult, so...
+  - Spring framework. 
+    - Uses Aspect-Oriented Programming (AOP), Plain Old Java Object (POJO), and dependency injection (DI)
+    - Collection of sollection of sub-frameworks, aka layers, like Spring AOP, Spring Object-Relational Mapping (Spring ORM). Spring Web Flow, and Spring Web MVC
+    //- Spring: the framework that was so complicated, it needed another framework (SpringBoot) to make it usable!
+
+- Java Memory Management
+
+

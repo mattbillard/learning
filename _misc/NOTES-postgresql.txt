@@ -1,0 +1,38 @@
+LEARNED POSTGRESQL 
+11/2019
+
+- Install with Homebrew 
+    brew install postgresql
+  - Instructions the installer outputs
+      To have launchd start postgresql now and restart at login:
+      brew services start postgresql
+      Or, if you don't want/need a background service you can just run:
+      pg_ctl -D /usr/local/var/postgres start
+
+
+- Create DB and user 
+    psql postgres
+    drop database if exists testdb;
+    create database testdb;
+    create user myuser with encrypted password 'mypass';
+    grant all privileges on database testdb to myuser;
+    \l
+
+- Dump the DB (Very useful for Flyway scripts)
+    pg_dump testdb > ~/Desktop/pg_dump.sql
+
+
+- PostgreSQL GUIs
+  - PG Admin
+    - version 3 
+      - Used this one on a past project, but it's very outdated. Doesn't even support current version of PostgreSQL
+    - version 4 
+      - Far more features than v3
+      - Too many features. Maybe good for power users, but seems a bit much for someone just starting out. 
+      - Also rather annoying. Requires a master password. No button to test new DB conneciton. Just too many buttons and not very UX. 
+        - pgAdmin password=password
+  - *** Table Plus
+    - Simple and very user-friendly. Easy to view, edit, and export tables and data. Great for getting started. 
+    - Supports MySQL, PostgreSQL, SQLite & more
+    - Shows a log of your commands so you can learn 
+

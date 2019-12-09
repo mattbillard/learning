@@ -1,0 +1,2342 @@
+HYPERSKILL (Partnered with IntelliJ to teach Java)
+2019-07
+
+https://hi.hyperskill.org/projects3
+
+- Intro 
+  - Java was originally called "Oak" 
+
+- Jetbrains - Key commands and shortcut templates 
+  - shift + enter 
+  - psvm - public static void main....
+  - sout - System.out.println....
+
+- Type inference
+  - Since Java 11, you can write var instead of a specific type
+      var language = "Java"; // String
+      var version = 11; // int
+
+- Terms
+  - Bytecode - compiled Java code that can then be run by the JVM on any system. (I think each symbol takes a byte, hence the name)
+  - JDK = JRE + compiler, debugger, archiver - Java Development Kit 
+    - javac - converts *.java into *.class 
+    - archiver - creates .JAR files 
+    - JRE = JVM + JCL - Java Runtime Environment 
+      - JVM - Java Virtual Machine 
+      - JCL - Java Class Library 
+  - So you want to install JDK, not JRE 
+
+- Terminals 
+  - Lines begin with > on Windows and $ on Mac and Linux 
+  - iTerm2 is useful on Mac 
+    - Better colors, autocomplete (Ctrl -), split terminals, paste history, click to open text files 
+  - Syntax 
+      <param> - required param 
+      [param] - optional param 
+      [params...] - params that can be repeated 
+      [param 1|param 2] - choice of params 
+  - Manual 
+      man <command_name> - for Mac 
+      <command_name> /? - for Windows
+  - Display all built in commands 
+      man builtin - for Mac and Linux 
+      help - for Windows
+
+- Compile and run 
+    javac Main.java
+    java Main 
+  or 
+     java  -cp . Main 
+
+
+- Scanner 
+  - Read input from the commandline 
+  - Example 
+      import java.util.Scanner;
+      public class ReadInput {
+        public static void main(String[] args) {
+          Scanner scanner = new Scanner(System.in);
+          String line = scanner.nextLine(); // read a whole line, for example "Hello, Java"
+          int num = scanner.nextInt(); // read a number, for example 123
+          double d = scanner.nextDouble(); // read double, for example 123.01
+          String string = scanner.next(); // read a string (not a line), for example "Hello"
+          long l = scanner.nextLong(); // read a long
+        }
+      }
+
+
+- Char 
+  - Can be incremented, decremented, treated like a number 
+      char ch = 'b';
+      ch += 1; // 'c'
+      ch -= 2; // 'a'
+      ch++; // 'b'
+      ch--; // 'a'
+  - Details 
+    - It has a minimum value of '\u0000' and a maximum value of '\uffff'.
+    - It may be considered as an unsigned integer value in the range from 0 to 65535.
+
+
+- Numbers 
+  - Only use int, long, and double 
+
+
+- Casting 
+  - implicit casting - when the target type is wider than source type. No loss of information
+  - explicit casting - when the target type is narrow than source type. Losses information
+    - Requires (type) to cast 
+    - type overflow - value gets truncated. For example bigNum to int 
+
+
+
+- Scanner 
+  import java.util.Scanner;
+  Scanner scanner = new Scanner(System.in);
+  String line = scanner.nextLine(); // read a whole line, for example "Hello, Java"
+  int num = scanner.nextInt(); // read a number, for example 123
+  double d = scanner.nextDouble(); // read double, for example 123.01
+  String string = scanner.next(); // read a string (not a line), for example "Hello"
+  long l = scanner.nextLong(); // read a long
+
+
+
+
+- Arrays 
+  - Basics 
+    - Initialization - there are lots of ways 
+      char[] arr = {'a', 'z', 'e', 'd'};
+      char[] arr = new char[] {'a', 'z', 'e', 'd'};
+      char[] arr = new char[5]; char[0]='a'; char[1]='b'; char[2]='c'; char[3]='d'; 
+    - Arrays utility class - class with standard methods used to process arrays
+      - Arrays.toString( arr )
+      - Arrays.sort( arr )
+      - Arrays.equals( arr,  arr )
+      - Arrays.fill(  ) 
+
+  - Fixed-size array
+    - Arrays in Java are fixed size. You can't change the size after you make them. 
+
+  - Dynamic array
+    - Arrays are fixed in size, so there's the concept of a Dynamic Array (used internally for collections)
+    - If you run out of space in the array, create a larger one and copy all the old elements over to the new one 
+    - size – number of elements currently in it 
+    - capacity – possible number of elements. Corresponds to the size of the internal regular array
+    - Scaling factor
+      - When size > capacity, everything is copied to a new larger internal array 
+      - Most common scaling strategies 
+        - Java - x1.5
+        - C++ - x2
+        - Go - x2 (if <1024), then x1.25
+      - Sometimes the array is shrunk too 
+    - Common operations
+      - Add an element to end (i.e. not specifying index)
+        - O(1) - average case. Just add the element to the end unless...
+        - O(n) - worst case. If we need to increase the size of the internal array, copy everything over to a new array 
+      - Add an element at the specified index
+        - O(n) - average and worst b/c need to shift existing elements to the right 
+      - Update value at the specified index
+        - O(1)
+      - Remove an element at the specified index
+        - O(n) - average and worst b/c need to shift remaining elements to the left
+      - Clear 
+        - O(n) - because you need to clear each element or garbage collector won't be able to get to them 
+      - Get element by index
+        - O(1)
+
+
+- Floating point numbers 
+  - Float and double 
+  - Recommend you always use double
+  - examples 
+      float pi = 3.1415f; // remember to add the "f" on the end 
+      double pi = 3.1415;
+      double eps = 5e-3; // "mantissa"
+  - IMPORTANT 
+      double d1 = 5 / 4; // 1.0
+      double d2 = 5.0 / 4; // 1.25
+  - Errors can accumulate during computation
+      double d = 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1;
+      System.out.println(d); // it prints 0.9999999999999999
+  - Scanner 
+      float f = scanner.nextFloat();
+      double d = scanner.nextDouble();
+    - Force scanner to use . instead of , for decimal: 
+        Scanner scanner = new Scanner(System.in).useLocale(Locale.US);
+
+
+
+- Infinity and NaN 
+  - float and double have +Infinity, -Infinity and NaN. 
+  - Examples
+    Double.NEGATIVE_INFINITY
+    Double.POSITIVE_INFINITY
+    Double.NaN
+    Float.POSITIVE_INFINITY
+    Float.NEGATIVE_INFINITY
+    Float.NaN
+
+
+
+- Strings and arrays
+  - Methods to convert btw strings and arrays 
+      char[] chars = { 'A', 'B', 'C', 'D', 'E', 'F' };
+      String stringFromChars = String.valueOf(chars); // "ABCDEF"
+      char[] charsFromString = stringFromChars.toCharArray(); // { 'A', 'B', 'C', 'D', 'E', 'F' }
+      String theSameString = new String(stringFromChars); // "ABCDEF"
+  - Other methods 
+      .split()
+      .charAt()
+  - You can loop over a string with for loops 
+
+
+- Arrays as parameters 
+  - varargs 
+    - variable-length arguments
+    - The way you pass N number of args to a method. Must all be same type. 
+    - Example 
+        public static void printNumberOfArguments(int... numbers) { .... }
+    - Interesting... both of these will successfully call it 
+        printNumberOfArguments(1, 2, 3);
+        printNumberOfArguments(new int[] { 1, 2 });
+
+
+- Classes 
+  - Multiple classes per file - don't need to do anything fancy. Just make *only one* of the classes public 
+      public class PatientDemo { .... }
+      class Patient { .... }
+  - Null - don't forget any object instance can be set to null 
+      Patient p = null; 
+
+
+- Regex 
+  - Basics 
+    - Very different from JS 
+        String reg = "abc";
+        "abc".matches(reg);  // true
+        "abc1".matches(reg)); // false - weird: needs to match whole string perfectly 
+    - ? - reminder - question mark means preceeding character is optional 
+    - [^abc] - not a,b,c 
+    - [^1-6] - not 1-6 
+    - (abc|def|xyz) - abc or def or xyz 
+    - {0,1} is the same as ?
+    - {0, } is the same I think as * 
+    - {n} - exactly n repetitions 
+    - {n, m} - n-m 
+    - {n,} - >= n
+    - {,m} - <= m
+  - Pattern and matcher 
+    - More efficient and more options than string.matches(reg);
+    - Not compiled every time you use it.  
+    - Example 
+        import java.util.regex.Pattern;
+        import java.util.regex.Matcher;
+
+        String text = "We use Java to write modern applications";
+        Pattern pattern = Pattern.compile(".*[Jj]ava.*", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(text); 
+        boolean matches = matcher.matches();
+
+        // or more concisely
+
+        String text = "We use Java to write modern applications";
+        boolean matches =
+          Pattern
+            .compile(".*[Jj]ava.*", Pattern.CASE_INSENSITIVE)
+            .matcher(text)
+            .matches();
+
+        // or non-reusable but with flags 
+
+        Pattern.matches("(?i).*[Jj]ava.*", "We use Java to write modern applications");
+
+  - Other methods 
+    - find - unlike matches, it looks for substrings and doesn't need to match the whole thing 
+        String text = "Regex is a powerful tool for programmers";
+        Pattern pattern = Pattern.compile(".*[Jj]ava.*"); 
+        Matcher matcher = pattern.matcher(text); 
+        matcher.matches(); // false, the whole string does not match the pattern
+        matcher.find(); // true, there is a substring that matches the pattern
+  - replaceFirst and replaceAll
+    - // IMPORTANT: replace() is different. It does not support regex 
+    - With strings... 
+      - string.replaceFirst(regex, replacement);
+      - string.replaceAll(regex, replacement);
+    - With matchers...
+      - matcher.replaceFirst(replacement);
+      - matcher.replaceAll(replacement);
+
+  - Match results 
+    - Example 
+        String text = "Java supports regular expressions. LET'S USE JAVA!!!";
+        Pattern pattern = Pattern.compile("java", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(text);
+        matcher.find();   // true
+        
+        // Now *after* find() you can run the following
+        matcher.start();  // 0, the starting index of match
+        matcher.end();    // 4, the index followed the last index of match
+        matcher.group();  // "Java", a substring that matches the pattern
+    - Or you can use MatchResult (which honestly seems about the same thing)
+        // Again only if you found something 
+        MatchResult result = matcher.toMatchResult(); // a special object containing match results
+        result.start();   // 0
+        result.end();     // 4
+        result.group();   // "Java"
+    - To avoid errors, consider using this pattern 
+        if (matchter.find()) {
+          //....
+        }
+    - Or to iterate over each found instance. (Seems useful)
+        while (matcher.find()) {
+          //....
+        }
+ 
+
+
+- Packages
+  - If a class is in the same package, you don't need to import it 
+  - java.lang is always imported. Includes String, System, Long, Integer, NullPointerException, etc 
+  - You can avoid imports by specifying full name (very verbose)
+      java.util.Scanner scanner = new java.util.Scanner(System.in);
+  - You can import static members of a class and then use them without the class name. (Never seen this actually done)
+      import static java.util.Arrays.*; 
+      ....
+      sort()
+  - You should always specify the package name. If you don't, it's dumped into the default package and can't be imported into any class in a named package. It's really just useful for helloworld kind of stuff. 
+
+
+- Constructors 
+  - Unlike JavaScript that names it "constructor", in Java, the constructor must have the exact same name as the class, with a captital letter 
+  - No return type, not even void 
+  - If you don't define a constructor, the compiler will make one with no prams for you 
+      class Nothing {
+        // ....
+      }
+
+
+- Enums 
+  - Special kind of Java class that enables a variable to be a set of predefined constants
+  - Convention: PascalCase.UPPER_CASE
+  - Example 
+    public enum Season {
+      SPRING, SUMMER, AUTUMN, WINTER
+    }
+  - You can use == or .equals()
+      summer == Season.SUMMER
+      summer.equals(Season.SUMMER)
+  - Useful methods 
+      Season[] seasons = Season.values(); // [SPRING, SUMMER, AUTUMN, WINTER]
+      Season season = Season.valueOf("SPRING"); // SPRING
+      Season winter = Season.valueOf("spring"); // IllegalArgumentException, valueOf is case-sensitive
+      String winter = Season.SPRING.name(); // SPRING
+      String autumn = Season.SPRING.toString(); // SPRING
+  - Great in switch statments
+      switch (season) {
+        case SPRING:
+          // .... 
+        case SUMMER:
+          // .... 
+        case AUTUMN:
+          // .... 
+        case WINTER:
+          // .... 
+      } 
+  - Enumerations can also include fields and methods
+      public enum TransactionStatus {
+        WAITING(false), 
+        PROCESSING(false), 
+        COMPLETED(true), 
+        ERROR(true);
+        
+        private boolean done;
+
+        TransactionStatus(boolean done) {
+          this.done = done;
+        }
+
+        public boolean isDone() {
+          return done;
+        }
+      }
+
+      printFullStatus(TransactionStatus.WAITING); // false
+
+
+- Access modifiers
+  - public, protected, default (package-private), private 
+    - private - available only inside a class;
+    - package-private (also known as default, implicit) - available for all classes in the same package;
+    - protected - for classes in the same package and for subclasses (will be covered later);
+    - public - available for all classes everywhere.  
+  - All four modifiers are available for class members, but only two of them, public and default, can be used with classes.
+  - Advice: use the most restrictive access level that makes sense for a particular member. 
+  - Constructors are usually public 
+  - What modifiers are admissible for a standard class (not nested, not inner, not static).
+    - public
+    - package-private (default)
+
+
+- Getters and setters 
+  - Convention is to name fields getFoo and setFoo, except...
+  - Booleans are named foo, isFoo(), and setFoo() 
+
+
+- Extending / inheritance / sublcasses 
+  - subclass = derived, extended, or child class 
+  - superclass = base, parent class 
+  - Java doesn't support multiple-classes inheritance. (Not same as "multi-level" which is supported.)
+  - A subclass DOES inherits all *public* and *protected* fields and methods from the superclass.
+  - A subclass DOES NOT inherit *private* fields and methods from the superclass. You'd need to use getters and setters 
+  - Constructors are NOT inherited by subclasses, but the superclass's constructor can be invoked from the subclass using the special keyword super.
+  - protected = use this if you'd like the base class members to be accessible from all subclasses but not accessible from outside code (excluding the same package)
+    - ***Fields seem to use *protected* when you plan to subclass 
+  - Is-a - Inheritance represents the IS-A relationship. A base class represents a general thing and subclass represents a particular thing.
+  - Final - cannot have subclasses
+
+
+- Exceptions 
+  - Exceptions are objects too (Of course, it's Java LOL)
+  - The base class for all exceptions is java.lang.Throwable.
+  - Useful methods 
+    - String getMessage()
+    - Throwable getCause()
+    - void printStackTrace()
+    - and several constructors 
+  - Throwable > Exception > RuntimeException (e.g. NullPointerException, NumberFormatException, ArrayIndexOutOfBoundsException.)
+  - Throwable > Error (exceptional events in JVM, for examples: OutOfMemoryError, StackOverFlowError, UnknownError)
+  - Exceptions 
+    - checked exceptions 
+      - extend java.lang.Exception
+      - If a method throws a checked exception, it needs to declare the exception. (e.g. method foo() throws bar)
+    - unchecked exceptions
+      - extend java.lang.RuntimeException
+    - Best practice - If a client can reasonably be expected to recover from an exception, make it a checked exception. If a client cannot do anything to recover from the exception, make it an unchecked exception.
+
+
+- Exception handling 
+  - Syntax 
+      try {
+        // code throwing an exception
+      } catch (IndexOutOfBoundsException e) {
+        // handle this type of exception 
+      } catch(SQLException | IOException e) {
+        // handle either of these 
+      } catch (Exception e) {
+        // all other types of exceptions 
+      } finally {
+        // ***ALWAYS*** executed regardless of whether exception is thrown or not 
+      }
+  - Note: you can do try/finally without a catch 
+  - try-with-resources 
+    - Concise syntax created to solve common problem of trying to read a file and finally closing while also making sure not to throw more errors 
+    - Guarantees resource is closed, avoiding memory leaks, regardless of success or fail 
+        InputStream is = null;
+        try {
+            is = new FileInputStream("test.txt"); // creating an instance for reading from the file
+
+            // do something with the stream
+        } catch (IOException e) {
+            // process an exception
+        } finally {
+            try {
+                if (is != null) {
+                    is.close(); // closing the stream
+                }
+            } catch (IOException e) {
+                // ignoring
+            }
+        }
+
+        v.s.
+
+        try (InputStream is = new FileInputStream("test.txt")) {
+            // do something with the stream
+        } catch (IOException e) {
+            // process an exception
+        }
+  - Rethrowing exceptions 
+    - Best practice: an exception should be handled in a method that has sufficient information to make the correct decision, otherwise, the exception must be thrown to the calling method
+    - It's best practice not to lose the original exceptions: 
+          // ....
+        } catch (Exception originalCause) {
+          throw new FooException("My message", originalCause);
+        }
+
+
+- NullPointerException
+  - LOL this is the only way to make sure not to throw an NPE when comparing 2 strings
+    Objects.equals(s1, s2)
+
+    OR...
+
+    s1 != null && s2 != null && s1.equals(s2)
+
+
+
+- Throwing exceptions
+  - Examples 
+      throw new RuntimeException("Something's bad.");
+      throw new Throwable("Something's bad.");
+      throw new Exception("An exception occurs");
+      throw new NullPointerException("The field is null");
+  - Checked exceptions - methods that throw checked exceptions need to declare it 
+      void myMethod() throws IOException {
+        throw new IOException("File not found");
+      }
+  - Unchecked exceptions - methods that throw unchecked exceptions do not need to declare it
+      void myMethod() { 
+        throw new IllegalArgumentException("Too large amount"); 
+      }
+  - When to throw an exception?
+      - The common practice is to throw an exception when and only when method preconditions are broken, i.e. it cannot be performed under the current conditions.
+
+ 
+
+- Big O notation
+  - Can be used for time or memory 
+  - Complexity for *worst* case scenario 
+  - Common examples 
+    - Constant time: O(1). The number of required operations is not dependent on the input size. 
+    - Logarithmic time: O(log n).
+    - Square-root time: O(sqrt(n))
+    - Linear time: O(n)
+    - Log-linear time O(n log n)
+    - Quadratic time: O(n^2)
+    - Exponential time:  O(2^n)
+
+
+- BigInteger (not BigInt)
+  - The size of a stored number is only limited by the available memory. (Wow!)
+  - Ints and longs aren't always large enough 
+      int y = 62957291795228763406253098; // compilation-error: integer number too large
+    or 
+      int a = Integer.MAX_VALUE; // 2147483647
+      a += 2; // -2147483647 - type-overflow 
+  - Immutable - so methods of the class always return new instances
+  - Only use when necessary - slower and less intuitive 
+  - Example 
+      import java.math.BigInteger;
+      BigInteger number = new BigInteger("62957291795228763406253098");
+      BigInteger number = BigInteger.valueOf(1_000_000_000);
+  - Useful constants:
+      BigInteger zero = BigInteger.ZERO; // 0
+      BigInteger one = BigInteger.ONE;   // 1
+      BigInteger ten = BigInteger.TEN;   // 10
+  - Use methods for math (again all return a new BigInt and don't change the original)
+      BigInteger eleven = ten.add(one);
+      BigInteger nine = ten.subtract(BigInteger.ONE); 
+      BigInteger oneHundredTen = ten.multiply(eleven); 
+      BigInteger twelve = oneHundredTen.divide(nine); // Note: remainder is lost. Just integer part kept 
+  - And more methods 
+      BigInteger negativeTen = ten.negate();
+      BigInteger positiveTen = negativeTen.abs();
+      BigInteger[] pair = oneHundredTen.divideAndRemainder(nine); // 12 and 2
+  - Even greatest common divisor
+      BigInteger three = BigInteger.valueOf(3);
+      BigInteger six = BigInteger.valueOf(6);
+      three.gcd(six); // 3
+
+
+- Math library
+  - Common methods
+      abs(...)
+      sqrt(...)
+      cbrt(...)
+      pow(..., ...)
+      min(..., ...)
+      max(..., ...)
+      toRadians(...)
+      sin(...)
+      cos(...)
+      random()
+      floor(...)
+      ceil(...)
+  - Useful constants 
+      Math.PI
+      Math.E
+
+
+- Random
+  - Example 
+      import java.util.Random;
+      Random random = new Random();
+  - Or you can seed it yourself 
+    - IMPORTANT: it will result in the same sequence of numbers every time 
+      Random random = new Random(100000);  
+  - Useful methods 
+      nextInt()
+      nextInt(int) - 0 (inclusive) to n (exclusive);
+      nextLong()
+      nextDouble()
+      nextBytes(byte[]) - generates random bytes and places them into a user-supplied byte array
+  - Example 
+      // number between a and b (inclusive)
+      int from = scanner.nextInt();
+      int to = scanner.nextInt();
+      random.nextInt(to - from + 1) + from;
+
+
+- LocalDate
+  - Date without a time 
+  - Example 
+      import java.time.LocalDate;
+      LocalDate now = LocalDate.now();
+      LocalDate date1 = LocalDate.of(2017, 11, 25); 
+      LocalDate date2 = LocalDate.parse("2017-11-25"); 
+  - Others
+      LocalDate.ofYearDay(2017, 33); // 33rd day of 2017  = 2017-02-02
+  - Get methods 
+      getYear()
+      getMonthValue()
+      getDayOfMonth()
+      getDayOfYear()
+  - Other methods 
+      lengthOfYear(); // 365
+      lengthOfMonth(); // 30
+  - And add or subtract - immutable so returns new instance 
+      plusDays(1)
+      minusDays(1)
+      plusYears(2)
+  - Modify just one piece - immutable so returns new instance 
+      withYear(2016)
+
+
+- LocalTime
+  - Time without a date
+    - Hours: 0-23
+    - Minutes and seconds: 0-59
+  - Example 
+      import java.time.LocalTime;
+      LocalTime now = LocalTime.now();
+      LocalTime.of(11, 45);        // 11:45
+      LocalTime.of(11, 45, 30);    // 11:45:30
+      LocalTime.parse("11:45:30"); // 11:45:30
+  - Others 
+      LocalTime.ofSecondOfDay(100); // 100th second of the day
+      LocalTime.ofNanoOfDay(100);   // 100th nanosecond of the day 
+  - Constants 
+      LocalTime.MIN; // 00:00
+      LocalTime.MAX; // 23:59:59.999999999
+      LocalTime.NOON; // 12:00
+      LocalTime.MIDNIGHT; // 00:00
+  - Get methods 
+      getHour()
+      getMinute()
+      getSecond()
+      getNano()
+  - And add or subtract - immutable so returns new instance 
+      plusHours(5)
+      minusMinutes(10)
+      minusSeconds(30)
+  - Modify just one piece  - immutable so returns new instance 
+      withHour(23)
+      withMinute(50)
+      withSecond(0)
+
+
+- LocalDateTime
+  - Combination of LocalDate and LocalTime without a time-zone, such as 2017-12-03T22:30
+  - Examples 
+      import java.time.LocalDateTime;
+      LocalDateTime now = LocalDateTime.now();
+      LocalDateTime dt1 = LocalDateTime.of(2017, 11, 25, 22, 30); 
+      LocalDateTime dt2 = LocalDateTime.parse("2017-11-25T22:30");
+  - Or make it using a date and a time object 
+      LocalDateTime dt = LocalDateTime.of(localDate, localTime);
+  - Or set stuff 
+      LocalDateTime dt = dt.atTime(time); // 2017-11-25T21:30
+      LocalDateTime dt = dt.atDate(date); // 2017-11-25T21:30
+  - Get methods 
+      getMonthValue()
+      getDayOfMonth()
+      getHour()
+      getMinute()
+  - Convert to LocalDate or LocalTime 
+      toLocalDate()
+      toLocalTime()
+  - Set mehods 
+      (See same methods of LocalDate and LocalTime)
+
+
+- Comparing dates and time
+  - Example - IMPORTANT, values are not -1,0,1. It's -x,0,x 
+      LocalDate date1 = LocalDate.parse("2017-01-02");
+      LocalDate date2 = LocalDate.parse("2017-12-12");
+      date1.compareTo(date1); // 0, date1 and date1 are equal
+      date1.compareTo(date2); // -11, date1 is less than date2
+      date2.compareTo(date1); // 11, date2 is greater than date1
+  - More convenient methods 
+      d1.isEqual(d1);
+      d1.isBefore(d2);
+      d1.isAfter(d2);
+  - All of them have all 4 of these methods except LocalTime doesn't have the method isEqual
+
+
+
+
+
+- Formatted output
+  - System.out.printf() and String.format()
+      %d - int, short, byte, long 
+      %f - double, float 
+      %.2f - double, float with 2 decimal places 
+      %c - character 
+      %s - string 
+  - Example 
+      System.out.printf("Display a Number %.2f", 15.23);
+      or
+      String msg = String.format("My name is %c. %s.%nMy age is %d.%nMy height is %.2f.", initial, surname, age, height);
+      System.out.println(msg);
+  - Stackoverflow indicates + is actually 10x faster but formatting has other useful features like padding, formating numbers, dates, etc 
+
+
+- Multi-dimentional arrays 
+  - Array of arrays. Can be as many levels deep as you want. Not all children need to be same length 
+    int[][] twoDimArray = new int[3][];
+
+    twoDimArray[0] = new int[] { 1, 2, 3, 4 }; // the length is 4
+    twoDimArray[1] = new int[] { 5, 7, 3};     // the length is 3
+    twoDimArray[2] = new int[] { 8 };          // the length is 1
+
+    for (int i = 0; i < twoDimArray.length; i++) {
+      System.out.println(Arrays.toString(twoDimArray[i])); // NOTE: useful - Arrays.toString()
+    }
+
+    // or using for-each 
+    for (int[] arr : twoDimArray) {
+      for (int num : arr) {
+        System.out.println(num);
+      }
+      System.out.println();
+    }
+
+
+- Methods overloading
+  - Same name, but different number or type of parameters
+  - The return type is not considered for overloading because it's not part of the signature 
+  - (Also the program wouldn't know which one you wanted to call if same input, different output)
+  - If they are all similar (see below), the compiler chooses the most suitable method in the order of implicit casting
+    - It can be difficult to figure out which method is called if the signatures are similar
+        print(short a) { // .... }
+        print(int a) { // .... }
+        print(long a) { // .... }
+        print(double a) { // .... }
+
+        // Which one gets called???
+        main(String[] args) { 
+          print(100);  // Answer: int 
+          print((short) 100);  // Answer: short b/c of explicit casting 
+
+          char val = 2; 
+          print(val); // Answer: int! Wow weird. Char -> int. 
+        }
+
+
+- Command-line arguments
+  - Example 
+      javac Main.java
+      java Main arg1 arg2
+
+
+- Recursion 
+  - Types of recursions
+    1) Direct recursion - method invokes itself 
+    2) Indirect recursion - method invokes another method that invokes the original
+    3) Tail-recursion - the last recursive call. It just returns 
+    4) Multiple recursion - method invokes itself recursively multiple times
+
+
+- StringBuilder
+  - More performant in situations where you are doing lots of concatenations 
+      StringBuilder sb = new StringBuilder("I use Java");
+  - Methods
+      length()
+      charAt(index)
+      setCharAt(index, ch)
+      deleteCharAt(index)
+      append(str)
+      insert(offset, str)
+      replace(start, end, str)
+      delete(start, end)
+      reverse()
+  - And the most common method...
+      toString()
+  - You can chain 
+    sb
+      .append("foo")
+      .append("bar")
+      .append("baz")
+  - Similar to collections, it guesses at how much space to allocate and then expands it periodically. This is called  
+    capacity()
+
+
+- Bitwise operators
+  - Operators for manipulating bits of integer numbers
+  - "Bitwise operations are worth studying because they have many applications. It is not their main use to substitute arithmetic operations. Cryptography, computer graphics, hash functions, compression algorithms, and network protocols are just some examples where bitwise operations are extremely useful." - Stackoverflow
+  - Bitwise operators 
+    - Each of these operators goes though all bits of both operands (numbers) one by one (i.e. bitwise) ﻿and produces a new number as a result.
+    - Operators 
+        ~ unary inverse
+          - is a unary operator that inverses bits in the binary format of the number making every 0 a 1 and every 1 a 0. It also changes the sign bit of the value.
+        & bitwise AND
+          - the result digit is 1 if both operand digits are 1, otherwise, it is 0;
+        | bitwise OR
+          - the result digit is 1 if at least one operand digit is 1, otherwise, it is 0;
+        ^ bitwise XOR
+          - the result digit is 1 if exactly one operand is 1, otherwise, it is 0
+    - Exmaples 
+        int first = 15;  // binary format 1111
+        int second = 10; // binary format 1010
+        int bitwiseAnd = first & second; // 1111 & 1010 = 1010, the result is 10
+        int bitwiseOr = first | second;  // 1111 | 1010 = 1111, the result is 15
+        int bitwiseXor = first ^ second; // 1111 ^ 1010 = 0101, the result is 5 
+  - Bit-shift operators
+    - Operators which can be used to shift bits of an integer number from one position to another.
+    - Operators 
+        << signed left shift
+          - shifts a bit pattern to the left by the distance specified in the right operand. 
+          - It fills the empty place with zeros
+          - equivalent to the multiplication by two
+        >> signed right shift 
+          - shifts a bit pattern to the right by the distance specified in the right operand. 
+          - It fills the empty place with values of the sign bit.
+          - equivalent to the division by two
+        >>> unsigned right shift 
+          - shifts a bit pattern to the right by the distance specified in the right operand. 
+          - It is almost like >>, but shifted values are filled up with zeros. 
+          - The result of the >>> operator is always positive.
+    - Examples 
+        int val = 25;   // binary: 0001 1001, decimal: 25
+        val = val << 1; // binary: 0011 0010, decimal: 50
+        val = val << 2; // binary: 1100 1000, decimal: 200
+        int anotherVal = 14;   // binary: 1110, decimal: 14
+        anotherVal = anotherVal >> 1; // binary: 0111, decimal: 7      
+  - NOTE: skipping for now b/c this depends on... 2's compliment > 1's compliment > binary math 
+
+
+- Build tools 
+  - Manual compile and run is not practical for more than a few files 
+  - Build tools do...
+    - Downloading and adding dependencies (external libraries).
+    - Compiling source code to be executed (into bytecode in case of Java Platform).
+    - Packaging compiled code.
+    - Running tests.
+    - Generate documetation 
+    - Deployment to the production environment.
+  - 3 main build tools for Java-based projects: 
+    - Apache Ant - released in 2000. Uses Apache Ivy to download dependencies. Rarely used
+    - Apache Maven - released in 2004. Most popular for server dev.
+      - Convention Over Configuration - all standard aspects should just work. Only need to specify unconventional aspects
+    - Gradle - released in 2007. Standard for Android apps. Maven's standards and dep management with Ant's flexibility 
+    - sbt (Scala Build Tool) - primarily for Scala but also usable for Java and Kotlin 
+
+- Maven basics
+  - Intro 
+    - Most popular server dev 
+    - "accumulator of knowledge" in Yiddish. 
+    - Dep management, build, run tests, helps with releases and issue managemnt 
+    - "Declarative" = you write WHAT, not HOW
+  - Key concepts
+    - pom.xml aka Project Object Model (POM). 
+      - Required
+      - Project name, version, properties, dependencies, and build config 
+    - Convention over configuration.
+      - Programmer configures only unconventional options in POM.
+    - Dependency management
+      - All deps are specified in the pom 
+      - Maven automatically downloads specified external libraries and solves conflict cases with dependencies
+    - Repositories
+      - Deps can be loaded from public repositories or the local file system
+    - Build lifecycle
+      - The process for building and distributing a project is clearly defined and has a sequence of phases such as validation, compilation, testing, packaging, installing, and others. All phases are described in the POM.
+    - Plugins
+      - Maven can be extended by plugins to utilize a number of tools for reporting or the build process. All information about plugin configurations is stored in the POM.
+
+- Gradle basics
+  - Intro 
+    - Default build tool for Android 
+    - Uses ANT, Maven, and lvy repositories
+    - Can build Java, Scala, Kotlin, C++, Assembler
+    - Extendable with plugins 
+    - Declarative 
+    - build-by-convention but flexible 
+  - Key concepts 
+    - Builds 
+      - Full or partial builds. Multi-project builds. 
+    - Integration tool 
+      - Supports ANT tasks
+      - Supports Maven and Ivy deps 
+    - Ease of migration
+      - Can convert pom.xml into gradle script for you 
+    - Gradle Wrapper 
+      − Allows you to execute Gradle builds on machines where Gradle is not installed
+      - Especially useful on continuous integration servers
+    - Build Scans 
+      – Allow you to understand, share, analyze build logs, test results, build performance, dependencies, build caching issues, prior builds
+  - DSL (domain specific languages)
+    - Less bloated, tedious, and outdated than XML
+    - Uses Groovy or Kotlin for its scripts 
+  - Gradle Init Plugin
+    - Create new build or convert an old one 
+
+- Java Archive
+  - Basics 
+    - Java Archive (JAR) - platform-independent file format to pack multiple .class files together and distribute them as a single unit.
+    - Compressed with ZIP algorithm 
+    - Can be digitally signed by author 
+    - JDK - required to make a JAR 
+    - JRE - used to run a JAR 
+  - Structure
+    - META-INF
+      - MANIFEST.MF - describes the JAR, version, author, etc 
+          Manifest-Version: 1.0
+          Created-By: 9.0.1 (Oracle Corporation)
+          Main-Class: package.Main
+          (Required to end with newline)
+    - yourPageName
+      - Main.class 
+      - other .class's
+      - Other files - conifg XML and JSON. Even images and audio files 
+  - Running 
+      - stadard jar
+          java -jar app.jar 
+      - jar that does not speifiy its main-class
+          java -cp app.jar path.to.Main 
+
+- Java Archive Tool
+  - creating, viewing, updating and extracting
+  - Create 
+      jar cvfm jar-name input-file(s)
+      - c - create 
+      - v - verbose 
+      - f - file (not to standard output)
+      - input-files 
+        - separate by spaces 
+        - files and/or directories (recursive)
+        - can use *
+      - m - manifest is included 
+      - (It seems to create a basic manifest if you don't)
+    - Example 
+        jar cvf app.jar *.class images
+      or with manifest
+        jar cvfm app.jar manifest.mf *.class images
+  - View 
+      jar tf app.jar
+      - t - view table of contents 
+      - f - file-name is specified 
+  - Unzip 
+    - Use WinRAR, 7-Zip, or others 
+    - Or 
+        jar xf app.jar
+        - x - extract 
+        - f - file-name is specified 
+  - Updating 
+      jar uf app.jar input-file(s)
+        - u - update 
+        - f - file-name is specified 
+
+- Simplest grale project 
+  - Install Gradle on Mac 
+      brew install gradle
+  - Creates new gradle project
+      gradle init
+  - build.gradle - config file similar to pom.xml
+  - Build the project. Puts everything in ./build/ . Jar file is put in ./build/libs/
+      gradle build 
+  - Run the project 
+      gradle run 
+
+- Gradle dependency management
+  - Common repositories: Maven Central, JCenter
+  - You can also specify where to find jars on your local network or computer
+    - Often %projectRoot%/libs
+  - Main scope types 
+    - Compile − dep is required to compile *and* run the project. (e.g. Spring MVC)
+    - CompileOnly − dep only required to compile (e.g. Lombok)
+    - Runtime − dep only required during runtime (e.g. H2 Database)
+    - test____ - dep only used for tests, not final jar 
+  - Examples. Note the verbose and succinct syntaxes 
+      dependencies {
+        compile group: 'com.google.guava', name: 'guava', version: '27.0-jre'
+        runtime('com.h2database:h2:1.4.197')
+        compileOnly('org.projectlombok:lombok:1.18.4')
+        testCompileOnly('org.projectlombok:lombok:1.18.4')
+        testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: "5.3.0"
+
+        // From file system
+        compile files('libs/a.jar', 'libs/b.jar')
+        compile fileTree('libs') { include '*.jar' }
+      }
+
+- Gradle configuration
+  - Define a variable in the current scope 
+      def dest = "dest"
+  - Define a task 
+    task copy(type: Copy) {
+      def dest = "dest"
+      from "source"
+      into dest
+    }
+  - Extra properties in commandline start with -P, e.g. 
+      gradle run -Pprofile=test
+
+- Simplest maven project 
+  - Install Maven 
+    - Either download from website and add to ~/.bashrc, or 
+        brew install maven 
+  - Each project has these 3
+      groupId:artifactId:version
+  - Generate a new maven project 
+    - Mac 
+        mvn archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.3 -DgroupId=com.hyperskill -DartifactId=first-maven-app -DinteractiveMode=false 
+    - Windows 
+        mvn archetype:generate "-DarchetypeArtifactId=maven-archetype-quickstart" "-DarchetypeVersion=1.3" "-DgroupId=com.hyperskill" "-DartifactId=first-maven-app" "-DinteractiveMode=false"  
+  - POM file
+    - aka Project Object Model (POM)
+  - Important commands 
+    - Build (No clean. No tests)
+        mvn compile
+    - Build with tests (No clean)
+        mvn package
+    -*** Build with clean and tests
+        mvn clean package
+        or 
+        mvn clean install
+  //- Unlike npm, Maven automatically downloads dependencies for you 
+  - To build and run (Didn't work for me: NullPointerException)
+      mvn clean install 
+      java -cp target/first-maven-app-1.0-SNAPSHOT.jar com.hyperskill.App
+
+- Maven dependency management
+  - Just like gradle, Maven has scope for dependencies, e.g. "test"
+  //- Maven downloads dependencies to ~/.m2
+  - You need a build plugin to create an "uber-jar" aka "fat JAR" or "JAR with dependencies" or "executable JAR"
+    - Examples 
+      maven-assembly-plugin
+      maven-shade-plugin
+      onejar-maven-plugin
+
+
+- Logging 
+  - Common uses 
+    - troubleshooting
+    - auditing
+    - user-profiling and statistics
+  - Common levels 
+    - Debug - to debug problems
+    - Info - important events 
+    - Warn - potential problem not yet affecting user (e.g. repeated attempts to access a resource, missing secondary data, switching from a primary server to a back-up server)
+    - Error - error but does not terminate program 
+    - Fatal - error that terminates program
+- Standard logger
+  - java.util.logging
+      Logger class
+      FileHandler class
+      ConsolHandler class
+      SimpleFormatter
+      XMLFormatter
+      Level
+      LogRecord
+      LogManager
+  - Logger class 
+    - Standard practice is to create an instance for each class
+    - Levels (These do not match up to the "common levels" listed above. Missing fatal, error, debug)
+        Level.SEVERE    or    logger.severe("...")
+        Level.WARNING   or    logger.warning("...")
+        Level.INFO      or    logger.info("...")
+        Level.CONFIG    or    logger.config("...")
+        Level.FINE      or    logger.fine("...")
+        Level.FINER     or    logger.finer("...")
+        Level.FINEST    or    logger.finest("...")
+  - Handlers and Formatters
+    - Handlers - take the log to the outside world 
+    - Handler is an abstract class. 2 most important implementations are 
+      - ConsoleHandler - writes to System.err
+      - FileHandler - logs to a file 
+    - Formatter is an abstract class. 2 implemntations are 
+      - SimpleFormatter
+      - XMLFormatter
+  - Filter 
+    - Controls what levels you are interested in outputting right now so you don't get too many logs 
+  - Example 
+      import java.util.logging.*;
+      Logger logger = Logger.getLogger( Main.class.getName());
+      // filter
+      Filter filter = new FilterExample();
+      logger.setFilter(filter);
+      // handler
+      Handler fileHandler = new FileHandler("default.log");
+      logger.addHandler(fileHandler);
+      // formatter
+      fileHandler.setFormatter(new XMLFormatter());
+      // log something
+      logger.info("Info log message");
+
+
+- JVM internals 
+  - Class files and Bytecode
+    - To compile and run a file 
+        javac Main.java
+        java -cp . Main
+    - Bytecode
+      - .java files are compiled to .class files written in bytecode machine language
+      - When a JVM loads a class file, it gets one stream of bytecodes for each method in the class. 
+      - Each machine instruction consists of a one-byte operation code – opcode followed by zero or more operands. 
+      - There are about 200 bytecodes currently in use
+    -*** To view the bytecode. Supercool!!!
+        javap -c Main.class
+    - You can edit class files manually with a HEX editor 
+
+
+  - Inside the JVM
+    - Java Virtual Machine (JVM) is a virtual simulation of a physical computer that executes compiled Java programs (bytecode)
+    - WORA (Write Once Run Anywhere) - can be run on any hardware or OS 
+    - Many different JVM implementations
+      - HotSpot is used by Oracle Java and OpenJDK
+    - JVM converts bytecode into the platform native code
+    - Main activities 
+      - loads bytecode
+      - verifies bytecode
+      - executes bytecode
+      - provides the runtime environment
+    - Subsystems
+      - Class loader - loads the Java bytecode, verifies it, allocates memory for it 
+      - Bytecode verifier - checks that the instructions don’t perform any dangerous actions like accessing private fields and methods of classes and objects
+      - Runtime data areas - JVM memory
+        - Areas 
+          - PC register holds the address of the currently executing instruction;
+          - stack area is a memory place where methods calls and local variables are stored;
+          - native method stack stores native method information;
+          - heap stores all created objects (instances of classes);
+          - method area stores all the class level information like class name, immediate parent class name, method information and all static variables.
+        - Every thread has its own PC register, stack, and native method stack
+        - All threads share the same heap, method area
+      - Execution engine - executes the bytecode 
+        - Parts 
+          - bytecode interpreter interprets the bytecode line by line and executes it (rather slowly);
+          - just-in-time compiler (JIT compiler) translates bytecode into native machine language while executing the program (it executes the program faster than the interpreter);
+          - garbage collector cleans unused objects from the heap.
+      - Interfaces and libraries
+        - native method interface - provides an interface between Java code and native method libraries
+        - native method library - consists of (C/C++) files that are required for the execution of native code
+
+
+  - Object interning 
+    //- This topic is weird and interesting
+    - Large program -> many objects in memory -> can affect performance 
+    - Object interning - stores of objects of some commonly used classes in special pools where it can reuse them 
+    - Example - reusing the same string 
+        String greeting3 = "hello";
+        String greeting4 = "hello";
+        greeting3 == greeting4; // true
+    - But if you use the "new" keyword, it won't reuse 
+        String greeting1 = new String("hello");
+        String greeting2 = new String("hello");
+        greeting1 == greeting2; // false
+    -!!! Some wrapper classes are cached. e.g. Boolean true/false. Chars 0-127. Byte, Short, Integer, and Long -128 to 128
+        Long i1 = 127L;
+        Long i2 = 127L;
+        i1 == i2;  // true
+        // But this wouldn't work for 129L b/c it's out of the range 
+    - Floats and doubles are not cached 
+
+
+  - Garbage Collector (GC)
+    - Every new object needs RAM
+    - JVM stores objects on its heap 
+    - Garbage Collector automatically frees up memory that's no longer used, unlike C/C++
+    - It's rare, but you might want to call the GC. (Note: neither actually guarantees to call the GC)
+      - System.gc()
+      - Runtime.getRuntime().gc()
+    - Calculating free memory 
+        Runtime r = Runtime.getRuntime();
+        long usedMemory = r.totalMemory() - r.freeMemory();
+        System.out.println("Used memory (bytes): " + usedMemory);
+ 
+
+
+- Wrapper classes 
+  - Each primitive type has one 
+  - Wrapper classes are immutable (just like strings)
+  - Boxing, unboxing, autoboxing, auto-unboxing
+  - Boxing and unboxing 
+    - Example 
+        Integer reference = Integer.valueOf( x );
+        int y = reference.intValue();
+  - Autoboxing and auto-unboxing
+    - Example 
+        double x = 10.8;
+        Double wrapperDouble = x; // autoboxing
+        double y = wrapperDouble; // auto-unboxing
+    - Only works when they are same type 
+      - Example 
+          Long n3 = 10; // WRONG, assigning int to Long
+          Integer n4 = 10L; // WRONG assigning long to Integer
+  - Multiple constructors. String is the most popular 
+    ***NOTE: stop using these after Java 9 
+      Integer number = new Integer("10012");
+      Float f = new Float("0.01");
+      Long longNumber = new Long("100000000");
+      Boolean boolVal = new Boolean("true");
+  - Also other special methods to create 
+      Long longVal = Long.parseLong("1000");
+      Long anotherLongVal = Long.valueOf("1000");
+  - Comparing wrappers
+    - Just like strings, use .equals() instead of == (b/c that will only check memory address is same)
+  - NullPointerException.
+    - They can also throw NPE b/c they can now equal null!!!
+        Long longVal = null;
+        long primitiveLong = longVal; // It throws NPE
+  - Pros and cons 
+    - Primitives are faster and can't throw NPE 
+    - Wrappers can be used in collections 
+
+
+- Generics 
+  - Example (The part that is unique to me is the first line and the last lines)
+      class GenericType<T> { 
+        private T t;
+        public GenericType(T t) { this.t = t; }
+        public T get() { return t; }
+        public void set(T parameter) { T variable = parameter; }
+      }
+
+      GenericType<String> instance2 = new GenericType<String>("abc");
+  - Naming conventions 
+      T – Type
+      S, U, V etc. – 2nd, 3rd, 4th types
+      E – Element (used extensively by the Java Collections Framework)
+      K – Key
+      V – Value
+      N – Number 
+
+  - Instantiation 
+      GenericType<Integer> instance1 = new GenericType<Integer>(10);
+      OR more concisely... 
+      GenericType<Integer> instance1 = new GenericType<>(10);
+
+  - And with many types... 
+    GenericType<Type1, Type2, ..., TypeN> instance = new GenericType<>(...);
+
+  - ***IMPORTANT*** primitives won't work. Must be reference types 
+      GenericType<int> instance1 = new GenericType<>(10); // int will cause an error 
+
+- Collections framework
+  - What are collections
+    - More flexible and useful than arrays
+    - Can also be resized 
+    - All collections are generics so can put any kind of reference types in them (Reminder: not primitives)
+      - Can only store reference types, not primitives 
+    - Example 
+        ArrayList<String> list = new ArrayList<>();
+        list.add("first"); 
+        list.add("second"); 
+        list.add("third");
+        System.out.println(list); // Actually prints something legible: "[first, second, third]";
+        list.get(0);    // first
+        list.get(1);    // second
+        list.get(2);    // third
+        list.remove("first"); 
+        list.remove("second"); 
+        list.remove("third");
+
+  - Collections framework continued 
+    - Unlike arrays, sizes change dynamically 
+    - Common types: list, set, queue, stack, deque, map (Map is not techincally a Collection)
+    - Two root interfaces: java.util.Collection<E> and java.util.Map<K, V>
+      - Hierarchy of Collections Framework interfaces: 
+        - java.util.Collection 
+          - List
+          - Set (each element must be unique)
+            - SortedSet 
+          - Queue (FIFO)
+            - Deque (FIFO or LIFO)
+            x- Stack - no Stack interface. Use Deque. (LIFO)
+        - java.util.Map (Note: part of Collections framework but does not extend java.util.Collection)
+          - SortedMap (each key must be unique)
+    - Collections - List, Set, Queue, Deque, SortedSet
+      - Methods
+        - size()
+        - isEmpty()
+        - contains(Object)
+        - add(Object)
+        - remove(Object)
+        - clear()
+    - Maps - SortedMap
+      - Methods 
+        - size()
+        - isEmpty()
+        - containsKey(Object key)
+        - containsValue(Object value)
+        - get(Object key)
+        - put(K key, V value)
+        - remove(Object key)
+        - clear()
+        - keySet()
+        - values()
+        - Map.Entry<K, V>> entrySet()
+    - Note that there is no Stack interface. It's recommended to use the Deque interface for stacks.
+
+  - ArrayList 
+    - Like arrays but resizeable (and only stores reference types)
+    - Actually is internally built on arrays, default size 10
+    - Examples 
+        import java.util.ArrayList;
+        ArrayList<String> list = new ArrayList<>();
+          or 
+        ArrayList<String> list = new ArrayList<>(50);
+          or
+        ArrayList<String> list = new ArrayList<>(anotherList);
+    - Note: technically better to create it via the List interface. (Didn't explain why)
+    - Methods 
+        - int size()
+        - get(int)
+        - add(val)
+        - add(int, val)  // Will insert at that spot and bump others up 
+        - set(int, val)  // Will replace value at that spot 
+        - remove(val)
+        - remove(int)
+        - clear()
+        - indexOf(val)
+        - lastIndexOf(val)
+        - lastIndexOf(val)
+    - Iteration - same as array with for or for-each 
+        for (int i = 0; i < arrList.count(); i++) {
+          // ....
+        }
+        for (Int value : arrList) {
+          // ....
+        }
+    - Useful examples 
+        List<String> list = Arrays.asList("Mr.Green", "Mr.Yellow", "Mr.Red");
+        ArrayList<String> nameList = new ArrayList<>(Arrays.asList("Mr.Green", "Mr.Yellow", "Mr.Red"));
+
+  - Lists 
+    - Part of collections 
+    - Interface = can't create an instance of it. Instead create an instance of one of its implementations: ArrayList or LinkedList
+    - Best practice 
+      - Seems like best practice is to type your ArrayLists as Lists because 
+        - You could easily switch from ArrayList to another implementation like LinkedList
+        - Subtle bugs: lots of methods do not guarantee to return the same type you put in. You get a List back, not necessarily a LinkedList 
+        - This is the same idea for most collections to type things as the most general type 
+        - List<String> list = new ArrayList<>();
+            instead of 
+          ArrayList<String> list = new ArrayList<>();
+    - Methods 
+      - get(int)
+      - size()
+      - isEmpty()
+      - contains(val)
+      - add(val)
+      - remove(val)
+      - clear()
+      - add(int, val)
+      - remove(int)
+      - set(int, val)
+      - indexOf(val)
+      - subList(int, int)
+    - Implementations 
+      - ArrayList
+        - Resizable-array. Implements all optional methods. Permits all elements, including null. 
+        - Also has methods to manipulate the size of the internal array 
+      - LinkedList
+        - Doubly-linked list implementation of the List interface
+        - Generally slower and more memory than ArrayList
+        - Example 
+            List<String> list = new LinkedList<>();
+              or 
+            List<String> list = new LinkedList<>(aCollection);
+      - Useful examples 
+          - Convert list to array
+              Object[] objArray = list.toArray();
+          - Convert list to string array 
+              String[] strArray = list.toArray(new String[0]);
+          - Convert an array to a list
+              List<String> list = Arrays.asList("one", "two", "three");
+          - Sublist
+              List<Integer> numList = new ArrayList<>(Arrays.asList(10,20,30,40,50)); // [10, 20, 30, 40, 50]
+              numList.subList(1,3);   //[20, 30]
+              numList.subList(1,3).clear();
+              numList;                //[10, 40, 50]
+          - Important 
+              Arrays.asList(....)
+              list.toArray();
+
+  - Sets 
+    - Unique elements
+    - Unlike array or list, impossible to get an element by the index
+    - Methods 
+      - size()
+      - isEmpty()
+      - contains(val)
+      - add(val)
+      - remove(val)
+      - clear()
+    - Only an interface. There are several common implementations. (Note identical to how HashMap, LinkedHashMap, TreeMap handle ordering)
+      - HashSet 
+        - Unordered 
+        - Fastest (Constant time performance)
+        - Implemnted with hash-table 
+      - LinkedHashSet
+        - Guarantees ordered by order inserted  
+        - Almost as fast as HashSet
+        - Implemented with hash-table + linked-list
+      - TreeSet
+        - Ordered by natural order (or a comparator you provide)
+        - Set > SortedSet > TreeSet 
+        - Slow 
+        - Additional methods
+          - comparator()
+          - first()
+          - last()
+          - headSet(toVal)
+          - tailSet(fromVal)
+          - subSet(fromVal, toVal)
+      - EnumSet
+        - Very fast. Only enums 
+    - Differences: the order of the elements when iterating, and the time it takes to insert and access elements
+    - Examples 1
+        Set<Integer> set = new HashSet<>();
+        Set<Integer> set = new LinkedHashSet<>();
+        Set<Integer> set = new TreeSet<>();
+    - Example 2
+          Set<Character> orderedSet = new LinkedHashSet<>();
+          for (char c = 'a'; c <= 'k'; c++) {
+            orderedSet.add(c);
+          }
+        // or (useful)
+          Set<Character> orderedSet = new LinkedHashSet<Character>(Arrays.asList('a', 'b', 'c'));
+
+  - Maps 
+    - Keys are unique. Values can repeat. 
+    - Methods 
+        - size()
+        - isEmpty()
+        - containsKey(key)
+        - containsValue(value)
+        - get(key)
+        - put(key, value)
+        - remove(key)
+        - clear()
+        - keySet()
+        - values()
+        - entrySet()
+        - putIfAbsent(key, value)
+        - getOrDefault(key, defaultValue)
+    - Only an interface. There are several common implementations. (Note identical to how HashSet, LinkedHashSet, TreeSet handle ordering)
+      - HashMap 
+        - Unordered 
+        - Constant time performance
+      - LinkedHashMap
+        - Ordered by order inserted  
+      - TreeMap
+        - Ordered by natural order (or a comparator you provide)
+        - Methods 
+          - comparator()
+          - firstKey()
+          - lastKey()
+          - headMap(toKey)
+          - tailMap(fromKey)
+          - subMap(fromKey, toKey)
+    - Iterating 
+        for (Map.Entry<Integer, String> item : hashMap.entrySet()) { ... }
+        for (String item : hashMap.values()) { ... }
+    - null  
+      - Getting a key:value that doesn't exist returns null 
+    - Examples 
+      - Map<Integer, String> map = new HashMap<>();
+      - Map<Integer, String> map = new LinkedHashMap<>();
+      - Map<Integer, String> map = new TreeMap<>();
+    - Example 
+        Map<Integer, String> products = new HashMap<>();
+        products.put(1000, "Notebook");
+        products.put(2000, "Phone");
+        products.put(3000, "Keyboard");
+
+        // iterating over pairs of the map
+        for (Map.Entry<Integer, String> product : products.entrySet()) {
+          System.out.println(product.getKey() + ": " + product.getValue());
+        }
+        // iterating over values of the map
+        for (String productName : products.values()) {
+            System.out.println(productName);
+        }
+
+  - Data structures 
+    - Collection of elements containing data, the relationships among them, and the possible operations that can be applied.
+    - Related but not same as abstract data type (ADT)
+      - A type that is defined by a value and a set of possible operations.
+    ?- Sooo a data structure is an implementation of an ADT 
+
+  - Queue and Stack
+    - No operations to get by index 
+    - Queue 
+      - First In First Out (FIFO)
+      - Methods 
+        - add(elem) - inserts at back or throws IllegalStateException if out of space 
+        - offer(elem) - inserts at back if there's enough space 
+        - remove() - removes from front or throws NoSuchElementException if empty 
+        - poll() - removes from front or returns null if empty 
+        - element() - gets first element (without removing) or throws NoSuchElementException if empty
+        - peek() - gets first element (without removing) or returns null if empty 
+- enqueue (which inserts an element) 
+- dequeue (which removes an element)
+      - Implemented with linked list or a classic array (non-resizable) = O(1) time 
+        
+    - Stack 
+      - last-in-first-out (LIFO)
+      - Methods 
+        - push(elem)
+        - pop(elem)
+      - Implemented with linked list or a classic array (non-resizable) = O(1) time 
+      - Stacks are used to:
+        - evaluate arithmetic expressions
+        - store arguments of functions and result of the functions' calls
+        - reverse the order of elements
+      - Don't use Java's "Stack". Instead use "Deque"
+
+    - Deque 
+      - Deque extends Queue interface 
+      - Can insert/remove elements from both ends, hence "Double-Ended Queue"
+      - Methods (I like these. They are very clear b/c of esplicit "first" and "last")
+        - First element (head) 
+          - Throws exception 
+            - addFirst(e)
+            - removeFirst()
+            - getFirst()
+          - Does not. Returns special value 
+            - offerFirst(e)
+            - pollFirst()
+            - peekFirst()
+        - Last element (tail)
+          - Throws excption 
+            - addLast(e)
+            - removeLast()
+            - getLast()
+          - Does not. Returns special value 
+            - offerLast(e)
+            - pollLast()
+            - peekLast()
+      -*** Two implementations of the interface Deque - ArrayDeque (seems to be generally preferred) and LinkedList
+      - These classes can work as Queue (FIFO), Stack (LIFO), and Deque.
+      - Example Deque interface as a queue (FIFO).
+          Queue<String> q = new ArrayDeque<>();
+          q.add("first");
+          q.add("second");
+          q.add("third");
+          q.peek();
+          q.remove();
+          q.isEmpty();
+      - Another example of a queue 
+          Queue<Integer> q = new ArrayDeque<>();
+          q.offer(10);
+          q.offer(20);
+          q.offer(5);
+          q.offer(6);
+          while (!q.isEmpty()) {
+              q.poll();
+          }
+      - Example Deque interface as a stack (LIFO).
+          Deque<String> stack = new ArrayDeque<>();
+          stack.offerLast("first");
+          stack.offerLast("second");
+          stack.offerLast("third");
+          stack.pollLast();
+      - Example of old Stack (not recommeded)
+          Stack<String> stack = new Stack<>();
+          stack.push("first");
+          stack.push("second");
+          stack.push("third");
+          stack.pop();
+
+  - Collections utility class 
+    - The Java Collections Framework includes the utility class Collections
+    - Static methods for creating and processing collections
+    - Collections utility clas != Collection interface 
+    - Methods
+        - creating empty collections
+            Collections.emptyList()
+            Collections.emptyMap()
+            Collections.emptySet()
+            etc
+        - creating colections with a single element: 
+            Collections.singletonList(T o)
+            Collections.singletonMap(K key, V val)
+            etc
+        - sorting, shuffling and reversing lists
+            Collections.sort(List<T> list)
+            Collections.shuffle(List<?> list)
+            Collections.reverse(List<?> list);
+        - check the two collections do not contain common elements
+            Collections.disjoint(Collection<?> c1, Collection<?> c2);
+        - counting the number of elements equal to the specified object
+            Collections.frequency(Collection<?> c, Object o);
+        - And more 
+          - finding max and min values in collections
+          - replacing elements
+          - copying collections
+          - creating an unmodifiable view of collections 
+
+
+  - Iterator and Iterable
+    - Collection extends the interface Iterable so you can use it in for-each loops 
+    - Iterable has three methods. All collections that extend Collection have these methods. (Remember Map does not extend Collection)
+      - forEach, iterator, spliterator
+      - Iterator
+        - Allows you to interate over collections regardless of their structure
+        - Methods 
+            hasNext()
+            next()
+            remove()
+        - Typical usage 
+          - check the collection has next element
+          - obtain the next element
+          - processing the obtained element
+        - Example - remove all items less than 10 from a set 
+            Set<Long> set = new TreeSet<>(); // sorted set
+            set.add(10L);
+            set.add(5L);
+            set.add(18L);
+            set.add(14L);
+            set.add(9L);
+            
+            Iterator<Long> iter = set.iterator();
+            while (iter.hasNext()) {
+                Long current = iter.next();
+                if (current < 10) {
+                    iter.remove();
+                }
+            }
+            
+            System.out.println(set); // [10, 14, 18]
+      - ListIterator
+        - Only for lists 
+        - Allows traverse list in either direction 
+        - NOte - iterator sits in between elements, so has no current element
+        - Example.
+            ListIterator<Integer> listIterator = list.listIterator(); // only for lists!
+            while (listIterator.hasPrevious()){
+              System.out.println(listIterator.previous() +" on "+ listIterator.previousIndex());
+            }
+
+
+- Functional streams 
+  - Functional interfaces and lambda expressions
+    - The functional interface is an interface (not a class or enum) with a single abstract method (SAM type). (Static and default methods are allowed.)
+    - @FunctionalInterface in Java Class Library marks functional interfaces with one method "apply"
+    - // NOTE: pay attention to "apply" below. 
+      - // Seems like lambdas one method are often named "apply" but also test, get, and accept (More detail below in 5 types)
+      - // You can invoke a lambda by calling .apply(args)
+    - Example new functional interface 
+        @FunctionalInterface 
+        interface Func<T, R> {     
+          R apply(T val);     
+          static void doNothingStatic() { }         
+          default void doNothingByDefault() { } 
+        }
+    - Implementing the interface 
+      - Always 2 options with an interface: 
+        1) Anonymous class - works but is unclear 
+            Func<Long, Long> square = new Func<Long, Long>() {
+              @Override
+              public Long apply(Long val) { return val * val; }
+            };
+            long val = square.apply(10L); // 100L
+        2) Lambda expression
+            Func<Long, Long> square = val -> val * val; // the lambda expression
+            long val = square.apply(10L); // 100L
+        - Generally speaking interfaces with single abstract methods (SAM)s (non-defualt and non-static) can be modeled with lambdas. 
+      - lambda expression = anonymous function that allows code as an argument to a method
+      - parameters -> body 
+      - Examples (honestly seems identical to TypeScript+ES6)
+          // a simple way to write a lambda expression with two parameters
+          BiFunction<Integer, Integer, Integer> sum = (x, y) -> x + y;
+          
+          // if it has only one argument "()" are optional
+          Function<Integer, Integer> identity1 = x -> x;
+          
+          // it's valid too
+          Function<Integer, Integer> identity2 = (x) -> x;
+          
+          // without type inference
+          Function<Integer, Integer> mult = (Integer x) -> x * 2;
+          
+          // with multiple statements
+          Function<Integer, Integer> adder = (x) -> {
+            x += 5;
+            x += 10;
+            return x;
+          };
+      - Standard functional interfaces (in brief)
+        Function<T, R> - standard functional interface. One argument of type T and return value of type R.
+        BiFunction<T, U, R> - standard functional interface representing. Two arguments of types T and U and return value of type R.
+      - Sometimes, lambda expressions don't have parameters or return values. (Discussed later.)
+    - Passing lambda expressions to methods
+      - It's possible to pass a lambda expression to some methods 
+        - Example 
+            public static void acceptFunctionalInterface(Function<Integer, Integer> f) {
+              System.out.println(f.apply(10));
+            }
+
+            Function<Integer, Integer> f = (x) -> x + 1;
+
+            acceptFunctionalInterface(f); // it prints 11
+            // or even without a reference
+            acceptFunctionalInterface(x -> x + 1); // the result is the same: 11
+      - Higher-order function - function that accepts another function 
+        - Used for function composition, currying, monads
+    - Usage of closures
+      - Example 
+          final String hello = "Hello, ";
+          Function<String, String> helloFunction = (name) -> hello + name;
+          helloFunction.apply("John");  // hello John
+      - Important: closure only works if variable is final or effectively-final (variable that is never changed)
+
+  - Method references
+    - Method references are often cleaner to read than lambdas. 
+    - Example 
+        Consumer<String> printer = str -> System.out.println(str);
+        // versus 
+        Consumer<String> printer = System.out::println;
+    - The Consumer - functional interface with a SAM "accept" which takes a value of type T and returns nothing.
+    - Syntax 
+        className::methodName
+        // or 
+        instanceName::methodName
+    - Kinds of method references
+      - Can be written for static and instance (non-static) methods.
+      - Four kinds 
+        1) reference to a static method
+          - Syntax 
+              ClassName :: staticMethodName
+          - Example 
+              Function<Double, Double> sqrt = Math::sqrt; 
+              sqrt.apply(100.0d);
+          - Or as lambda (less readable)
+              Function<Double, Double> sqrt = x -> Math.sqrt(x);
+              sqrt.apply(100.0d);
+
+        2) reference to an instance method of an existing object
+          - Syntax 
+              objectName :: instanceMethodName
+          - Example 
+              Scanner scanner = new Scanner(System.in); // IO scanner
+              Supplier<String> lineReader = scanner::nextLine; // method reference
+              String firstLine = lineReader.get();
+              String secondLine = lineReader.get();
+          - Or as lambda (less readable)
+              Supplier<String> lineReader = () -> scanner.nextLine();
+
+        3) reference to an instance method of an object of a particular type
+          - Syntax 
+              ClassName :: instanceMethodName
+          - Example 
+              Function<Long, Double> converter = Long::doubleValue;
+              converter.apply(100L);
+          - Or as lambda (less readable)
+              Function<Long, Double> converter = val -> val.doubleValue();
+
+        4) reference to a constructor
+          - Syntax 
+              ClassName :: new
+          - Example 
+              Supplier<String> generator = String::new;
+          - Or as lambda (less readable)
+              Supplier<String> generator = () -> new String();
+
+  - Standard functional interfaces
+    - Kind of functional interfaces
+      - Java 8 added lots of functional interfaces to java.util.function
+      - 5 groups 
+        1) functions 
+          - arguments -> result
+          - .apply()
+        2) operators (subset of functions that return same type as input)
+          - arguments -> same type 
+          - .apply()
+        3) predicates 
+          - arguments -> boolean (boolean-valued function).
+          - .test()
+        4) suppliers 
+          - nothing -> result
+          - .get() or .getAs___()
+        5) consumers 
+          - arguments -> nothing 
+          - .accept()
+      - Example types (Java seems soooooo complicated. Why does actually have names?)
+        - Function<T, R> accepts a value of type T and produces a result of type R.
+        - BiFunction<T, U, R> accepts two values of T and U types and produces a result of type R.
+        - LongFunction<R> accepts a long value and produces a result of type R.
+        - IntToDoubleFunction accepts an integer value and produces a double value.
+        - IntPredicate accepts an integer value and returns boolean value.
+        - Supplier<T> returns a value of type T.
+        - BiConsumer<T, U> accepts two values of T and U types.
+        - and others...
+      - Examples 
+          DoubleFunction<Double> f = (x) -> { return x + 10; }; 
+          BiPredicate<Integer, Double> p = (x, y) -> (x > y) && (x % 2 == 0); 
+          Supplier<String> s = () -> Long.valueOf(10_000L).toString(); 
+          BiConsumer<Integer, String> c = (x, y) -> { }; 
+          UnaryOperator<List<String>> o = (x) -> x.subList(0, x.size()); 
+    - (The problems suck. They don't explain it well enough to enable you to do them.)
+
+
+  - Functional data processing with streams
+    - Introduction to streams
+      - Stream classes in Java - Stream<T>, IntStream, LongStream and DoubleStream
+      - Example - old way vs streams 
+          List<Integer> values = ...
+          List<Integer> filteredValues = new ArrayList<>();
+          for (Integer val : values) {
+            if (val >= 10) {
+              filteredValues.add(val);
+            }
+          }
+
+          // versus 
+
+          List<Integer> values = ...
+          List<Integer> filteredValues = values.stream()
+            .filter(val -> val >= 10)
+            .collect(Collectors.toList());
+      - Note: streams are lazy. Nothing happens until there is a terminal operation (e.g. collect)
+    - Creating streams
+      - You can create them from lists, arrays, strings, sets, etc. 
+        1) From a collection - most common way. All collections have a .stream() 
+          List<Integer> list = Arrays.asList(0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55);
+          Stream<Integer> stream = list.stream();
+          
+          Set<String> set = new HashSet<>(Arrays.asList("functions", "lazy", "immutability"));
+          Stream<String> stream = set.stream();
+
+        2) From an array
+          Stream<Double> stream = Arrays.stream(new Double[]{ 1.01, 1d, 0.99, 1.02, 1d, 0.99 });
+
+        3) From a string
+          IntStream stream = "aibohphobia".chars();
+
+        4) From values
+          LongStream stream = LongStream.of(111_111_111L, 333_333_333L);
+
+        5) From other streams
+          Stream<BigInteger> concatedStream = Stream.concat(Stream.empty(), Stream.empty());
+
+        6) Use Stream.generate()
+          Stream<User> userStream = Stream.generate(User::new);
+
+          DoubleStream randomStream = DoubleStream.generate(Math::random);
+
+        7) Use Stream.iterate()
+          IntStream oddNumbersStream = IntStream.iterate(1, x -> x + 2);
+
+        8) Use Stream.range() or Stream.rangeClosed(). Method rangeClosed() includes an upper bound.
+          LongStream rangedStream = LongStream.rangeClosed(100_000, 1_000_000);
+    - Groups of stream operations
+      - All stream operations are divided into two groups:
+        - Intermediate operations - lazy. Return new streams
+          - filter - returns a stream including the elements that match a predicate
+          - map - returns a stream consisting of the elements that were obtained by applying a function (transforms each element)
+          - limit - returns a stream consisting of first N elements of this stream
+          - distinct - returns a stream that has only unique elements according to method equals
+          - sorted - returns a stream consisting of the elements sorted according to the natural order or a given comparator
+          - flatMap - allows to replace a value with a stream and concatenates all streams together
+        - Terminal operations - return a result or produce a side-effect
+          - collect(toList) - returns a list from the values in a stream, in general cases collect is a more complex operation
+          - toArray - returns an array from the values in a stream
+          - max / min - returns maximum / minimum element of the stream according to the given comparator
+          - count - returns the count of elements in the stream
+          - forEach - performs an operation for each element of the stream (be careful with side-effects!)
+          - reduce - combines values from the stream into a single value (aggregate value)
+          - anyMatch - returns true if at least one element matches a predicate 
+          - allMatch - returns true if all elements matches a predicate 
+          - noneMatch - returns true if no elements matches a predicate 
+      - Reminder - higher-order functions are functions that accep functions as arguments (e.g. filter, map, reduce, forEach, anyMatch)
+      - Example 1 - count number of unique words 
+          List<String> words = Arrays.asList("Java", "CLOSURE", "Function", "Lambda", "closure", "java"); 
+          long countOfUniqueWords = words.stream()
+            .map(String::toUpperCase)
+            .distinct()
+            .count();
+      - Example 2 - Print integers [0,10)
+          IntStream.range(1, 10).forEach(System.out::print);
+    - Classes of streams
+      - Stream<T> versus IntStream, LongStream and DoubleStream
+        - They have additional methods - average(), summaryStatistics(), range(), rangeClosed() 
+        - More performant b/c they avoid boxing and unboxing 
+        - More restricted - IntStream.filter() accepts IntPredicate, but not Predicate<Integer>
+        - Example 
+            IntSummaryStatistics stat = IntStream.rangeClosed(1, 55_555).summaryStatistics();
+            System.out.println(String.format("Count: %d, Min: %d, Max: %d, Avg: %.1f", stat.getCount(), stat.getMin(), stat.getMax(), stat.getAverage()));
+        - Notes 
+          - To transform a primitives stream into generalized stream, use boxed method (IntStream => Stream<Integer>)
+          - To transform a generalized stream into a primatives stream, use these: mapToInt, mapToLong, mapToDouble.
+          - There is no CharStream in Java.
+    - (The problems suck. They don't explain it well enough to enable you to do them.)
+  
+  - Function composition
+    - Combining functions to build more complicated functions
+    - Standard functions, operators, predicates, and consumers have methods for combining them (but not suppliers!)
+    - Composing functions
+      - The functional interface Function<T, R> has two default methods
+        - f.compose(g).apply(x) - same as f(g(x))
+        - f.andThen(g).apply(x) - the same as g(f(x))
+      - Example 
+          Function<Integer, Integer> adder = x -> x + 10;
+          Function<Integer, Integer> multiplier = x -> x * 5;
+          
+          // compose: adder(multiplier(5))
+          adder.compose(multiplier).apply(5); // 5*5, +10  35
+          
+          // andThen: multiplier(adder(5))
+          adder.andThen(multiplier).apply(5); // 5+10 then *5 = 75 
+    - Composing predicates
+      - IntPredicate (as well as other predicates) has three methods for composing new predicates: and(...), or(...) and negate(...).
+      - Examples 
+          IntPredicate isOdd = n -> n % 2 != 0;
+          isOdd.test(10); // false
+          isOdd.test(11); // true
+                  
+          IntPredicate lessThan11 = n -> n < 11; // it's true for all numbers < 11
+          lessThan11.test(10); // true
+          lessThan11.test(11); // false
+      - Example2 - negate the first predicate:
+          IntPredicate isEven = isOdd.negate(); // it's true for 0, 2, 4, 6, 8, 10 and so on
+          isEven.test(10); // true
+          isEven.test(11); // false
+      - Example3 - combine with OR
+          IntPredicate isOddOrLessThan11 = isOdd.or(lessThan11);
+          isOddOrLessThan11.test(11); // true
+          isOddOrLessThan11.test(12); // false
+      - Example4 - combine with AND
+          IntPredicate isOddAndLessThan11 = isOdd.and(lessThan11);
+          isOddAndLessThan11.test(9); // true
+          isOddAndLessThan11.test(10); // false
+    - Quiz - Function composition
+        Predicate<Character> isLetter = Character::isLetter;
+        Predicate<Character> isUpperCase = Character::isUpperCase;
+        Predicate<Character> predicate = isLetter.and(isUpperCase.negate()); // Will now return true for letters that are not uppercase 
+        predicate.test('c'); // true
+        predicate.test('1'); // false
+        predicate.test('D'); // false
+    - Quiz - composing consumers
+        Consumer<Integer> printer = System.out::println;
+        Consumer<Integer> devNull = (val) -> { int v = val * 2; };
+        Consumer<Integer> combinedConsumer = devNull.andThen(devNull.andThen(printer));
+        combinedConsumer.accept(100);  // Prints 100
+  
+  - Filtering elements
+    - The filter operation
+      - Examples 
+          List<Integer> primeNumbers = Arrays.asList(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31);
+          List<Integer> filteredPrimeNumbers = primeNumbers.stream()
+            .filter(n -> n>=11 && n<=23)
+            .collect(Collectors.toList()); 
+
+          // or
+
+          Predicate<Integer> between11and23 = n -> n>=11 && n<=23;
+          List<Integer> filteredPrimeNumbers = primeNumbers.stream()
+            .filter(between11and23)
+            .collect(Collectors.toList());
+    - Multiple filters
+      - Example - same as above but multiple steps 
+          List<Integer> filteredPrimeNumbers = primeNumbers.stream()
+            .filter(n -> n>=11)
+            .filter(n -> n <=23)
+            .collect(Collectors.toList());
+  
+  - Map and flatMap
+    - The map operation
+      - Lazy operation that transforms elements in some way 
+      - Used to 
+        1) Transform each element
+            List<Integer> squares = numbers.stream()
+              .map(x -> x * x)
+              .collect(Collectors.toList());
+        2) Get a property each object in a collection 
+            List<String> titleList = jobList.stream()
+              .map(Job::getTitle)
+              .collect(Collectors.toList());
+        3) Create data transfer object (DTO) for passing an object between modules or returning response from a service
+            List<AccountInfo> infoList = accounts.stream()
+              .map(a -> {
+                AccountInfo info = new AccountInfo();
+                info.setNumber(a.getNumber());
+                info.setBalance(a.getBalance());
+                return info;
+              }).collect(Collectors.toList());
+        4) Sometimes, the map operation is used with identity function that applies x and returns x. 
+          - You can use the lambda x -> x or Function.identity() for these purposes.
+    - Primitive-specialized types of the map operation
+      - If you use IntStream, LongStream or DoubleStream the map method takes an instance of IntUnaryOperator, LongUnaryOperator or DoubleUnaryOperator respectively.
+      - Also, each primitive-specialized stream has special kinds of the map operation (mapToInt, mapToLong, mapToDouble) to transform elements of a primitive type to another primitive type.
+      - Example 
+          IntStream stream = LongStream.of(1L, 2L, Long.MAX_VALUE - 1, Long.MAX_VALUE)
+            .mapToInt(longVal -> longVal > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) longVal);
+      - To transform a stream of primitive values to a generic stream you can use the mapToObj method.
+    - The flatMap operation
+      - Convert collection of collections into just one collection. 
+      - Example - get all book authors in one list 
+          // the collection of java books
+          List<Book> javaBooks = Stream.of(
+            new Book("Java EE 7 Essentials", 2013, Arrays.asList("Arun Gupta")),
+            new Book("Algorithms", 2011, Arrays.asList("Robert Sedgewick", "Kevin Wayne")),
+            new Book("Clean code", 2014, Arrays.asList("Robert Martin"))
+          ).collect(Collectors.toList());
+
+          // list of authors
+          final List<String> authors = javaBooks.stream()
+            .flatMap(book -> book.getAuthors().stream())
+            .collect(Collectors.toList());
+      - Quiz 
+          List<List<Integer>> list = Arrays.asList(
+            Arrays.asList(1, 2, 3),
+            Arrays.asList(4, 5, 1),
+            Arrays.asList(8, 3, 2)
+          );
+          List<Integer> numbers = list.stream()
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
+          // 1, 2, 3, 4, 5, 1, 8, 3, 2
+
+
+  - Currying 
+    - Returning functions
+      - Example 1
+        public static IntBinaryOperator sumF(IntUnaryOperator f) {
+          return (a, b) -> f.applyAsInt(a) + f.applyAsInt(b);
+        } 
+        IntBinaryOperator sumOfSquares = sumF(x -> x * x);
+        long sum = sumOfSquares.applyAsInt(5, 10);    // 125
+    - Currying functions
+      - Currying = translating one function with multiple parameters into a sequence of functions, each with a single parameter
+      - Example 2
+          IntBinaryOperator notCurriedFun = (x, y) -> x + y; // not a curried function
+          IntFunction<IntUnaryOperator> curriedFun = x -> y -> x + y; // a curried function
+      - Example 3
+          // curried function
+          IntFunction<IntFunction<IntFunction<Integer>>> fff = x -> y -> z -> x * y + z;
+          
+          // fff returns a curried function y -> z -> 2 * y + z
+          IntFunction<IntFunction<Integer>> ff = fff.apply(2);
+          
+          // ff returns a curried function z -> 2 * 3 + z
+          IntFunction<Integer> f = ff.apply(3);
+          
+          // f returns 7
+          int result = f.apply(1);
+        
+        or...
+          int anotherResult = fff.apply(10).apply(15).apply(3);   // 153
+      - Example 1 rewritten 
+          Function<IntUnaryOperator, IntBinaryOperator> sumF = (f) -> (a, b) -> f.applyAsInt(a) + f.applyAsInt(b);
+          IntBinaryOperator sumOfSquares = sumF.apply(x -> x * x);
+          long sum = sumOfSquares.applyAsInt(5, 10);
+  - An example of currying
+      Function<String, Consumer<String>> say = what -> whom -> System.out.println(what + ", " + whom);
+
+      // The friends' context:
+      List<String> friends = Arrays.asList("John", "Neal", "Natasha");
+      Consumer<String> sayHi = say.apply("Hi");
+      friends.forEach(sayHi);
+      
+      // The partner's context:
+      List<String> partners = Arrays.asList("Randolph Singleton", "Jessie James");
+      Consumer<String> sayHello = say.apply("Hello");
+      partners.forEach(sayHello);
+  -*** Reminder to self: 
+    - When reading types, read from left to right 
+    - Function<Foo, Function<Bar, Baz>> is a function that takes a Foo and returns a function...
+    - Function<Bar, Baz> means a function that takes a Bar and returns a Baz 
+  - Quiz 
+    LongFunction<LongFunction<Long>> ff = x -> y -> 0L;
+    What type of a value will be returned after invoking ff.apply(10); ?
+    
+    LongFunction<Long>
+  - Quiz 
+    (arg1) -> (arg2) -> arg1 - arg2;
+    Select all possible its types.
+
+    Function<Integer, Function<Integer, Integer>>
+    Function<Double, Function<Double, Double>>
+  - Problem 
+    Write f(x,y,z)=x+y∗y+z∗z∗z as a curried function 
+    (x) -> (y) -> (z) -> x + y*y + z*z*z;
+
+
+- Reduction methods
+  - The reduce operation
+      - Terminal operation which combines elements of a stream into a single value
+      - Seed or identity and a function 
+      - Example 
+          int sum = numbers.stream().reduce(0, (acc, elem) -> acc + elem);
+      - Could use it to find min/max/sum but stream already has these features 
+          long sum = IntStream.of(3, 5, 6, 7).sum();
+          long min = IntStream.of(11, 12, 7, 3, 10, 22).min().orElse(Integer.MAX_VALUE);
+        The same code using the reduce method:
+          long min = IntStream.of(11, 12, 7, 3, 10, 22).reduce(Integer.MAX_VALUE, (x, y) -> x < y ? x : y);
+  - Quiz 
+      List<Person> persons = Arrays.asList(
+        new Person("Mary", 18),
+        new Person("John", 21),
+        new Person("Andrew", 31),
+        new Person("Julia", 19)
+      );
+      Person person = persons.stream().reduce(new Person("DEFAULT", 0), (p1, p2) -> p1.getAge() > p2.getAge() ? p1 : p2);
+      // Andrew, 31
+  - Quiz 
+      stream().reduce(a, (b, c) -> d);
+      // a - The default result if there are no elements in the stream
+      // b - The sum of all processed integers so far
+      // c - the next elements of the stream
+      // d - The result of the reduction if the stream has elements.
+
+
+  - Producing collections
+    - Producing collections
+      - All streams have .collect() method
+      - Examples 
+          - To list 
+              List<String> numberList = accounts.stream()
+                .map(Account::getNumber)
+                .collect(Collectors.toList());
+          - To set 
+              Set<String> numberSet = accounts.stream()
+                .map(Account::getNumber)
+                .collect(Collectors.toSet());
+          - To map 
+              Map<String, Long> numberToBalanceMap = accounts.stream()
+                .collect(Collectors.toMap(Account::getNumber, Account::getBalance));
+      - Or if you don't want to use the default collection chosen (e.g. thread-safe collection like a ConcurrentMap)
+          stream().collect(Collectors.toCollection(HashSet::new));
+    - Partitioning and grouping
+      - Partitioning - using a predicate to split a collection in 2 with true and false as the keys (e.g. accounts with balances balance >= 10000 and <10000)
+          Map<Boolean, List<Account>> partByBalance = accounts.stream().collect(Collectors.partitioningBy(a -> a.getBalance() >= 10000));
+          // {
+          //   false=[Account{balance=3333, number='530012'}, Account{balance=0, number='681891'}], 
+          //   true=[Account{balance=15000, number='771843'}]
+          // }
+      - Grouping - more general than partitioning. Split on anything. Have as many groups as you like. 
+          Map<Account.State, List<Account>> groupingByState = accounts.stream().collect(Collectors.groupingBy(Account::getState));
+          // {
+          //   REMOVED=[Account{balance=0, number='681891'}], 
+          //   ACTIVE=[Account{balance=3333, number='530012'}], 
+          //   BLOCKED=[Account{balance=15000, number='771843'}]
+          // }
+    - Producing values
+      - Collectors that produce a single value:
+        - summingInt, summingLong, summingDouble;
+        - averagingInt, averagingLong, averagingDouble;
+        - maxBy, minBy
+        - counting
+      - Note - to make your code more clear and short you can perform static import of necessary collectors.
+          import static java.util.stream.Collectors.averagingLong;
+          import static java.util.stream.Collectors.summingLong;
+          long summary = accounts.stream().collect(summingLong(Account::getBalance));
+      - Note - averaging collectors return a double values even your field is long.
+          double average = accounts.stream().collect(averagingLong(Account::getBalance));
+      - A more general collector "reducing" exists 
+          // Let's concatenate all account numbers into one big number (just for fun) using reducing collector:
+          String meganumber = accounts.stream().collect(reducing("", Account::getNumber, String::concat));
+        - Arguments of the reducing collector:
+          - identity - first value to combine results (optional)
+          - mapper function - allows transforming all elements before reducing (optional)
+          - reducer - an operator to combine a pair of values into a single value (required!!!)
+        - // Or same as reducer in previous chapter: Collectors.reducing(a, (b, c) -> d)
+    - Downstream collectors
+      - Collectors with collectors as a parameters (e.g. groupingBy, partitioningBy)
+      - Downstream collectors produce part of a value that is then used by the main collector 
+      - Example - sum of accounts by status 
+          Map<Account.State, Long> sumByStates = accounts.stream().collect(groupingBy(Account::getState, summingLong(Account::getBalance)));
+          // A map - { REMOVED=0, ACTIVE=24133, BLOCKED=60000 }
+      - You can create a reference to an instance of a combined collector and then pass it into collect method.
+          Collector<Account, ?, Map<Account.State, Long>> summingByStates = groupingBy(Account::getState, summingLong(Account::getBalance));
+          Map<Account.State, Long> sumByStates = accounts.stream().collect(summingByStates);
+    - Quiz 
+        Stream<Integer> stream = Stream.of(5, 1, 9, -2, -5, 1);
+        stream.collect(Collectors.partitioningBy(n -> n > 0, Collectors.summingLong(x -> x)));
+        // {false=-7, true=16}
+        stream.collect(Collectors.partitioningBy(a -> a >= 0));
+        // {false=[-2, -5], true=[5, 1, 9, 1]}
+    - Problem 
+        // Sum transactions by account 
+        List<Transaction> transactions = ...
+        Map<String, Long> totalSumOfTransByEachAccount = transactions.stream().collect( t -> t.getAccount().getNumber(), summingLong(Transaction::getSum) );
+  
+
+  - Stream pipelines
+    - Most used operations - filter, map, reduce 
+    - Example - count words that start with "ja" (case-insensitive)
+        long totalNumberOfWordsStartingWithJA = words.stream()
+          .map(String::toUpperCase)
+          .filter(s -> s.startsWith("JA"))
+          .count(); 
+    - Examples - events between 2 dates 
+        LocalDate after = LocalDate.of(2017, 12, 29);
+        LocalDate before = LocalDate.of(2018, 1, 1);
+        List<String> suitableEvents = events.stream()
+          .filter(e -> e.getBeginning().isAfter(after) && e.getBeginning().isBefore(before))
+          .map(Event::getName)
+          .collect(Collectors.toList());
+    - Example - average of some results 
+        double low = 0.4;
+        double high = 0.5;
+        double avg = results.stream()
+          .mapToDouble(r -> r) // transforming this Stream<Double> to DoubleStream
+          .filter(r -> r > low && r < high) 
+          .average() 
+          .orElse(0); // default if no values
+  - Quiz
+      List<String> paradigms = Arrays.asList(
+        "Aspect-oriented programming",
+        "Functional programming",
+        "Object-oriented programming",
+        "Logical programming",
+        "Procedural programming",
+        "Automata-based programming"
+      );
+      List<String> filtered = paradigms.stream()
+        .filter(paradigm -> paradigm.contains("oriented") || paradigm.contains("Functional"))
+        .flatMap(paradigm -> Arrays.stream(paradigm.split("\\s+")))
+        .distinct()
+        .collect(Collectors.toList());
+      // Aspect-oriented, Functional, Object-oriented, programming
+
+
+- Spring Boot
+  - Intro to Spring Boot
+    - Spring Initializer - https://start.spring.io/
+    - IntelliJ Ultimate's Spring Initializer - https://www.javadevjournal.com/spring-boot/spring-boot-application-intellij/
+      - IMPORTANT: can start Spring Boot with 
+        mvn spring-boot:run
+    - .jar vs .war - JAR is simpler. WAR requires upload to external server 
+    - Build and run (I wonder if there's a ./gradlew run)
+        ./gradlew build && java -jar build/libs/*.jar 
+
+  - Frameworks 
+    - Inversion of control 
+      - The framework calls your code, not the other way around (opposite of libraries)
+
+  - Beans and components
+    - @Component
+      - When Spring Boot starts an application, it looks for all the @Component annotated classes and creates at least an object of each and then holds them in the container 
+      - They are singletons 
+    - @Autowired  
+      - Puts a bean into another bean - dependency injection 
+      - Example - 2 singleton components, 1 is autowired into the other 
+          @Component
+          public class InkSupply {
+              private final String INK_MESSAGE = "This is ink supply";
+              public InkSupply() { .... }
+              public String getMessage(){ return INK_MESSAGE; }
+          }
+
+          @Component
+          public class Printer {
+              private InkSupply inkSupply;          
+              @Autowired
+              public Printer(InkSupply inkSupply) { this.inkSupply = inkSupply; }
+              public void printHello(){ System.out.println(inkSupply.getMessage()); }
+          }
+        - NOTE - it's usually easier just to put the @Autowired annotation above a field than to do it more manually with constructors 
+          @Component
+          public class Printer {
+              @Autowired
+              private InkSupply inkSupply;          
+          }
+    - @Bean and @Configuration
+      - But when you use 3rd party cody you can't edit it and add the @Component annotation, so you wrap it and use @Configuration and @Bean 
+      - Example 
+          @Configuration
+          public class PrinterConfiguration {
+            @Bean
+            public InkSupply getInkSupply(){
+              return new InkSupply();
+            }
+          }
+
+          // And now we can do same as before
+          @Component
+          public class Printer {
+            private InkSupply inkSupply;
+            @Autowired
+            public Printer(InkSupply inkSupply) { this.inkSupply = inkSupply; }
+          }
+    - Summary 
+      - @Component tells Spring Boot to make a singleton 
+      - @Bean is similar but used when you are using 3rd party code that you can't edit 
+      - @Autowired tells Spring Boot to dependency inject it 
+
+  - Rest controller
+    - @RestController
+      - Annotates a class that provides REST endpoints 
+    - Post 
+      - @PostMapping - annotates a method that provides a Post endpoint 
+      - @RequestBody - annotates the post body payload 
+    - @RestController
+        @RestController = @Controller (has REST endpoints) + @ResponseBody (returns JSON)
+    - @GetMapping
+      - Some points 
+        - Can't have a body 
+        - Spring will convert the response to JSON for you 
+        - @PathVariable - annotates variables in the URI 
+      - Example
+          @GetMapping("/lines/{id}")
+          public String getLine(@PathVariable String id)
+    - Example - all of above
+        @RestController
+        public class TaskController {
+          public TaskController() {}
+
+          @PostMapping(path = "/tasks")
+          public void addTask(@RequestBody Task task){ 
+            /* Save task to DB. Return task. */ 
+          }
+
+          @GetMapping(path = "/tasks/{id}")
+          public Task getTask(@PathVariable int id){
+            /* Get task from DB and return it. */
+          }
+        }
+    - // The images seem to indicate that IntelliJ has some sort of PostMan equivalent built in?
+    - Sub topics 
+      - HTTP 
+        - HEAD - like GET method, but without a response body
+        - Status codes 
+          - 1xx: Informational
+          - 2xx: Success
+          - 3xx: Redirection
+          - 4xx: Client
+          - 5xx: Server
+      - World Wide Web
+        - Web 1.0 (just search and read) vs web 2.0 (interact and post content)
+        - WWW is a subset of Internet 
+
+  - Passing JSON to server
+    - Passing an array
+      - To accept an array of JSON use a list 
+          @PostMapping(value = "/greet", consumes = "application/json")
+          public String greet(@RequestBody List<UserInfo> userInfoList) { .... }
+      - Note - not sure why they say it needs the 'consumes = "application/json"' bit. The previous chapter had plenty of examples that didn't need it. 
+      
+
+
+
+
+
+
+
+
+
+
+
+QUESTIONS 
+- What's the difference?
+  Arrays.asList(1,2,3);
+  new ArrayList<>( Arrays.asList(1,2,3) );
+- Convert group of integers between array, list, arrayList, string
+  - For example 
+      String.join(" ", Arrays.asList(1,2,3)); 
+    doesn't work but 
+      String.join(" ", Arrays.asList("a","b","c")); 
+    does

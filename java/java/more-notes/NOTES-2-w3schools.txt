@@ -1,0 +1,182 @@
+
+NOTES
+5/2019
+
+https://www.w3schools.com/java/default.asp
+
+- Longs must end in L 
+- Floats must end in f 
+- Doubles must end in d 
+- Chars can be ASCII: char a = 65;
+- A primitive type has always a value, while non-primitve types can be null.
+- Smallest to largest so can be cast without loss: 
+  byte -> short -> char -> int -> long -> float -> double
+
+- Casting 
+  - Does NOT require parenthesis when casting up: 
+    double myDouble = myInt;
+  - Does require parenthesis when casting down: 
+    int myInt = (int) myDouble;
+
+- Arrays
+  - Syntax is weird. [] on the left. {} on the right. 
+      int[] arr = {10, 20, 30, 40};
+    
+- Access modifiers
+  - Classes: 
+    - public, default. No private
+    - final, abstract 
+  - Attributes, methods, and constructors: 
+    - public, private, default, protected 
+      - default: only accessible from same package 
+      - protected: only accessible from same package and subclasses 
+    - final, static, abstract, transient, synchronized, volatile 
+      - transient: skipped when being serialized 
+      - synchronized: for concurrency
+      - volatile: always read from main memory 
+
+- Packages 
+  - Import 
+      import package.name.Class; // Import a single class 
+      import package.name.*; // Import the whole package
+  - Create a package 
+    package mypack;
+
+- Compile and run 
+  - File 
+    javac MyClass.java    # compile a file 
+    java MyClass          # run compiled file 
+  - Package 
+    java MyPackageClass.java  
+    javac -d . MyPackageClass.java    # compile a package (after you've compiled each file)
+    java mypack.MyPackageClass        # run package 
+
+- Inner classes 
+  - Weird. Class within a class. Also checkout the crazy syntax to instantiate the InnerClass 
+    class OuterClass {
+      int y = 5;
+
+      class InnerClass {  // Weird. Class within a class 
+        public int print() {
+          return y;       // Can access the OuterClass
+        }
+      }
+    }
+
+    public class Main {
+      public static void main(String[] args) {
+        OuterClass myOuter = new OuterClass();
+        OuterClass.InnerClass myInner = myOuter.new InnerClass();   // Crazy! Check out that space 
+        System.out.println(myInner.print());
+      }
+    }
+
+- Abstraction 
+  - 2 ways to achieve abstraction: abstract and interface 
+  - Neither can be instantiated directly. Need to extend/implement them 
+- Abstract 
+  - An abstract class can have both abstract and regular methods
+  - Why use it?
+      - Security - hide certain details and only show the important details of an object.
+- Interface 
+  ***- An interface is a completely "abstract class" that is used to group related methods with empty bodies
+  - NONE of its methods are implemented 
+  - On implementation of an interface, you must override all of its methods
+  - Methods default: abstract and public
+  - Attributes default: public, static and final
+  - Interface CANNOT have a constructor
+  - Can have attributes 
+  - Why use it?
+    - Security - kind of... but really because
+    - Java does not support multiple inheritance. Interfaces provide a kind of way to do it 
+
+  - Enum 
+    - Group of constants
+    - Can be standalone or like an attribute on a class 
+    - Can loop over vals: 
+      for (Level foo : Level.values()) { ... }
+    - Can have methods! (But cannot be instantiated or extended)
+    - No choice. It's constants are always: public, static and final
+
+- Dates
+  - Current date 
+      import java.time.LocalDate;
+      System.out.println( LocalDate.now() );
+  - Current time 
+      import java.time.LocalTime;
+      System.out.println( LocalTime.now() );
+  - Current date + time 
+      import java.time.LocalDateTime;
+      System.out.println( LocalDateTime.now() );
+  - Formatting 
+      import java.time.LocalDateTime;
+      import java.time.format.DateTimeFormatter;
+      LocalDateTime date = LocalDateTime.now(); 
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"); 
+      System.out.println( date.format(formatter) );  
+
+- ArrayList
+  - Can change size after creation - unlike default array
+  - Syntax 
+    import java.util.ArrayList;
+    ArrayList<T> cars = new ArrayList<T>();
+  - Important!
+    - Must be objects. So use Integer, Boolean, etc instead of int, boolean. 
+  - Methods 
+    - arr.get(0); - Can't use arr[0]
+    - arr.set(0, 123); - Can't use arr[0] = 123;
+    - arr.remove(1); - much better than slice or splice!
+    - arr.size() - not length
+  - for and for-each also work 
+
+
+
+- Hashmap 
+  - Syntax 
+    import java.util.HashMap;
+    HashMap<String, String> capitalCities = new HashMap<String, String>();
+  - Key can be String, Integer, etc 
+  - Similar to ArrayList, both keys and values need to be objects so Integer not int 
+  - Methods 
+    hash.get("foo");
+    hash.put("foo", "bar");
+    hash.remove("foo");
+    hash.size();
+  - for-each works
+    - keys: 
+      for (String i : capitalCities.keySet()) { ... }
+    - values: 
+      for (String i : capitalCities.values()) { ... }
+
+
+- Wrapper classes 
+  - Allow you to use promitives as objects, i.e. with methods 
+    - Noteable (both spelled out full word):
+        - int -> Integer
+        - char -> Character 
+  - Sometimes you need objects / can't use primitives, e.g. with ArrayList and HashMap 
+      ArrayList<int> myNumbers = new ArrayList<int>(); // Invalid
+      ArrayList<Integer> myNumbers = new ArrayList<Integer>(); // Valid
+  - Creating: 
+      Integer x = 123;
+    - or
+      int y = 123; 
+      Integer z = Integer.valueOf(y);
+  - Methods to get the value out of them:
+    - intValue(), byteValue(), shortValue(), longValue(), floatValue(), doubleValue(), charValue(), booleanValue()
+  - Autoboxing and unboxing 
+    - The compiler will often convert between the primitive and the object types automatically in situations where it is necessary
+    - Example adding int and Integer 
+        int sum = 0; 
+        sum += Integer.valueOf(123);  // Doesn't complain
+      or adding an int to an ArrayList 
+        ArrayList<Integer> arr = new ArrayList<Integer>();
+        arr.add(123);
+        arr.add(Integer.valueOf(123));
+
+
+- Working with files 
+  - Read, write, create files. (Only partial notes below. Go see webiste for good examples)
+  File myObj = new File("filename.txt");
+  FileWriter myWriter = new FileWriter("filename.txt");
+

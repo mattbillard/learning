@@ -1,0 +1,13 @@
+learnjavaonline.org
+6/2019
+https://www.learnjavaonline.org/
+
+
+// Going to skip most of the basics as I've already done them 3 times
+
+- Compiling and running with arguments
+  javac Main.java
+  java Main arg0 arg1 arg2
+
+// Lame... there's virtually no content on this site besides the basics 
+
