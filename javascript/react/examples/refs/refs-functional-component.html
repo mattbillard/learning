@@ -1,0 +1,44 @@
+<!-- MODIFIED FROM: https://raw.githubusercontent.com/reactjs/reactjs.org/master/static/html/single-file-example.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useEffect } = React;
+
+    const Example = () => {
+      let ref;
+
+      const focusInput = () => {
+        ref.focus();
+      }
+
+      useEffect(() => {
+        focusInput();
+      }, [])
+
+      return (
+        <div>
+          <button onClick={focusInput}>Focus on click</button>
+          <input ref={(elem) => ref = elem} defaultValue="Focus on load" />
+        </div>
+      );
+    }
+
+    ReactDOM.render(
+      <Example />,
+      document.getElementById('root')
+    );
+
+  </script>
+</body>
+
+</html>

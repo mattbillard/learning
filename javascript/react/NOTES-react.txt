@@ -1,0 +1,420 @@
+REACT
+12/2019
+
+- From the first page of Getting Started - an HTML file that works for prototyping and trying stuff out 
+  https://raw.githubusercontent.com/reactjs/reactjs.org/master/static/html/single-file-example.html
+
+- Reminders of basic stuff 
+  - import syntax 
+      import theDefault from 'npmModule'
+      import { aaa } from 'foo/bar'
+      import * as bbb from './foo/bar'
+
+  - Constructor (Different syntax from Java and Python)
+      constructor(props) {
+        super(props);
+        this.myMethod = this.myMethod.bind(this);
+        this.state = {foo: ''};
+      }
+
+  - CSS class attribute is className (common mistake)
+  - Style looks like this 
+      <div style={{color: 'red', fontWeight: 'bold'}} />
+
+  - Functions vs objects 
+    - components are functions 
+    - JSX html tags are objects (e.g. typeof React.createElement('div') == 'object')
+
+
+- Forms
+  - Controlled components vs uncontrolled components
+    - Uncontrolled components - React *can* use refs and not use event handlers. Sometimes the right solution with 3rd party, non-React libs
+  - Example 
+      handleChange(event) {
+        this.setState({value: event.target.value});
+      }
+      <input type="text" value={this.state.value} onChange={this.handleChange} />
+  - Value vs defaultValue 
+    - You probably want to use defaultValue
+  - Formik 
+    - Library to make forms easier 
+    - "Build forms in React, without the tears."
+
+
+- Context 
+  - The consumer will use the default value (e.g. 'light' if no provider is an ancestor)
+  - Values can be simple (e.g. a string) or complex, e.g. an object with props and methods { foo:'foo', bar:()=>{....} }
+    - Reference identity is used to determine whether children need a refresh so...
+    - Make sure they are defined some place in the code that won't be recreated on every render (e.g. contructor) or all the children will rerender constantly 
+  - Example
+      // theme-context.ts - should be in a separate file to avoid "ReferenceError: Cannot access context before initialization"
+      export const ThemeContext = React.createContext('light');   // default
+      ThemeContext.displayName = 'xxxxxxxxxx';                    // Optional name for React dev tools 
+
+
+      // Some component high up in the tree
+      import { ThemeContext } from 'theme-context.ts';
+      <ThemeContext.Provider value="dark">                        // value
+        ....
+      </ThemeContext.Provider>
+
+
+      // Some child component low down in the tree
+      import { ThemeContext } from 'theme-context.ts';
+
+      <ThemeContext.Consumer>{
+        value => (
+          ....
+        )
+      </ThemeContext.Consumer>
+
+
+      // Or a less powerful syntax for a child that only works with classes and only allows one context, not multiple 
+      static contextType = ThemeContext;
+      {this.context}
+
+
+- Forwarding Refs 
+  - Sometimes you need access to the actual DOM element - e.g. focus, selection, or animations
+  - Example 
+      // Outer component 
+      const ref = React.createRef();      // Will have ref directly to the inner component's DOM button *after* it has mounted and rendered
+      <FancyButton ref={ref} />;
+
+      // Inner component 
+      const FancyButton = React.forwardRef((props, ref) => (
+        <button ref={ref}>....</button>
+      ));
+
+- Refs 
+  - Can't be used with functional components 
+  - Refs can also be functions if you want more control 
+      this.setTextInputRef = element => {
+        // ... Do some stuff here
+        this.textInput = element;
+      };      
+
+      <input
+        type="text"
+        ref={this.setTextInputRef}
+      />
+
+
+- Higher-Order Components (HOC)
+  - It's a design pattern that uses composition 
+  - HOCs are functions that take components and return another component 
+    - HOC = (component) => anotherComponent
+    - So it's not technically a component but it does return one 
+  - HOCs are a type of Container Component 
+  - Convention - named with camelCase, not PascalCase 
+  - Example 
+
+      withFoo(WrappedComponent) => {
+        // Return a component 
+        return Foo extends React.Component {
+          constructor() {
+            // Do some setup, add some life-cycle behaviors, etc 
+          }
+
+          // Add some props, wrap HTML, etc. 
+          render() (
+            <WrappedComponent {...props} addThisProp={addThisProp} />
+          )
+        }
+      }
+
+      BarWithFoo = withFoo(Bar);
+      BazWithFoo = withFoo(Baz);
+
+  - Redux Connect is an HOC 
+  - Examples 
+      // Redux 
+      const ConnectedComment = connect(commentSelector, commentActions)(CommentList);
+
+      // Relay
+      const CommentWithRelay = Relay.createContainer(Comment, config);
+  - Important 
+    - Don't create HOCs inside a render method b/c the new function will always be different and cause lots of re-renders 
+    - Refs aren’t passed through
+
+
+- Render props 
+  - It's a design pattern that uses composition 
+  - It's a function that returns another component, but unlike an HOC, it's input might not be a component 
+  - There's nothing magical about the name "render". You can pick something else. 
+  - Important 
+    - Using a render prop can negate the advantage that comes from using React.PureComponent
+
+
+- Integrating with Other Libraries
+  - Example with some jQuery plugin 
+      class SomePlugin extends React.Component {
+        componentDidMount() {
+          this.$el = $(this.el);
+          this.$el.somePlugin();
+        }
+
+        componentWillUnmount() {
+          this.$el.somePlugin('destroy');
+        }
+
+        render() {
+          return <div ref={el => this.el = el} />;
+        }
+      }
+
+
+- Optimizing Performance
+  - General 
+    - For accurate numbers, make sure you are usign the prod build 
+    - Make sure to turn off all Chrome plugins, especially React Dev tools
+  - Virtualize long lists 
+    - Use windowing if you dispaly 100s or 1000s of rows 
+    - Helpful libraries - react-window, react-virtualized 
+  - Avoid reconciliation and unnecessary DOM renders
+    - Useful 
+      - shouldComponentUpdate
+      - React.PureComponent - equivalent to shouldComponentUpdate() with a shallow comparison of current and previous props and state
+    - Immutability 
+      - Important - make sure you are always returning new arrays and objects rather than modifying them 
+      - If you don't PureComponents with their shallow comparisons won't know to update 
+
+
+- Portals
+  - Useful for modals, pop ups, tooltips, etc 
+  - Useful when you want an element that is not hidden by overflow or has the correct z-index 
+  - In all other respects, it is a child of its React parent component 
+    - Events bubble up through the React parent components, not necessarily through it's HTML DOM parents 
+
+
+- Profiler API
+  - Measures how often React is rendering and how costly it is 
+  - Example - you can have one or more Profiler components, nested or not nested 
+      <Profiler id="Foo" onRender={callback}>
+        <Foo />
+      </Profiler>
+  - The callback method receives a lot of info and stats on what happened and how long it took 
+
+
+- TypeScript
+  - If an npm package or library does not have types, search on DefinitelyTyped - https://microsoft.github.io/TypeSearch/
+    - In rare instances, you might make your own local type declarations. More details - https://reactjs.org/docs/static-type-checking.html#type-definitions
+  - There are lots of other rarer options for typed React projects - Flow, Reason, Kotlin 
+
+
+- StrictMode 
+  - A tool for highlighting potential problems before build 
+      <React.StrictMode>
+        ....
+      </React.StrictMode>
+  - Helps with:
+    - Unsafe lifecycles
+    - Legacy and deprecated code
+    - Unexpected side effects
+  - Important 
+    - React does work in 2 phases - https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects
+      - Render 
+        - Determines what changes need to be made to the DOM
+        - During this phase, React calls render and then compares the result to the previous render
+        - Slower
+      - Commit 
+        - React applies any changes. (e.g. inserts, updates, and removes DOM nodes.) 
+        - React also calls lifecycles like componentDidMount and componentDidUpdate during this phase
+        - Faster 
+    - Lifecycles 
+      - These might be called more than once or not at all so don't include side-effects
+        - constructor
+        - componentWillMount
+        - componentWillReceiveProps
+        - componentWillUpdate
+        - getDerivedStateFromProps
+        - shouldComponentUpdate
+        - render
+        - setState updater functions (the first argument)
+      - StrictMode calls all of these twice in a row just to help you spot problems 
+
+
+- React.Suspense
+  - Only used for lazy loading of code. (Future plans to support data fetching)
+  - See code splitting guide - https://reactjs.org/docs/code-splitting.html#reactlazy
+  - Example 
+
+      const OtherComponent = React.lazy(() => import('./OtherComponent'));
+
+      MyComponent = (props) => {
+        return (
+          // Displays <Spinner> until OtherComponent loads
+          <React.Suspense fallback={<Spinner />}>
+            <div>
+              <OtherComponent />
+            </div>
+          </React.Suspense>
+        );
+      }
+
+
+- Hooks 
+  - Intro 
+    - Reasons 
+      - They give all sorts of reasons, but the main one is - hooks allow you to reuse methods that reference *state*
+        - Especially useful if you want to share some logic that needs to go in a variety of places like componentDidMount, componentWillUnmount
+        - More powerful than HOCs and render props
+      - Allows you to split code by concern rather than lifecycle
+      - Classes are hard to minify and don't work as consistently with hot reloading 
+      - It gives functional components features from classes without making them classes 
+    - Can't use hooks with classes 
+    - Requires you to stop thinking about lifecycles and more about declarative given this state what do I want to render 
+
+  - A few thoughts on hooks 
+    - Hooks are annoying at first but after a few days learning/experimenting, are actually mostly delightful 
+    - Pros 
+      - Does indeed result in less code, generally easier to read 
+      - useContext and Redux's useSelector/useDispatch eliminate quite a lot of boilerplate 
+      - Moving lots of related life-cycle code into one useEffect seems great, especially WET code in componentDidMount and componentDidUpdate
+      - Sharing stateful code between components seems great 
+    - Cons 
+      - useEffect 
+        - It's dependency array seems really easy to mess up
+        - Having an empty dependency array and returnign a function are not clear syntactical replacement for componentDidMount and componentWillUnmount
+        - Seems wasteful to add and remove listeners/handlers/subscriptions every render 
+        - Lifecycles were actually much easier to understand and were at least clearly named 
+      - Classes seemed slightly easier to mock and test 
+    - Misc thoughts
+      - Yet another example where we have to relearn how to do everything over again, time we could spend learning backend, databases, machine-learning, etc 
+      - The furniture gets moved around often enough (e.g. deprecated lifecycle methods, getDerivedStateFromProps) one always has to wonder if it's a fad 
+      - I don't really buy a lot of the arguments for hooks. They should stick to their best arguments. 
+        - "Classes are confusing" - They are not really. They are present in virtually every major current language 
+        - "Fewer bugs" - Hooks seem to exchange known bugs for new bugs that are more subtle (e.g. useEffect's dependencies. Also useSelector needs shallowComparison for objects)
+      - It's odd how dogmatic the community is 
+        - They were so proud that "React is just a view library," but it's not anymore. It's beginning to have things like "useReducer". 
+        - It used to be that classes were for "container components" and functions were for presentation. This seems more blury now with functional components doing everything 
+        - "Functional programming, pure functions, etc", but with useEffect, functional components are no longer pure with always the same inputs->outputs 
+      - Confusing names 
+      - useRef - Sometimes used for DOM refs. Sometimes used to hold variables you want to persist across renders. 
+      - useReducer - most people will probably assume this has something to do with Redux 
+
+
+  - useState 
+    - [value, setValue] = useState(initialValue)
+    - You can have as many useState()'s as you want 
+      - Find a balance though. Use objects for logical groupings of objects 
+    - Must be at top level of your function, i.e. not in loops or conditionals 
+    - A setter can take a function. This is often useful in scenarios with timeouts or async 
+        const [count, setcount] = setState(0);
+        setTimeout(() => {
+          setCount(count + 1);  // Will NOT always be accurate
+          setCount(c => c + 1); // Will always be accurate
+        }, 1000)
+
+  - useEffect Hook
+    - Used for side-effects - data fetching, subscriptions, manually changing the DOM 
+    - Serves the same purpose as componentDidMount, componentDidUpdate, and componentWillUnmount
+    - The useEffect and the clean up are run *after every render* unless you limit it with the second parameter's dependency array
+    - The dependency array is really easy to screw up. Think very carefully about it
+    - Example 
+        useEffect(() => {
+          // Do something....
+          return () => { console.log('Run clean up code') };
+        }, [foo, bar]); // Optional array. If values are the same, the array won't be run
+
+    - Use as many useEffects as you like, usually organized by concept, not lifecycle
+
+  - Rules 
+    - Only call Hooks at the top level, not from loops, conditions, or nested functions
+    - Only call Hooks from React function components. Don’t call Hooks from regular JavaScript functions
+    - Plugin to help - eslint-plugin-react-hooks
+
+  - Custom hooks 
+    - Naming convention - useMyHookName
+    - Each hook has isolates state so you can use the same hook/customHook as many times as you want in a component 
+
+  - FAQ
+    - Be careful with setTimeOut. It can reference old values because it can reference old variables
+    - Another rule - if useEffect references a function, they want you to "declare functions needed by an effect inside of it"
+      - Or you can move the function outside of your component to guarantee it doesn't reference any props or state 
+    - How do I implement shouldComponentUpdate?
+      - You can wrap a function component with React.memo to shallowly compare its props:
+          const Button = React.memo((props) => {
+            // your component
+          });
+
+  - Hooks API Reference 
+    - useState
+      - Lazy initial state
+        - If the initial state is computationally expensive, do this 
+            const [state, setState] = useState(() => {
+              const initialState = someExpensiveComputation(props);
+              return initialState;
+            });
+
+    - useContext 
+      - This is actually much simpler than before 
+          // Same as before 
+          export const ThemeContext = React.createContext('light');
+          <ThemeContext.Provider value="dark">
+            ....
+          </ThemeContext.Provider>
+
+          // Different / simpler 
+          const GrandChildComponent = (props) => {
+            const value = useContext(ThemeContext);
+
+            // Theme can now be accessed as "value"
+          }
+
+    - useReducer
+      - Preferable to useState when you have complex state logic that involves multiple sub-values or when the next state depends on the previous one
+      - Community seems to agree it is not a replacement for Redux
+        - You would need to use both useReducer and useContext and reinvent many things Redux does just fine 
+        - Redux also allows great middleware like thunks and loggers 
+        - Redux seems to be great for global state with many reducers. useReducer might be good for complex local state with one reducer 
+
+    - useCallback
+      - Returns a memoized callback. (Not exactly clear what the difference is between useCallback and useMemo)
+      - useCallback(fn, deps) is equivalent to useMemo(() => fn, deps)
+      - Example 
+          const memoizedCallback = useCallback(() => {
+            doSomething(a, b);
+          }, [a, b]);
+
+    - useMemo
+      - Returns a memoized value.
+          const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+
+    - useRef
+      - Can be used like ref, to point to a DOM node 
+          const Exampel = () => {
+            const inputEl = useRef(null);
+            const onButtonClick = () => { inputEl.current.focus(); };
+
+            return (
+              <div>
+                <input ref={inputEl} type="text" />
+                <button onClick={onButtonClick}>Focus the input</button>
+              </div>
+            );
+          }
+      - Can also be used to store any mutable value over time. Similar to a class's fields 
+      - Important 
+        - Changing ref.current doesn't cause a rerender 
+        - You aren't notified when current changes 
+
+  - useImperativeHandle
+    - useImperativeHandle(ref, createHandle, [deps])
+    - Used with forwardRef
+
+  - useLayoutEffect
+    - Identical to useEffect, but it fires synchronously after all DOM mutations
+    - Use this to read layout from the DOM and synchronously re-render
+
+  - useDebugValue
+    - useDebugValue(value)
+    - Used to display a label for custom hooks in React DevTools
+
+
+
+
+
+CREATE REACT APP
+- New project with TypeScript
+    npx create-react-app APP_NAME --template typescript

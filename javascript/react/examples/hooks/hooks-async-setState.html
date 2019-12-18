@@ -1,0 +1,55 @@
+<!-- MODIFIED FROM: https://raw.githubusercontent.com/reactjs/reactjs.org/master/static/html/single-file-example.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    div { padding: 20px; }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useEffect, useState } = React;
+
+    const Example = (props) => {
+      const initalCount = 0;
+      const [count, setCount] = useState(initalCount);
+
+      const addBad = () => {
+        setTimeout(() => {
+          setCount(count +1)      // BAD: if you click lots of times, it will only increment once
+        }, 1000)
+      } 
+
+      const addGood = () => {
+        setTimeout(() => {
+          setCount(c => c + 1)    // GOOD: if you click lots of times, it will increment all of them
+        }, 1000)
+      } 
+
+      return (
+        <div>
+          <button onClick={addBad}>Click me multiple times - bad</button>{count} <br />
+          <button onClick={addGood}>Click me multiple times - good</button>{count} <br />
+          props.outer: {props.outer}
+        </div>
+      );
+    }
+
+    // --------------------
+
+    ReactDOM.render(
+      <Example />,
+      document.getElementById('root')
+    );
+
+  </script>
+</body>
+
+</html>

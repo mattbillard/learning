@@ -1,0 +1,188 @@
+REDUX (REFRESHER)
+12/2019
+
+Reminders...
+
+
+- Pure functions 
+- Always return a new copy of state 
+
+- Always have a default
+    default:
+      return state
+
+- Object.assign vs spread operator 
+    return Object.assign({}, state, {
+      foo: action.foo
+    })
+
+    or 
+
+    return {
+      ...state,
+      foo: action.foo 
+    }
+
+- Example code 
+    // Adding a new item to an array 
+    case ADD_TODO:
+      return {
+        ...state,
+        todos: [
+          ...state.todos,
+          {
+            text: action.text,
+            completed: false
+          }
+        ]
+      }
+
+  // Modifying one item in an array 
+  case TOGGLE_TODO:
+    return {
+      ...state,
+      todos: state.todos.map((todo, index) => {
+        index === action.index ?
+          {
+            ...todo,
+            completed: !todo.completed
+          }
+          : todo
+      })
+    }
+
+- combineReducers
+    const rootReducer = combineReducers({
+      aaa
+      bbb
+    })
+
+    // is same as 
+
+    const rootReducer = (state = {}, action) => {
+      return {
+        aaa: aaa(state.aaa, action),
+        bbb: bbb(state.bbb, action)
+      }
+    }
+
+- createStore 
+    const store = createStore(rootReducer)
+    const store = createStore(rootReducer, window.initialStateFromServer)
+
+- subscribe
+    store.subscribe(() => console.log(store.getState()))
+
+- bindActionCreators
+    const mapDispatchToProps = dispatch => ({
+      aaa: id => dispatch(aaa(id)),
+      bbb: id => dispatch(bbb(id)),
+      ccc: id => dispatch(ccc(id)),
+    })
+
+    // is same as 
+    const mapDispatchToProps = dispatch => (
+      bindActionCreators({
+        aaa,
+        bbb,
+        ccc,
+      }, dispatch)
+    );
+
+    // is same as this when used with connect(). (***This is the best way***)
+    const mapDispatchToProps = {
+      aaa,
+      bbb,
+      ccc,
+    };
+
+    // Or if you happened to group all your actions in an object, this is convenient
+    const mapDispatchToProps = (dispatch) => ({
+      actions: bindActionCreators(actions, dispatch)
+    });
+
+- redux-thunk
+  - It's odd that Redux would think async code is an "advanced" usecase. It's probably one of the most popular usecases
+  - Allows dispatch to accept functions instead of just objects 
+      const fetchPosts = (subreddit) => dispatch => {
+        dispatch(requestPosts(subreddit))
+        return fetch(`https://www.reddit.com/r/${subreddit}.json`)
+          .then(response => response.json())
+          .then(json => dispatch(receivePosts(subreddit, json)))
+      }
+
+      const store = createStore(
+        rootReducer,
+        applyMiddleware(
+          thunkMiddleware, // lets us dispatch() functions
+          loggerMiddleware // neat middleware that logs actions
+        )
+      )
+  - You can use redux-promise or redux-promise-middleware to dispatch Promises instead of functions.
+
+- Example middleware 
+    const logger = store => next => action => {
+      console.log('dispatching', action)
+      let result = next(action)
+      console.log('next state', store.getState())
+      return result
+    }
+
+
+- Hooks 
+  - https://thoughtbot.com/blog/using-redux-with-react-hooks
+  - Before
+      import React from "react";
+      import { connect } from "react-redux";
+      import { addCount } from "./store/counter/actions";
+
+      export const Count = ({ count, addCount }) => {
+        return (
+          <main>
+            <div>Count: {count}</div>
+            <button onClick={addCount}>Add to count</button>
+          </main>
+        );
+      };
+
+      const mapStateToProps = state => ({
+        count: state.counter.count
+      });
+      const mapDispatchToProps = { addCount };
+      export default connect(mapStateToProps, mapDispatchToProps)(Count);
+
+  - After 
+      import React from "react";
+      import { useDispatch, useSelector } from "react-redux";
+      import { addCount } from "./store/counter/actions";
+
+      export const Count = () => {
+        const count = useSelector(state => state.counter.count);
+        const dispatch = useDispatch();
+
+        return (
+          <main>
+            <div>Count: {count}</div>
+            <button onClick={() => dispatch(addCount())}>Add to count</button>
+          </main>
+        );
+      };
+
+  - Important 
+    - Be careful returning objects from useSelector 
+        // Do this - return each item separately 
+        const count = useSelector(state => state.counter.count);
+        const user = useSelector(state => state.user);
+
+        // Or this - shallowEqual b/c each time useSelector is called, a new object is returned 
+        import { shallowEqual, useSelector } from 'react-redux';
+
+        const { count, user } = useSelector(state => ({
+          count: state.counter.count,
+          user: state.user,
+        }), shallowEqual);
+
+
+
+
+

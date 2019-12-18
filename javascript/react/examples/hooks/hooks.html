@@ -1,0 +1,80 @@
+<!-- MODIFIED FROM: https://raw.githubusercontent.com/reactjs/reactjs.org/master/static/html/single-file-example.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    div { padding: 20px; }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useEffect, useState } = React;
+
+    const Inner = (props) => {
+      const initalCount = 0;
+      const [count, setCount] = useState(initalCount);
+
+      useEffect(() => {
+        console.log(`Inner - useEffect - ${count}`);
+        return () => { console.log('Inner - clean up') };
+      }, [count]);
+
+      const add = () => {
+        setTimeout(() => {
+          // setCount(count +1)
+          setCount(c => c + 1)
+        }, 1000)
+      } 
+
+      // <button onClick={() => setCount(count + 1)}>Click me</button>{count} <br />
+      return (
+        <div>
+          <button onClick={add}>Click me</button>{count} <br />
+          props.outer: {props.outer}
+        </div>
+      );
+    }
+
+    const Outer = () => {
+      const initalCount = 0;
+      const [count, setCount] = useState(initalCount);
+
+      useEffect(() => {
+        console.log(`Outer - useEffect - ${count}`);
+        return () => { console.log('Outer - clean up') };
+      }, [count]);
+
+      return (
+        <div>
+          <button onClick={() => setCount(count + 1)}>Click me</button>{count} <br />
+          <Inner outer={count} />
+        </div>
+      );
+    }
+
+    // --------------------
+
+    const App = (props) => {
+      return (
+        <div>
+          <Outer />
+        </div>
+      )
+    }
+
+    ReactDOM.render(
+      <App />,
+      document.getElementById('root')
+    );
+
+  </script>
+</body>
+
+</html>

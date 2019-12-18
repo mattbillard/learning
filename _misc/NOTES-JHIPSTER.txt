@@ -1,0 +1,95 @@
+JHIPSTER
+11/2019
+
+- Generation 
+  - See 
+      https://github.com/jhipster/jhipster-guides/blob/master/guides/00_setting_up_your_environment.md
+      https://github.com/jhipster/jhipster-guides/blob/master/guides/01_creating_your_application.md
+  - Run this code 
+    ```
+    npm install -g generator-jhipster
+    jhipster
+    ```
+  - Database - H2 for dev, Postgres/MySQL for Prod 
+
+- .editorconfig - make sure indenting, etc is consistent 
+- .huskyrc - githooks made easy
+- prettier - it has prettier code formatting 
+- .yo-rc.json - the settings you chose when generating the project 
+- build.gradle 
+  - liquibase - DB management, versions, deployment 
+  - emails - has some sort of email capability 
+- package.json 
+  - fortawesome, axios, bootstrap, lodas, moment, react, redux, reactstrap, thunk, enzyme, jest, autoprefixer, core-js, postcss, prettier, rimraf, sass, webpack
+  - TypeScript 
+  - prettier:format
+- Readme 
+  - Has instructions for jar and war, Sonar code quality, and Docker 
+- sonar-project.properties - Uses sonar for code quality 
+- tsconfig.json - uses TypeScript
+
+- src/
+  - docker 
+    - Uses docker 
+    - Grafana and Prometheus for metrics 
+      - Supposedly becoming a common devops combo. Prometheus for data storage and Grafana for easy UIs/dashboards 
+  - jib - Google tool to make Docker easier 
+  - resources/
+    - config/ 
+      - liquibase - interesting. It uses csv files to populate the user database 
+      - yml config files 
+    - i18n - text files 
+    - templates - for error and email 
+    - .h2.server.properties - for h2 database 
+    - banner.txt - replaces the Spring startup text graphic with the JHipster one
+    - logback-spring.xml - configures Logback 
+  - java - interesting that they use singular instead of plural for all the following 
+    - aop - logging 
+    - config 
+    - domain - POJO entities
+    - repository 
+    - security 
+    - service 
+    - web 
+  - webapp - They use webapp. I wonder if it gets included in the jar
+    - index.html - has a spot for Google Analytics
+    - robots.txt - has a robots file for search engines 
+    - app/ 
+    - content - css and images 
+    - i18n - internationalization json files 
+    - swagger-ui/ 
+    - WEB-INF - a folder in the static/public folder that is never served to the browser. Therefore private and used for things like jsp files 
+      - web.xml - a config file for the webapp 
+
+
+
+
+
+- Application
+  - Install / set up 
+    ./gradlew 
+  - Run - 2 terminal 
+      ./gradlew 
+      npm start 
+  - Ports - Gradle runs on 8080. Webpack on 9000
+  - Uses Swagger to document the API 
+  - PWA - offers support for progressive web apps 
+
+
+
+- Useful 
+  - Toast
+      import { ToastContainer, toast } from 'react-toastify';
+  - Types for connected components
+      export interface IAppProps extends StateProps, DispatchProps {}
+      ....
+      type StateProps = ReturnType<typeof mapStateToProps>;
+      type DispatchProps = typeof mapDispatchToProps;
+  - Hooks 
+      const [menuOpen, setMenuOpen] = useState(false);
+  - Error boundaries 
+      <ErrorBoundary> component
+  - Dynamic import statements 
+      import(/* webpackChunkName: "account" */ 'app/modules/account')
+
+

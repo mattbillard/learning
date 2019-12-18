@@ -1,0 +1,66 @@
+<!-- MODIFIED FROM: https://raw.githubusercontent.com/reactjs/reactjs.org/master/static/html/single-file-example.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    div { padding: 20px; }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useContext } = React;
+
+    const ThemeContext = React.createContext({color: 'light'});
+
+    const Grandchild = (props) => {
+      const theme = useContext(ThemeContext);
+
+      return (
+        <div>
+          Grandchild <br />
+          Theme: {theme.color}
+        </div>
+      )
+    }
+
+    // --------------------
+
+    const Child = (props) => {
+      return (
+        <div>
+          Child
+          <Grandchild />
+        </div>
+      )
+    }
+
+    // --------------------
+
+    const theTheme = {color: 'dark'};
+
+    const App = (props) => {
+      return (
+        <ThemeContext.Provider value={theTheme}>
+          App
+          <Child />
+        </ThemeContext.Provider>
+      )
+    }
+
+    ReactDOM.render(
+      <App />,
+      document.getElementById('root')
+    );
+
+  </script>
+</body>
+
+</html>

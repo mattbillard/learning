@@ -1,0 +1,73 @@
+AG-GRID
+12/2019
+
+- React
+  https://www.ag-grid.com/react-grid/
+
+- Column Configuration - https://www.ag-grid.com/react-column-configuration/
+  - 3 ways to define columns
+
+      // 1- Defining columns declaratively:
+      <AgGridReact rowData={this.state.rowData}>
+        <AgGridColumn field="make"></AgGridColumn>
+        <AgGridColumn field="model"></AgGridColumn>
+        <AgGridColumn field="price"></AgGridColumn>
+      </AgGridReact>
+
+      // 2 - Defining columns via GridOptions:
+      this.state = {
+        gridOptions = {
+          columnDefs: [
+            { make: "Toyota", model: "Celica", price: 35000 },
+            { make: "Ford", model: "Mondeo", price: 32000 },
+            { make: "Porsche", model: "Boxter", price: 72000 }
+          ]
+        }
+      };
+      <AgGridReact gridOptions={this.state.gridOptions}></AgGridReact>
+
+      // 3 - Defining columns by binding to a property:
+      this.state = {
+        columnDefs: [
+          { make: "Toyota", model: "Celica", price: 35000 },
+          { make: "Ford", model: "Mondeo", price: 32000 },
+          { make: "Porsche", model: "Boxter", price: 72000 }
+        ]
+      };
+      <AgGridReact columnDefs={this.state.columnDefs}></AgGridReact>
+
+
+- Context API - https://www.ag-grid.com/react-apis/
+    const FontContext = React.createContext('normal');
+
+    <FontContext.Provider value="bold">
+      <GridComponent/>
+    </FontContext.Provider>
+
+    <FontContext.Consumer>
+      {fontWeight => <span style={{fontWeight}}>Stylised Component!</span> }
+    </FontContext.Consumer>
+
+
+- Access the Grid & Column API - https://www.ag-grid.com/react-grid-apis/
+    <AgGridReact onGridReady={this.onGridReady} .../>
+
+    // in onGridReady, store the api for later use
+    onGridReady = (params) => {
+      this.api = params.api;
+      this.columnApi = params.columnApi;
+    }
+
+    // use the api some point later!
+    somePointLater() {
+      this.api.selectAll();
+      this.columnApi.setColumnVisible('country', visible);
+    }
+
+
+- With Redux
+  - Need forwardRef
+      export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(TheComponent);
+  - Also need the following grid properites b/c Redux returns a new copy of all data every time 
+      deltaRowDataMode={true}
+      getRowNodeId={data => data.id}
