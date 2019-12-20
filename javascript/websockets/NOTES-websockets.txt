@@ -1,0 +1,61 @@
+WEBSOCKETS
+12/2019
+
+WebSocket Tutorial in 10 Minutes
+- https://www.tutorialdocs.com/article/websocket-tutorial-in-10-minutes.html
+- Intro 
+  - Ports are same as http/https - 80 and 443
+  - Protocol are similar - ws:// and wss://
+  - Data is text or binary (e.g. blob or Arraybuffer)
+- Example
+    var ws = new WebSocket("wss://echo.websocket.org");
+
+    ws.onopen = function (evt) {
+      console.log("Connection open ...", evt);
+      ws.send("Hello WebSockets!");
+    };
+
+    ws.onmessage = function (evt) {
+      console.log("Received Message: ", evt.data, evt);
+      ws.close();
+    };
+
+    ws.onclose = function (evt) {
+      console.log("Connection closed.", evt);
+    };
+
+- Note the lowercase capitalization 
+- There are also corresponding event listeners 
+    ws.onopen = (event) => { .... };
+    ws.onmessage = (event) => { .... };
+    ws.onclose = (event) => { .... };
+    ws.onerror = (event) => { .... };
+
+    ws.addEventListener('open', (event) => { .... });
+    ws.addEventListener('message', (event) => { .... });
+    ws.addEventListener('close', (event) => { .... });
+    ws.addEventListener("error", (event) => { .... });
+
+
+- websocketd 
+  - https://github.com/joewalnes/websocketd/blob/master/examples
+  - Fun and easy way to have websockets execute the results of bash, node, and other scripts 
+    - Feels similar in complexity / usefulness to npm http-server 
+  - Example 
+      websocketd --port=8080 bash ./some-script.sh
+
+
+- Popularity - weekly downloads on npm 
+  - ws        - 18,596,161
+  - socket.io -  3,028,374
+  - websocket -    202,441
+
+
+
+
+
+- 01 - absurdley basic 
+- 02 - websocketd is fun and similar vibe to npm http-server. My frontend code is useful. Rest is not 
+- 03 - backend code is useful 
+- 04 - article is good. Code is sloppy. App is impressive. 
+

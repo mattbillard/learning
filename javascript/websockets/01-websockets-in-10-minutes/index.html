@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+</head>
+
+<body>
+  Demo
+
+  <script>
+    // CODE FROM: https://www.tutorialdocs.com/article/websocket-tutorial-in-10-minutes.html
+    var ws = new WebSocket("wss://echo.websocket.org");
+
+    ws.onopen = (event) => {
+      console.log("Connection open ...", event);
+      ws.send("Hello WebSockets!");
+    };
+
+    ws.onmessage = (event) => {
+      console.log("Received Message: ", event.data, event);
+      ws.close();
+    };
+
+    ws.onerror = (event) => {
+      console.log("Received Error: ", event);
+      ws.close();
+    };
+
+    ws.onclose = (event) => {
+      console.log("Connection closed.", event);
+    };      
+  </script>
+</body>
+
+</html>

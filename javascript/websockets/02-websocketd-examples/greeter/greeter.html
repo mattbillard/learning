@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+</head>
+
+<body>
+  Demo
+
+  <form name="myForm" action="javascript:sendMessage()">
+    <input type="text" name="myInput" value="Type your name" />
+    <button type="submit">Send</button>
+  </form>
+
+  <script>
+    /** 
+     * I made this page to interact with greeter.sh
+     * 
+     * INSTRUCTIONS:
+     * 
+     * - Install websocketd
+     *    brew install websocketd
+     * - Run this
+     *    websocketd --port=8080 bash ./greeter.sh
+     * - Open this file in the browser. (Don't go to http://localhost:8080)
+     * - Type something, hit send, and check the console
+     * 
+    */
+
+    const sendMessage = () => {
+      const message = window.myForm.myInput.value;
+      ws.send(message)
+    }
+
+    var ws = new WebSocket('ws://localhost:8080/');
+
+    ws.onopen = (event) => {
+      console.log("Connection open ...", event);
+    };
+
+    ws.onmessage = (event) => {
+      console.log("Received Message: ", event.data);
+    };
+
+    ws.onerror = (event) => {
+      console.log("Received Error: ", event);
+      ws.close();
+    };
+
+    ws.onclose = (event) => {
+      console.log("Connection closed.", event);
+    };      
+  </script>
+</body>
+
+</html>
