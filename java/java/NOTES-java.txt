@@ -1,1076 +1,558 @@
 HYPERSKILL (Partnered with IntelliJ to teach Java)
 2019-07
 
-https://hi.hyperskill.org/projects3
+https://hyperskill.org/knowledge-map/73?v=table
 
-- Intro 
-  - Java was originally called "Oak" 
-
-- Jetbrains - Key commands and shortcut templates 
-  - shift + enter 
-  - psvm - public static void main....
-  - sout - System.out.println....
-
-- Type inference
-  - Since Java 11, you can write var instead of a specific type
-      var language = "Java"; // String
-      var version = 11; // int
-
-- Terms
-  - Bytecode - compiled Java code that can then be run by the JVM on any system. (I think each symbol takes a byte, hence the name)
-  - JDK = JRE + compiler, debugger, archiver - Java Development Kit 
-    - javac - converts *.java into *.class 
-    - archiver - creates .JAR files 
-    - JRE = JVM + JCL - Java Runtime Environment 
-      - JVM - Java Virtual Machine 
-      - JCL - Java Class Library 
-  - So you want to install JDK, not JRE 
-
-- Terminals 
-  - Lines begin with > on Windows and $ on Mac and Linux 
-  - iTerm2 is useful on Mac 
-    - Better colors, autocomplete (Ctrl -), split terminals, paste history, click to open text files 
-  - Syntax 
-      <param> - required param 
-      [param] - optional param 
-      [params...] - params that can be repeated 
-      [param 1|param 2] - choice of params 
-  - Manual 
-      man <command_name> - for Mac 
-      <command_name> /? - for Windows
-  - Display all built in commands 
-      man builtin - for Mac and Linux 
-      help - for Windows
-
-- Compile and run 
-    javac Main.java
-    java Main 
-  or 
-     java  -cp . Main 
+- Basic syntax and simple programs
+  - Intro 
+    - Java was originally called "Oak" 
+    - Jetbrains - Key commands and shortcut templates 
+      - shift + enter 
+      - psvm - public static void main....
+      - sout - System.out.println....
+    - Type inference
+      - Since Java 11, you can write var instead of a specific type
+          var language = "Java"; // String
+          var version = 11; // int
 
 
-- Scanner 
-  - Read input from the commandline 
-  - Example 
-      import java.util.Scanner;
-      public class ReadInput {
-        public static void main(String[] args) {
-          Scanner scanner = new Scanner(System.in);
-          String line = scanner.nextLine(); // read a whole line, for example "Hello, Java"
-          int num = scanner.nextInt(); // read a number, for example 123
-          double d = scanner.nextDouble(); // read double, for example 123.01
-          String string = scanner.next(); // read a string (not a line), for example "Hello"
-          long l = scanner.nextLong(); // read a long
-        }
-      }
+  - Arrays 
+    - Basics 
+      - Initialization - there are lots of ways 
+        char[] arr = {'a', 'z', 'e', 'd'};
+        char[] arr = new char[] {'a', 'z', 'e', 'd'};
+        char[] arr = new char[5]; char[0]='a'; char[1]='b'; char[2]='c'; char[3]='d'; 
+      - Useful examples 
+          int[] arr = new int[3];
+          int[] arr = {1, 2, 3};
+          int[] arr = new int[]{1, 2, 3};
+      - Arrays utility class - class with standard methods used to process arrays
+        - Arrays.toString( arr )
+        - Arrays.sort( arr )
+        - Arrays.equals( arr,  arr )
+        - Arrays.fill(  ) 
+      - Useful 
+        - ArrayList to Array 
+            String[] arr = arrayList.toArray(new String[0]);
+
+    - Fixed-size array
+      - Arrays in Java are fixed size. You can't change the size after you make them. 
+
+    - Dynamic array
+      - Arrays are fixed in size, so there's the concept of a Dynamic Array (used internally for collections)
+      - If you run out of space in the array, create a larger one and copy all the old elements over to the new one 
+      - size – number of elements currently in it 
+      - capacity – possible number of elements. Corresponds to the size of the internal regular array
+      - Scaling factor
+        - When size > capacity, everything is copied to a new larger internal array 
+        - Most common scaling strategies 
+          - Java - x1.5
+          - C++ - x2
+          - Go - x2 (if <1024), then x1.25
+        - Sometimes the array is shrunk too 
+      - Common operations
+        - Add an element to end (i.e. not specifying index)
+          - O(1) - average case. Just add the element to the end unless...
+          - O(n) - worst case. If we need to increase the size of the internal array, copy everything over to a new array 
+        - Add an element at the specified index
+          - O(n) - average and worst b/c need to shift existing elements to the right 
+        - Update value at the specified index
+          - O(1)
+        - Remove an element at the specified index
+          - O(n) - average and worst b/c need to shift remaining elements to the left
+        - Clear 
+          - O(n) - because you need to clear each element or garbage collector won't be able to get to them 
+        - Get element by index
+          - O(1)
 
 
-- Char 
-  - Can be incremented, decremented, treated like a number 
-      char ch = 'b';
-      ch += 1; // 'c'
-      ch -= 2; // 'a'
-      ch++; // 'b'
-      ch--; // 'a'
-  - Details 
-    - It has a minimum value of '\u0000' and a maximum value of '\uffff'.
-    - It may be considered as an unsigned integer value in the range from 0 to 65535.
+  - Casting 
+    - implicit casting - when the target type is wider than source type. No loss of information
+    - explicit casting - when the target type is narrow than source type. Losses information
+      - Requires (type) to cast 
+      - type overflow - value gets truncated. For example bigNum to int 
 
 
-- Numbers 
-  - Only use int, long, and double 
-
-
-- Casting 
-  - implicit casting - when the target type is wider than source type. No loss of information
-  - explicit casting - when the target type is narrow than source type. Losses information
-    - Requires (type) to cast 
-    - type overflow - value gets truncated. For example bigNum to int 
-
-
-
-- Scanner 
-  import java.util.Scanner;
-  Scanner scanner = new Scanner(System.in);
-  String line = scanner.nextLine(); // read a whole line, for example "Hello, Java"
-  int num = scanner.nextInt(); // read a number, for example 123
-  double d = scanner.nextDouble(); // read double, for example 123.01
-  String string = scanner.next(); // read a string (not a line), for example "Hello"
-  long l = scanner.nextLong(); // read a long
-
-
-
-
-- Arrays 
-  - Basics 
-    - Initialization - there are lots of ways 
-      char[] arr = {'a', 'z', 'e', 'd'};
-      char[] arr = new char[] {'a', 'z', 'e', 'd'};
-      char[] arr = new char[5]; char[0]='a'; char[1]='b'; char[2]='c'; char[3]='d'; 
-    - Arrays utility class - class with standard methods used to process arrays
-      - Arrays.toString( arr )
-      - Arrays.sort( arr )
-      - Arrays.equals( arr,  arr )
-      - Arrays.fill(  ) 
-
-  - Fixed-size array
-    - Arrays in Java are fixed size. You can't change the size after you make them. 
-
-  - Dynamic array
-    - Arrays are fixed in size, so there's the concept of a Dynamic Array (used internally for collections)
-    - If you run out of space in the array, create a larger one and copy all the old elements over to the new one 
-    - size – number of elements currently in it 
-    - capacity – possible number of elements. Corresponds to the size of the internal regular array
-    - Scaling factor
-      - When size > capacity, everything is copied to a new larger internal array 
-      - Most common scaling strategies 
-        - Java - x1.5
-        - C++ - x2
-        - Go - x2 (if <1024), then x1.25
-      - Sometimes the array is shrunk too 
-    - Common operations
-      - Add an element to end (i.e. not specifying index)
-        - O(1) - average case. Just add the element to the end unless...
-        - O(n) - worst case. If we need to increase the size of the internal array, copy everything over to a new array 
-      - Add an element at the specified index
-        - O(n) - average and worst b/c need to shift existing elements to the right 
-      - Update value at the specified index
-        - O(1)
-      - Remove an element at the specified index
-        - O(n) - average and worst b/c need to shift remaining elements to the left
-      - Clear 
-        - O(n) - because you need to clear each element or garbage collector won't be able to get to them 
-      - Get element by index
-        - O(1)
-
-
-- Floating point numbers 
-  - Float and double 
-  - Recommend you always use double
-  - examples 
-      float pi = 3.1415f; // remember to add the "f" on the end 
-      double pi = 3.1415;
-      double eps = 5e-3; // "mantissa"
-  - IMPORTANT 
-      double d1 = 5 / 4; // 1.0
-      double d2 = 5.0 / 4; // 1.25
-  - Errors can accumulate during computation
-      double d = 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1;
-      System.out.println(d); // it prints 0.9999999999999999
   - Scanner 
-      float f = scanner.nextFloat();
-      double d = scanner.nextDouble();
-    - Force scanner to use . instead of , for decimal: 
-        Scanner scanner = new Scanner(System.in).useLocale(Locale.US);
-
-
-
-- Infinity and NaN 
-  - float and double have +Infinity, -Infinity and NaN. 
-  - Examples
-    Double.NEGATIVE_INFINITY
-    Double.POSITIVE_INFINITY
-    Double.NaN
-    Float.POSITIVE_INFINITY
-    Float.NEGATIVE_INFINITY
-    Float.NaN
-
-
-
-- Strings and arrays
-  - Methods to convert btw strings and arrays 
-      char[] chars = { 'A', 'B', 'C', 'D', 'E', 'F' };
-      String stringFromChars = String.valueOf(chars); // "ABCDEF"
-      char[] charsFromString = stringFromChars.toCharArray(); // { 'A', 'B', 'C', 'D', 'E', 'F' }
-      String theSameString = new String(stringFromChars); // "ABCDEF"
-  - Other methods 
-      .split()
-      .charAt()
-  - You can loop over a string with for loops 
-
-
-- Arrays as parameters 
-  - varargs 
-    - variable-length arguments
-    - The way you pass N number of args to a method. Must all be same type. 
+    - Read input from the commandline 
     - Example 
-        public static void printNumberOfArguments(int... numbers) { .... }
-    - Interesting... both of these will successfully call it 
-        printNumberOfArguments(1, 2, 3);
-        printNumberOfArguments(new int[] { 1, 2 });
+        import java.util.Scanner;
+        public class ReadInput {
+          public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+            String line = scanner.nextLine(); // read a whole line, for example "Hello, Java"
+            int num = scanner.nextInt(); // read a number, for example 123
+            double d = scanner.nextDouble(); // read double, for example 123.01
+            String string = scanner.next(); // read a string (not a line), for example "Hello"
+            long l = scanner.nextLong(); // read a long
+          }
+        }
+    - Methods
+      import java.util.Scanner;
+      Scanner scanner = new Scanner(System.in);
+      String line = scanner.nextLine(); // read a whole line, for example "Hello, Java"
+      int num = scanner.nextInt(); // read a number, for example 123
+      double d = scanner.nextDouble(); // read double, for example 123.01
+      String string = scanner.next(); // read a string (not a line), for example "Hello"
+      long l = scanner.nextLong(); // read a long
 
 
-- Classes 
-  - Multiple classes per file - don't need to do anything fancy. Just make *only one* of the classes public 
-      public class PatientDemo { .... }
-      class Patient { .... }
-  - Null - don't forget any object instance can be set to null 
-      Patient p = null; 
+  - Numbers 
+    - Only use int, long, and double 
+  - Big O notation
+    - Can be used for time or memory 
+    - Complexity for *worst* case scenario 
+    - Common examples 
+      - Constant time: O(1). The number of required operations is not dependent on the input size. 
+      - Logarithmic time: O(log n).
+      - Square-root time: O(sqrt(n))
+      - Linear time: O(n)
+      - Log-linear time O(n log n)
+      - Quadratic time: O(n^2)
+      - Exponential time:  O(2^n)
 
 
-- Regex 
-  - Basics 
-    - Very different from JS 
-        String reg = "abc";
-        "abc".matches(reg);  // true
-        "abc1".matches(reg)); // false - weird: needs to match whole string perfectly 
-    - ? - reminder - question mark means preceeding character is optional 
-    - [^abc] - not a,b,c 
-    - [^1-6] - not 1-6 
-    - (abc|def|xyz) - abc or def or xyz 
-    - {0,1} is the same as ?
-    - {0, } is the same I think as * 
-    - {n} - exactly n repetitions 
-    - {n, m} - n-m 
-    - {n,} - >= n
-    - {,m} - <= m
-  - Pattern and matcher 
-    - More efficient and more options than string.matches(reg);
-    - Not compiled every time you use it.  
+  - Bitwise operators
+    - Operators for manipulating bits of integer numbers
+    - "Bitwise operations are worth studying because they have many applications. It is not their main use to substitute arithmetic operations. Cryptography, computer graphics, hash functions, compression algorithms, and network protocols are just some examples where bitwise operations are extremely useful." - Stackoverflow
+    - Bitwise operators 
+      - Each of these operators goes though all bits of both operands (numbers) one by one (i.e. bitwise) ﻿and produces a new number as a result.
+      - Operators 
+          ~ unary inverse
+            - is a unary operator that inverses bits in the binary format of the number making every 0 a 1 and every 1 a 0. It also changes the sign bit of the value.
+          & bitwise AND
+            - the result digit is 1 if both operand digits are 1, otherwise, it is 0;
+          | bitwise OR
+            - the result digit is 1 if at least one operand digit is 1, otherwise, it is 0;
+          ^ bitwise XOR
+            - the result digit is 1 if exactly one operand is 1, otherwise, it is 0
+      - Exmaples 
+          int first = 15;  // binary format 1111
+          int second = 10; // binary format 1010
+          int bitwiseAnd = first & second; // 1111 & 1010 = 1010, the result is 10
+          int bitwiseOr = first | second;  // 1111 | 1010 = 1111, the result is 15
+          int bitwiseXor = first ^ second; // 1111 ^ 1010 = 0101, the result is 5 
+    - Bit-shift operators
+      - Operators which can be used to shift bits of an integer number from one position to another.
+      - Operators 
+          << signed left shift
+            - shifts a bit pattern to the left by the distance specified in the right operand. 
+            - It fills the empty place with zeros
+            - equivalent to the multiplication by two
+          >> signed right shift 
+            - shifts a bit pattern to the right by the distance specified in the right operand. 
+            - It fills the empty place with values of the sign bit.
+            - equivalent to the division by two
+          >>> unsigned right shift 
+            - shifts a bit pattern to the right by the distance specified in the right operand. 
+            - It is almost like >>, but shifted values are filled up with zeros. 
+            - The result of the >>> operator is always positive.
+      - Examples 
+          int val = 25;   // binary: 0001 1001, decimal: 25
+          val = val << 1; // binary: 0011 0010, decimal: 50
+          val = val << 2; // binary: 1100 1000, decimal: 200
+          int anotherVal = 14;   // binary: 1110, decimal: 14
+          anotherVal = anotherVal >> 1; // binary: 0111, decimal: 7      
+    - NOTE: skipping for now b/c this depends on... 2's compliment > 1's compliment > binary math 
+
+
+  - Floating point numbers 
+    - Float and double 
+    - Recommend you always use double
+    - examples 
+        float pi = 3.1415f; // remember to add the "f" on the end 
+        double pi = 3.1415;
+        double eps = 5e-3; // "mantissa"
+    - IMPORTANT 
+        double d1 = 5 / 4; // 1.0
+        double d2 = 5.0 / 4; // 1.25
+    - Errors can accumulate during computation
+        double d = 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1;
+        System.out.println(d); // it prints 0.9999999999999999
+    - Scanner 
+        float f = scanner.nextFloat();
+        double d = scanner.nextDouble();
+      - Force scanner to use . instead of , for decimal: 
+          Scanner scanner = new Scanner(System.in).useLocale(Locale.US);
+
+
+  - Infinity and NaN 
+    - float and double have +Infinity, -Infinity and NaN. 
+    - Examples
+      Double.NEGATIVE_INFINITY
+      Double.POSITIVE_INFINITY
+      Double.NaN
+      Float.POSITIVE_INFINITY
+      Float.NEGATIVE_INFINITY
+      Float.NaN
+
+
+  - Char 
+    - Can be incremented, decremented, treated like a number 
+        char ch = 'b';
+        ch += 1; // 'c'
+        ch -= 2; // 'a'
+        ch++; // 'b'
+        ch--; // 'a'
+    - Details 
+      - It has a minimum value of '\u0000' and a maximum value of '\uffff'.
+      - It may be considered as an unsigned integer value in the range from 0 to 65535.
+
+
+  - Formatted output
+    - System.out.printf() and String.format()
+        %d - int, short, byte, long 
+        %f - double, float 
+        %.2f - double, float with 2 decimal places 
+        %c - character 
+        %s - string 
     - Example 
-        import java.util.regex.Pattern;
-        import java.util.regex.Matcher;
+        System.out.printf("Display a Number %.2f", 15.23);
+        or
+        String msg = String.format("My name is %c. %s.%nMy age is %d.%nMy height is %.2f.", initial, surname, age, height);
+        System.out.println(msg);
+    - Stackoverflow indicates + is actually 10x faster but formatting has other useful features like padding, formating numbers, dates, etc 
 
-        String text = "We use Java to write modern applications";
-        Pattern pattern = Pattern.compile(".*[Jj]ava.*", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(text); 
-        boolean matches = matcher.matches();
 
-        // or more concisely
+  - Strings and arrays
+    - Methods to convert btw strings and arrays 
+        char[] chars = { 'A', 'B', 'C', 'D', 'E', 'F' };
+        String stringFromChars = String.valueOf(chars); // "ABCDEF"
+        char[] charsFromString = stringFromChars.toCharArray(); // { 'A', 'B', 'C', 'D', 'E', 'F' }
+        String theSameString = new String(stringFromChars); // "ABCDEF"
+    - Other methods 
+        .split()
+        .charAt()
+    - You can loop over a string with for loops 
 
-        String text = "We use Java to write modern applications";
-        boolean matches =
-          Pattern
-            .compile(".*[Jj]ava.*", Pattern.CASE_INSENSITIVE)
-            .matcher(text)
-            .matches();
 
-        // or non-reusable but with flags 
+  - Multi-dimentional arrays 
+    - Array of arrays. Can be as many levels deep as you want. Not all children need to be same length 
+      int[][] twoDimArray = new int[3][];
 
-        Pattern.matches("(?i).*[Jj]ava.*", "We use Java to write modern applications");
+      twoDimArray[0] = new int[] { 1, 2, 3, 4 }; // the length is 4
+      twoDimArray[1] = new int[] { 5, 7, 3};     // the length is 3
+      twoDimArray[2] = new int[] { 8 };          // the length is 1
 
-  - Other methods 
-    - find - unlike matches, it looks for substrings and doesn't need to match the whole thing 
-        String text = "Regex is a powerful tool for programmers";
-        Pattern pattern = Pattern.compile(".*[Jj]ava.*"); 
-        Matcher matcher = pattern.matcher(text); 
-        matcher.matches(); // false, the whole string does not match the pattern
-        matcher.find(); // true, there is a substring that matches the pattern
-  - replaceFirst and replaceAll
-    - // IMPORTANT: replace() is different. It does not support regex 
-    - With strings... 
-      - string.replaceFirst(regex, replacement);
-      - string.replaceAll(regex, replacement);
-    - With matchers...
-      - matcher.replaceFirst(replacement);
-      - matcher.replaceAll(replacement);
+      for (int i = 0; i < twoDimArray.length; i++) {
+        System.out.println(Arrays.toString(twoDimArray[i])); // NOTE: useful - Arrays.toString()
+      }
 
-  - Match results 
+      // or using for-each 
+      for (int[] arr : twoDimArray) {
+        for (int num : arr) {
+          System.out.println(num);
+        }
+        System.out.println();
+      }
+
+
+  - Methods overloading
+    - Same name, but different number or type of parameters
+    - The return type is not considered for overloading because it's not part of the signature 
+    - (Also the program wouldn't know which one you wanted to call if same input, different output)
+    - If they are all similar (see below), the compiler chooses the most suitable method in the order of implicit casting
+      - It can be difficult to figure out which method is called if the signatures are similar
+          print(short a) { // .... }
+          print(int a) { // .... }
+          print(long a) { // .... }
+          print(double a) { // .... }
+
+          // Which one gets called???
+          main(String[] args) { 
+            print(100);  // Answer: int 
+            print((short) 100);  // Answer: short b/c of explicit casting 
+
+            char val = 2; 
+            print(val); // Answer: int! Wow weird. Char -> int. 
+          }
+
+
+  - Arrays as parameters 
+    - varargs 
+      - variable-length arguments
+      - The way you pass N number of args to a method. Must all be same type. 
+      - Example 
+          public static void printNumberOfArguments(int... numbers) { .... }
+      - Interesting... both of these will successfully call it 
+          printNumberOfArguments(1, 2, 3);
+          printNumberOfArguments(new int[] { 1, 2 });
+
+
+  - Command-line arguments
     - Example 
-        String text = "Java supports regular expressions. LET'S USE JAVA!!!";
-        Pattern pattern = Pattern.compile("java", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(text);
-        matcher.find();   // true
-        
-        // Now *after* find() you can run the following
-        matcher.start();  // 0, the starting index of match
-        matcher.end();    // 4, the index followed the last index of match
-        matcher.group();  // "Java", a substring that matches the pattern
-    - Or you can use MatchResult (which honestly seems about the same thing)
-        // Again only if you found something 
-        MatchResult result = matcher.toMatchResult(); // a special object containing match results
-        result.start();   // 0
-        result.end();     // 4
-        result.group();   // "Java"
-    - To avoid errors, consider using this pattern 
-        if (matchter.find()) {
-          //....
-        }
-    - Or to iterate over each found instance. (Seems useful)
-        while (matcher.find()) {
-          //....
-        }
- 
-
-
-- Packages
-  - If a class is in the same package, you don't need to import it 
-  - java.lang is always imported. Includes String, System, Long, Integer, NullPointerException, etc 
-  - You can avoid imports by specifying full name (very verbose)
-      java.util.Scanner scanner = new java.util.Scanner(System.in);
-  - You can import static members of a class and then use them without the class name. (Never seen this actually done)
-      import static java.util.Arrays.*; 
-      ....
-      sort()
-  - You should always specify the package name. If you don't, it's dumped into the default package and can't be imported into any class in a named package. It's really just useful for helloworld kind of stuff. 
-
-
-- Constructors 
-  - Unlike JavaScript that names it "constructor", in Java, the constructor must have the exact same name as the class, with a captital letter 
-  - No return type, not even void 
-  - If you don't define a constructor, the compiler will make one with no prams for you 
-      class Nothing {
-        // ....
-      }
-
-
-- Enums 
-  - Special kind of Java class that enables a variable to be a set of predefined constants
-  - Convention: PascalCase.UPPER_CASE
-  - Example 
-    public enum Season {
-      SPRING, SUMMER, AUTUMN, WINTER
-    }
-  - You can use == or .equals()
-      summer == Season.SUMMER
-      summer.equals(Season.SUMMER)
-  - Useful methods 
-      Season[] seasons = Season.values(); // [SPRING, SUMMER, AUTUMN, WINTER]
-      Season season = Season.valueOf("SPRING"); // SPRING
-      Season winter = Season.valueOf("spring"); // IllegalArgumentException, valueOf is case-sensitive
-      String winter = Season.SPRING.name(); // SPRING
-      String autumn = Season.SPRING.toString(); // SPRING
-  - Great in switch statments
-      switch (season) {
-        case SPRING:
-          // .... 
-        case SUMMER:
-          // .... 
-        case AUTUMN:
-          // .... 
-        case WINTER:
-          // .... 
-      } 
-  - Enumerations can also include fields and methods
-      public enum TransactionStatus {
-        WAITING(false), 
-        PROCESSING(false), 
-        COMPLETED(true), 
-        ERROR(true);
-        
-        private boolean done;
-
-        TransactionStatus(boolean done) {
-          this.done = done;
-        }
-
-        public boolean isDone() {
-          return done;
-        }
-      }
-
-      printFullStatus(TransactionStatus.WAITING); // false
-
-
-- Access modifiers
-  - public, protected, default (package-private), private 
-    - private - available only inside a class;
-    - package-private (also known as default, implicit) - available for all classes in the same package;
-    - protected - for classes in the same package and for subclasses (will be covered later);
-    - public - available for all classes everywhere.  
-  - All four modifiers are available for class members, but only two of them, public and default, can be used with classes.
-  - Advice: use the most restrictive access level that makes sense for a particular member. 
-  - Constructors are usually public 
-  - What modifiers are admissible for a standard class (not nested, not inner, not static).
-    - public
-    - package-private (default)
-
-
-- Getters and setters 
-  - Convention is to name fields getFoo and setFoo, except...
-  - Booleans are named foo, isFoo(), and setFoo() 
-
-
-- Extending / inheritance / sublcasses 
-  - subclass = derived, extended, or child class 
-  - superclass = base, parent class 
-  - Java doesn't support multiple-classes inheritance. (Not same as "multi-level" which is supported.)
-  - A subclass DOES inherits all *public* and *protected* fields and methods from the superclass.
-  - A subclass DOES NOT inherit *private* fields and methods from the superclass. You'd need to use getters and setters 
-  - Constructors are NOT inherited by subclasses, but the superclass's constructor can be invoked from the subclass using the special keyword super.
-  - protected = use this if you'd like the base class members to be accessible from all subclasses but not accessible from outside code (excluding the same package)
-    - ***Fields seem to use *protected* when you plan to subclass 
-  - Is-a - Inheritance represents the IS-A relationship. A base class represents a general thing and subclass represents a particular thing.
-  - Final - cannot have subclasses
-
-
-- Exceptions 
-  - Exceptions are objects too (Of course, it's Java LOL)
-  - The base class for all exceptions is java.lang.Throwable.
-  - Useful methods 
-    - String getMessage()
-    - Throwable getCause()
-    - void printStackTrace()
-    - and several constructors 
-  - Throwable > Exception > RuntimeException (e.g. NullPointerException, NumberFormatException, ArrayIndexOutOfBoundsException.)
-  - Throwable > Error (exceptional events in JVM, for examples: OutOfMemoryError, StackOverFlowError, UnknownError)
-  - Exceptions 
-    - checked exceptions 
-      - extend java.lang.Exception
-      - If a method throws a checked exception, it needs to declare the exception. (e.g. method foo() throws bar)
-    - unchecked exceptions
-      - extend java.lang.RuntimeException
-    - Best practice - If a client can reasonably be expected to recover from an exception, make it a checked exception. If a client cannot do anything to recover from the exception, make it an unchecked exception.
-
-
-- Exception handling 
-  - Syntax 
-      try {
-        // code throwing an exception
-      } catch (IndexOutOfBoundsException e) {
-        // handle this type of exception 
-      } catch(SQLException | IOException e) {
-        // handle either of these 
-      } catch (Exception e) {
-        // all other types of exceptions 
-      } finally {
-        // ***ALWAYS*** executed regardless of whether exception is thrown or not 
-      }
-  - Note: you can do try/finally without a catch 
-  - try-with-resources 
-    - Concise syntax created to solve common problem of trying to read a file and finally closing while also making sure not to throw more errors 
-    - Guarantees resource is closed, avoiding memory leaks, regardless of success or fail 
-        InputStream is = null;
-        try {
-            is = new FileInputStream("test.txt"); // creating an instance for reading from the file
-
-            // do something with the stream
-        } catch (IOException e) {
-            // process an exception
-        } finally {
-            try {
-                if (is != null) {
-                    is.close(); // closing the stream
-                }
-            } catch (IOException e) {
-                // ignoring
-            }
-        }
-
-        v.s.
-
-        try (InputStream is = new FileInputStream("test.txt")) {
-            // do something with the stream
-        } catch (IOException e) {
-            // process an exception
-        }
-  - Rethrowing exceptions 
-    - Best practice: an exception should be handled in a method that has sufficient information to make the correct decision, otherwise, the exception must be thrown to the calling method
-    - It's best practice not to lose the original exceptions: 
-          // ....
-        } catch (Exception originalCause) {
-          throw new FooException("My message", originalCause);
-        }
-
-
-- NullPointerException
-  - LOL this is the only way to make sure not to throw an NPE when comparing 2 strings
-    Objects.equals(s1, s2)
-
-    OR...
-
-    s1 != null && s2 != null && s1.equals(s2)
-
-
-
-- Throwing exceptions
-  - Examples 
-      throw new RuntimeException("Something's bad.");
-      throw new Throwable("Something's bad.");
-      throw new Exception("An exception occurs");
-      throw new NullPointerException("The field is null");
-  - Checked exceptions - methods that throw checked exceptions need to declare it 
-      void myMethod() throws IOException {
-        throw new IOException("File not found");
-      }
-  - Unchecked exceptions - methods that throw unchecked exceptions do not need to declare it
-      void myMethod() { 
-        throw new IllegalArgumentException("Too large amount"); 
-      }
-  - When to throw an exception?
-      - The common practice is to throw an exception when and only when method preconditions are broken, i.e. it cannot be performed under the current conditions.
-
- 
-
-- Big O notation
-  - Can be used for time or memory 
-  - Complexity for *worst* case scenario 
-  - Common examples 
-    - Constant time: O(1). The number of required operations is not dependent on the input size. 
-    - Logarithmic time: O(log n).
-    - Square-root time: O(sqrt(n))
-    - Linear time: O(n)
-    - Log-linear time O(n log n)
-    - Quadratic time: O(n^2)
-    - Exponential time:  O(2^n)
-
-
-- BigInteger (not BigInt)
-  - The size of a stored number is only limited by the available memory. (Wow!)
-  - Ints and longs aren't always large enough 
-      int y = 62957291795228763406253098; // compilation-error: integer number too large
-    or 
-      int a = Integer.MAX_VALUE; // 2147483647
-      a += 2; // -2147483647 - type-overflow 
-  - Immutable - so methods of the class always return new instances
-  - Only use when necessary - slower and less intuitive 
-  - Example 
-      import java.math.BigInteger;
-      BigInteger number = new BigInteger("62957291795228763406253098");
-      BigInteger number = BigInteger.valueOf(1_000_000_000);
-  - Useful constants:
-      BigInteger zero = BigInteger.ZERO; // 0
-      BigInteger one = BigInteger.ONE;   // 1
-      BigInteger ten = BigInteger.TEN;   // 10
-  - Use methods for math (again all return a new BigInt and don't change the original)
-      BigInteger eleven = ten.add(one);
-      BigInteger nine = ten.subtract(BigInteger.ONE); 
-      BigInteger oneHundredTen = ten.multiply(eleven); 
-      BigInteger twelve = oneHundredTen.divide(nine); // Note: remainder is lost. Just integer part kept 
-  - And more methods 
-      BigInteger negativeTen = ten.negate();
-      BigInteger positiveTen = negativeTen.abs();
-      BigInteger[] pair = oneHundredTen.divideAndRemainder(nine); // 12 and 2
-  - Even greatest common divisor
-      BigInteger three = BigInteger.valueOf(3);
-      BigInteger six = BigInteger.valueOf(6);
-      three.gcd(six); // 3
-
-
-- Math library
-  - Common methods
-      abs(...)
-      sqrt(...)
-      cbrt(...)
-      pow(..., ...)
-      min(..., ...)
-      max(..., ...)
-      toRadians(...)
-      sin(...)
-      cos(...)
-      random()
-      floor(...)
-      ceil(...)
-  - Useful constants 
-      Math.PI
-      Math.E
-
-
-- Random
-  - Example 
-      import java.util.Random;
-      Random random = new Random();
-  - Or you can seed it yourself 
-    - IMPORTANT: it will result in the same sequence of numbers every time 
-      Random random = new Random(100000);  
-  - Useful methods 
-      nextInt()
-      nextInt(int) - 0 (inclusive) to n (exclusive);
-      nextLong()
-      nextDouble()
-      nextBytes(byte[]) - generates random bytes and places them into a user-supplied byte array
-  - Example 
-      // number between a and b (inclusive)
-      int from = scanner.nextInt();
-      int to = scanner.nextInt();
-      random.nextInt(to - from + 1) + from;
-
-
-- LocalDate
-  - Date without a time 
-  - Example 
-      import java.time.LocalDate;
-      LocalDate now = LocalDate.now();
-      LocalDate date1 = LocalDate.of(2017, 11, 25); 
-      LocalDate date2 = LocalDate.parse("2017-11-25"); 
-  - Others
-      LocalDate.ofYearDay(2017, 33); // 33rd day of 2017  = 2017-02-02
-  - Get methods 
-      getYear()
-      getMonthValue()
-      getDayOfMonth()
-      getDayOfYear()
-  - Other methods 
-      lengthOfYear(); // 365
-      lengthOfMonth(); // 30
-  - And add or subtract - immutable so returns new instance 
-      plusDays(1)
-      minusDays(1)
-      plusYears(2)
-  - Modify just one piece - immutable so returns new instance 
-      withYear(2016)
-
-
-- LocalTime
-  - Time without a date
-    - Hours: 0-23
-    - Minutes and seconds: 0-59
-  - Example 
-      import java.time.LocalTime;
-      LocalTime now = LocalTime.now();
-      LocalTime.of(11, 45);        // 11:45
-      LocalTime.of(11, 45, 30);    // 11:45:30
-      LocalTime.parse("11:45:30"); // 11:45:30
-  - Others 
-      LocalTime.ofSecondOfDay(100); // 100th second of the day
-      LocalTime.ofNanoOfDay(100);   // 100th nanosecond of the day 
-  - Constants 
-      LocalTime.MIN; // 00:00
-      LocalTime.MAX; // 23:59:59.999999999
-      LocalTime.NOON; // 12:00
-      LocalTime.MIDNIGHT; // 00:00
-  - Get methods 
-      getHour()
-      getMinute()
-      getSecond()
-      getNano()
-  - And add or subtract - immutable so returns new instance 
-      plusHours(5)
-      minusMinutes(10)
-      minusSeconds(30)
-  - Modify just one piece  - immutable so returns new instance 
-      withHour(23)
-      withMinute(50)
-      withSecond(0)
-
-
-- LocalDateTime
-  - Combination of LocalDate and LocalTime without a time-zone, such as 2017-12-03T22:30
-  - Examples 
-      import java.time.LocalDateTime;
-      LocalDateTime now = LocalDateTime.now();
-      LocalDateTime dt1 = LocalDateTime.of(2017, 11, 25, 22, 30); 
-      LocalDateTime dt2 = LocalDateTime.parse("2017-11-25T22:30");
-  - Or make it using a date and a time object 
-      LocalDateTime dt = LocalDateTime.of(localDate, localTime);
-  - Or set stuff 
-      LocalDateTime dt = dt.atTime(time); // 2017-11-25T21:30
-      LocalDateTime dt = dt.atDate(date); // 2017-11-25T21:30
-  - Get methods 
-      getMonthValue()
-      getDayOfMonth()
-      getHour()
-      getMinute()
-  - Convert to LocalDate or LocalTime 
-      toLocalDate()
-      toLocalTime()
-  - Set mehods 
-      (See same methods of LocalDate and LocalTime)
-
-
-- Comparing dates and time
-  - Example - IMPORTANT, values are not -1,0,1. It's -x,0,x 
-      LocalDate date1 = LocalDate.parse("2017-01-02");
-      LocalDate date2 = LocalDate.parse("2017-12-12");
-      date1.compareTo(date1); // 0, date1 and date1 are equal
-      date1.compareTo(date2); // -11, date1 is less than date2
-      date2.compareTo(date1); // 11, date2 is greater than date1
-  - More convenient methods 
-      d1.isEqual(d1);
-      d1.isBefore(d2);
-      d1.isAfter(d2);
-  - All of them have all 4 of these methods except LocalTime doesn't have the method isEqual
-
-
-
-
-
-- Formatted output
-  - System.out.printf() and String.format()
-      %d - int, short, byte, long 
-      %f - double, float 
-      %.2f - double, float with 2 decimal places 
-      %c - character 
-      %s - string 
-  - Example 
-      System.out.printf("Display a Number %.2f", 15.23);
-      or
-      String msg = String.format("My name is %c. %s.%nMy age is %d.%nMy height is %.2f.", initial, surname, age, height);
-      System.out.println(msg);
-  - Stackoverflow indicates + is actually 10x faster but formatting has other useful features like padding, formating numbers, dates, etc 
-
-
-- Multi-dimentional arrays 
-  - Array of arrays. Can be as many levels deep as you want. Not all children need to be same length 
-    int[][] twoDimArray = new int[3][];
-
-    twoDimArray[0] = new int[] { 1, 2, 3, 4 }; // the length is 4
-    twoDimArray[1] = new int[] { 5, 7, 3};     // the length is 3
-    twoDimArray[2] = new int[] { 8 };          // the length is 1
-
-    for (int i = 0; i < twoDimArray.length; i++) {
-      System.out.println(Arrays.toString(twoDimArray[i])); // NOTE: useful - Arrays.toString()
-    }
-
-    // or using for-each 
-    for (int[] arr : twoDimArray) {
-      for (int num : arr) {
-        System.out.println(num);
-      }
-      System.out.println();
-    }
-
-
-- Methods overloading
-  - Same name, but different number or type of parameters
-  - The return type is not considered for overloading because it's not part of the signature 
-  - (Also the program wouldn't know which one you wanted to call if same input, different output)
-  - If they are all similar (see below), the compiler chooses the most suitable method in the order of implicit casting
-    - It can be difficult to figure out which method is called if the signatures are similar
-        print(short a) { // .... }
-        print(int a) { // .... }
-        print(long a) { // .... }
-        print(double a) { // .... }
-
-        // Which one gets called???
-        main(String[] args) { 
-          print(100);  // Answer: int 
-          print((short) 100);  // Answer: short b/c of explicit casting 
-
-          char val = 2; 
-          print(val); // Answer: int! Wow weird. Char -> int. 
-        }
-
-
-- Command-line arguments
-  - Example 
-      javac Main.java
-      java Main arg1 arg2
-
-
-- Recursion 
-  - Types of recursions
-    1) Direct recursion - method invokes itself 
-    2) Indirect recursion - method invokes another method that invokes the original
-    3) Tail-recursion - the last recursive call. It just returns 
-    4) Multiple recursion - method invokes itself recursively multiple times
-
-
-- StringBuilder
-  - More performant in situations where you are doing lots of concatenations 
-      StringBuilder sb = new StringBuilder("I use Java");
-  - Methods
-      length()
-      charAt(index)
-      setCharAt(index, ch)
-      deleteCharAt(index)
-      append(str)
-      insert(offset, str)
-      replace(start, end, str)
-      delete(start, end)
-      reverse()
-  - And the most common method...
-      toString()
-  - You can chain 
-    sb
-      .append("foo")
-      .append("bar")
-      .append("baz")
-  - Similar to collections, it guesses at how much space to allocate and then expands it periodically. This is called  
-    capacity()
-
-
-- Bitwise operators
-  - Operators for manipulating bits of integer numbers
-  - "Bitwise operations are worth studying because they have many applications. It is not their main use to substitute arithmetic operations. Cryptography, computer graphics, hash functions, compression algorithms, and network protocols are just some examples where bitwise operations are extremely useful." - Stackoverflow
-  - Bitwise operators 
-    - Each of these operators goes though all bits of both operands (numbers) one by one (i.e. bitwise) ﻿and produces a new number as a result.
-    - Operators 
-        ~ unary inverse
-          - is a unary operator that inverses bits in the binary format of the number making every 0 a 1 and every 1 a 0. It also changes the sign bit of the value.
-        & bitwise AND
-          - the result digit is 1 if both operand digits are 1, otherwise, it is 0;
-        | bitwise OR
-          - the result digit is 1 if at least one operand digit is 1, otherwise, it is 0;
-        ^ bitwise XOR
-          - the result digit is 1 if exactly one operand is 1, otherwise, it is 0
-    - Exmaples 
-        int first = 15;  // binary format 1111
-        int second = 10; // binary format 1010
-        int bitwiseAnd = first & second; // 1111 & 1010 = 1010, the result is 10
-        int bitwiseOr = first | second;  // 1111 | 1010 = 1111, the result is 15
-        int bitwiseXor = first ^ second; // 1111 ^ 1010 = 0101, the result is 5 
-  - Bit-shift operators
-    - Operators which can be used to shift bits of an integer number from one position to another.
-    - Operators 
-        << signed left shift
-          - shifts a bit pattern to the left by the distance specified in the right operand. 
-          - It fills the empty place with zeros
-          - equivalent to the multiplication by two
-        >> signed right shift 
-          - shifts a bit pattern to the right by the distance specified in the right operand. 
-          - It fills the empty place with values of the sign bit.
-          - equivalent to the division by two
-        >>> unsigned right shift 
-          - shifts a bit pattern to the right by the distance specified in the right operand. 
-          - It is almost like >>, but shifted values are filled up with zeros. 
-          - The result of the >>> operator is always positive.
-    - Examples 
-        int val = 25;   // binary: 0001 1001, decimal: 25
-        val = val << 1; // binary: 0011 0010, decimal: 50
-        val = val << 2; // binary: 1100 1000, decimal: 200
-        int anotherVal = 14;   // binary: 1110, decimal: 14
-        anotherVal = anotherVal >> 1; // binary: 0111, decimal: 7      
-  - NOTE: skipping for now b/c this depends on... 2's compliment > 1's compliment > binary math 
-
-
-- Build tools 
-  - Manual compile and run is not practical for more than a few files 
-  - Build tools do...
-    - Downloading and adding dependencies (external libraries).
-    - Compiling source code to be executed (into bytecode in case of Java Platform).
-    - Packaging compiled code.
-    - Running tests.
-    - Generate documetation 
-    - Deployment to the production environment.
-  - 3 main build tools for Java-based projects: 
-    - Apache Ant - released in 2000. Uses Apache Ivy to download dependencies. Rarely used
-    - Apache Maven - released in 2004. Most popular for server dev.
-      - Convention Over Configuration - all standard aspects should just work. Only need to specify unconventional aspects
-    - Gradle - released in 2007. Standard for Android apps. Maven's standards and dep management with Ant's flexibility 
-    - sbt (Scala Build Tool) - primarily for Scala but also usable for Java and Kotlin 
-
-- Maven basics
-  - Intro 
-    - Most popular server dev 
-    - "accumulator of knowledge" in Yiddish. 
-    - Dep management, build, run tests, helps with releases and issue managemnt 
-    - "Declarative" = you write WHAT, not HOW
-  - Key concepts
-    - pom.xml aka Project Object Model (POM). 
-      - Required
-      - Project name, version, properties, dependencies, and build config 
-    - Convention over configuration.
-      - Programmer configures only unconventional options in POM.
-    - Dependency management
-      - All deps are specified in the pom 
-      - Maven automatically downloads specified external libraries and solves conflict cases with dependencies
-    - Repositories
-      - Deps can be loaded from public repositories or the local file system
-    - Build lifecycle
-      - The process for building and distributing a project is clearly defined and has a sequence of phases such as validation, compilation, testing, packaging, installing, and others. All phases are described in the POM.
-    - Plugins
-      - Maven can be extended by plugins to utilize a number of tools for reporting or the build process. All information about plugin configurations is stored in the POM.
-
-- Gradle basics
-  - Intro 
-    - Default build tool for Android 
-    - Uses ANT, Maven, and lvy repositories
-    - Can build Java, Scala, Kotlin, C++, Assembler
-    - Extendable with plugins 
-    - Declarative 
-    - build-by-convention but flexible 
-  - Key concepts 
-    - Builds 
-      - Full or partial builds. Multi-project builds. 
-    - Integration tool 
-      - Supports ANT tasks
-      - Supports Maven and Ivy deps 
-    - Ease of migration
-      - Can convert pom.xml into gradle script for you 
-    - Gradle Wrapper 
-      − Allows you to execute Gradle builds on machines where Gradle is not installed
-      - Especially useful on continuous integration servers
-    - Build Scans 
-      – Allow you to understand, share, analyze build logs, test results, build performance, dependencies, build caching issues, prior builds
-  - DSL (domain specific languages)
-    - Less bloated, tedious, and outdated than XML
-    - Uses Groovy or Kotlin for its scripts 
-  - Gradle Init Plugin
-    - Create new build or convert an old one 
-
-- Java Archive
-  - Basics 
-    - Java Archive (JAR) - platform-independent file format to pack multiple .class files together and distribute them as a single unit.
-    - Compressed with ZIP algorithm 
-    - Can be digitally signed by author 
-    - JDK - required to make a JAR 
-    - JRE - used to run a JAR 
-  - Structure
-    - META-INF
-      - MANIFEST.MF - describes the JAR, version, author, etc 
-          Manifest-Version: 1.0
-          Created-By: 9.0.1 (Oracle Corporation)
-          Main-Class: package.Main
-          (Required to end with newline)
-    - yourPageName
-      - Main.class 
-      - other .class's
-      - Other files - conifg XML and JSON. Even images and audio files 
-  - Running 
-      - stadard jar
-          java -jar app.jar 
-      - jar that does not speifiy its main-class
-          java -cp app.jar path.to.Main 
-
-- Java Archive Tool
-  - creating, viewing, updating and extracting
-  - Create 
-      jar cvfm jar-name input-file(s)
-      - c - create 
-      - v - verbose 
-      - f - file (not to standard output)
-      - input-files 
-        - separate by spaces 
-        - files and/or directories (recursive)
-        - can use *
-      - m - manifest is included 
-      - (It seems to create a basic manifest if you don't)
-    - Example 
-        jar cvf app.jar *.class images
-      or with manifest
-        jar cvfm app.jar manifest.mf *.class images
-  - View 
-      jar tf app.jar
-      - t - view table of contents 
-      - f - file-name is specified 
-  - Unzip 
-    - Use WinRAR, 7-Zip, or others 
-    - Or 
-        jar xf app.jar
-        - x - extract 
+        javac Main.java
+        java Main arg1 arg2
+
+
+  - Recursion 
+    - Types of recursions
+      1) Direct recursion - method invokes itself 
+      2) Indirect recursion - method invokes another method that invokes the original
+      3) Tail-recursion - the last recursive call. It just returns 
+      4) Multiple recursion - method invokes itself recursively multiple times
+
+
+  - StringBuilder
+    - More performant in situations where you are doing lots of concatenations 
+        StringBuilder sb = new StringBuilder("I use Java");
+    - Methods
+        length()
+        charAt(index)
+        setCharAt(index, ch)
+        deleteCharAt(index)
+        append(str)
+        insert(offset, str)
+        replace(start, end, str)
+        delete(start, end)
+        reverse()
+    - And the most common method...
+        toString()
+    - You can chain 
+      sb
+        .append("foo")
+        .append("bar")
+        .append("baz")
+    - Similar to collections, it guesses at how much space to allocate and then expands it periodically. This is called  
+      capacity()
+
+
+- Environment and tools
+  - Write, compile, and run 
+    - Terms
+      - Bytecode - compiled Java code that can then be run by the JVM on any system. (I think each symbol takes a byte, hence the name)
+      - JDK = JRE + compiler, debugger, archiver - Java Development Kit 
+        - javac - converts *.java into *.class 
+        - archiver - creates .JAR files 
+        - JRE = JVM + JCL - Java Runtime Environment 
+          - JVM - Java Virtual Machine 
+          - JCL - Java Class Library 
+      - So you want to install JDK, not JRE 
+
+    - Terminals 
+      - Lines begin with > on Windows and $ on Mac and Linux 
+      - iTerm2 is useful on Mac 
+        - Better colors, autocomplete (Ctrl -), split terminals, paste history, click to open text files 
+      - Syntax 
+          <param> - required param 
+          [param] - optional param 
+          [params...] - params that can be repeated 
+          [param 1|param 2] - choice of params 
+      - Manual 
+          man <command_name> - for Mac 
+          <command_name> /? - for Windows
+      - Display all built in commands 
+          man builtin - for Mac and Linux 
+          help - for Windows
+
+    - Compile and run 
+        javac Main.java
+        java Main 
+      or 
+        java  -cp . Main 
+
+
+  - Build tools 
+    - Manual compile and run is not practical for more than a few files 
+    - Build tools do...
+      - Downloading and adding dependencies (external libraries).
+      - Compiling source code to be executed (into bytecode in case of Java Platform).
+      - Packaging compiled code.
+      - Running tests.
+      - Generate documetation 
+      - Deployment to the production environment.
+    - 3 main build tools for Java-based projects: 
+      - Apache Ant - released in 2000. Uses Apache Ivy to download dependencies. Rarely used
+      - Apache Maven - released in 2004. Most popular for server dev.
+        - Convention Over Configuration - all standard aspects should just work. Only need to specify unconventional aspects
+      - Gradle - released in 2007. Standard for Android apps. Maven's standards and dep management with Ant's flexibility 
+      - sbt (Scala Build Tool) - primarily for Scala but also usable for Java and Kotlin 
+
+  - Maven basics
+    - Intro 
+      - Most popular server dev 
+      - "accumulator of knowledge" in Yiddish. 
+      - Dep management, build, run tests, helps with releases and issue managemnt 
+      - "Declarative" = you write WHAT, not HOW
+    - Key concepts
+      - pom.xml aka Project Object Model (POM). 
+        - Required
+        - Project name, version, properties, dependencies, and build config 
+      - Convention over configuration.
+        - Programmer configures only unconventional options in POM.
+      - Dependency management
+        - All deps are specified in the pom 
+        - Maven automatically downloads specified external libraries and solves conflict cases with dependencies
+      - Repositories
+        - Deps can be loaded from public repositories or the local file system
+      - Build lifecycle
+        - The process for building and distributing a project is clearly defined and has a sequence of phases such as validation, compilation, testing, packaging, installing, and others. All phases are described in the POM.
+      - Plugins
+        - Maven can be extended by plugins to utilize a number of tools for reporting or the build process. All information about plugin configurations is stored in the POM.
+
+  - Gradle basics
+    - Intro 
+      - Default build tool for Android 
+      - Uses ANT, Maven, and lvy repositories
+      - Can build Java, Scala, Kotlin, C++, Assembler
+      - Extendable with plugins 
+      - Declarative 
+      - build-by-convention but flexible 
+    - Key concepts 
+      - Builds 
+        - Full or partial builds. Multi-project builds. 
+      - Integration tool 
+        - Supports ANT tasks
+        - Supports Maven and Ivy deps 
+      - Ease of migration
+        - Can convert pom.xml into gradle script for you 
+      - Gradle Wrapper 
+        − Allows you to execute Gradle builds on machines where Gradle is not installed
+        - Especially useful on continuous integration servers
+      - Build Scans 
+        – Allow you to understand, share, analyze build logs, test results, build performance, dependencies, build caching issues, prior builds
+    - DSL (domain specific languages)
+      - Less bloated, tedious, and outdated than XML
+      - Uses Groovy or Kotlin for its scripts 
+    - Gradle Init Plugin
+      - Create new build or convert an old one 
+
+  - Java Archive
+    - Basics 
+      - Java Archive (JAR) - platform-independent file format to pack multiple .class files together and distribute them as a single unit.
+      - Compressed with ZIP algorithm 
+      - Can be digitally signed by author 
+      - JDK - required to make a JAR 
+      - JRE - used to run a JAR 
+    - Structure
+      - META-INF
+        - MANIFEST.MF - describes the JAR, version, author, etc 
+            Manifest-Version: 1.0
+            Created-By: 9.0.1 (Oracle Corporation)
+            Main-Class: package.Main
+            (Required to end with newline)
+      - yourPageName
+        - Main.class 
+        - other .class's
+        - Other files - conifg XML and JSON. Even images and audio files 
+    - Running 
+        - stadard jar
+            java -jar app.jar 
+        - jar that does not speifiy its main-class
+            java -cp app.jar path.to.Main 
+
+  - Java Archive Tool
+    - creating, viewing, updating and extracting
+    - Create 
+        jar cvfm jar-name input-file(s)
+        - c - create 
+        - v - verbose 
+        - f - file (not to standard output)
+        - input-files 
+          - separate by spaces 
+          - files and/or directories (recursive)
+          - can use *
+        - m - manifest is included 
+        - (It seems to create a basic manifest if you don't)
+      - Example 
+          jar cvf app.jar *.class images
+        or with manifest
+          jar cvfm app.jar manifest.mf *.class images
+    - View 
+        jar tf app.jar
+        - t - view table of contents 
         - f - file-name is specified 
-  - Updating 
-      jar uf app.jar input-file(s)
-        - u - update 
-        - f - file-name is specified 
+    - Unzip 
+      - Use WinRAR, 7-Zip, or others 
+      - Or 
+          jar xf app.jar
+          - x - extract 
+          - f - file-name is specified 
+    - Updating 
+        jar uf app.jar input-file(s)
+          - u - update 
+          - f - file-name is specified 
 
-- Simplest grale project 
-  - Install Gradle on Mac 
-      brew install gradle
-  - Creates new gradle project
-      gradle init
-  - build.gradle - config file similar to pom.xml
-  - Build the project. Puts everything in ./build/ . Jar file is put in ./build/libs/
-      gradle build 
-  - Run the project 
-      gradle run 
+  - Simplest grale project 
+    - Install Gradle on Mac 
+        brew install gradle
+    - Creates new gradle project
+        gradle init
+    - build.gradle - config file similar to pom.xml
+    - Build the project. Puts everything in ./build/ . Jar file is put in ./build/libs/
+        gradle build 
+    - Run the project 
+        gradle run 
 
-- Gradle dependency management
-  - Common repositories: Maven Central, JCenter
-  - You can also specify where to find jars on your local network or computer
-    - Often %projectRoot%/libs
-  - Main scope types 
-    - Compile − dep is required to compile *and* run the project. (e.g. Spring MVC)
-    - CompileOnly − dep only required to compile (e.g. Lombok)
-    - Runtime − dep only required during runtime (e.g. H2 Database)
-    - test____ - dep only used for tests, not final jar 
-  - Examples. Note the verbose and succinct syntaxes 
-      dependencies {
-        compile group: 'com.google.guava', name: 'guava', version: '27.0-jre'
-        runtime('com.h2database:h2:1.4.197')
-        compileOnly('org.projectlombok:lombok:1.18.4')
-        testCompileOnly('org.projectlombok:lombok:1.18.4')
-        testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: "5.3.0"
+  - Gradle dependency management
+    - Common repositories: Maven Central, JCenter
+    - You can also specify where to find jars on your local network or computer
+      - Often %projectRoot%/libs
+    - Main scope types 
+      - Compile − dep is required to compile *and* run the project. (e.g. Spring MVC)
+      - CompileOnly − dep only required to compile (e.g. Lombok)
+      - Runtime − dep only required during runtime (e.g. H2 Database)
+      - test____ - dep only used for tests, not final jar 
+    - Examples. Note the verbose and succinct syntaxes 
+        dependencies {
+          compile group: 'com.google.guava', name: 'guava', version: '27.0-jre'
+          runtime('com.h2database:h2:1.4.197')
+          compileOnly('org.projectlombok:lombok:1.18.4')
+          testCompileOnly('org.projectlombok:lombok:1.18.4')
+          testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: "5.3.0"
 
-        // From file system
-        compile files('libs/a.jar', 'libs/b.jar')
-        compile fileTree('libs') { include '*.jar' }
+          // From file system
+          compile files('libs/a.jar', 'libs/b.jar')
+          compile fileTree('libs') { include '*.jar' }
+        }
+
+  - Gradle configuration
+    - Define a variable in the current scope 
+        def dest = "dest"
+    - Define a task 
+      task copy(type: Copy) {
+        def dest = "dest"
+        from "source"
+        into dest
       }
+    - Extra properties in commandline start with -P, e.g. 
+        gradle run -Pprofile=test
 
-- Gradle configuration
-  - Define a variable in the current scope 
-      def dest = "dest"
-  - Define a task 
-    task copy(type: Copy) {
-      def dest = "dest"
-      from "source"
-      into dest
-    }
-  - Extra properties in commandline start with -P, e.g. 
-      gradle run -Pprofile=test
+  - Simplest maven project 
+    - Install Maven 
+      - Either download from website and add to ~/.bashrc, or 
+          brew install maven 
+    - Each project has these 3
+        groupId:artifactId:version
+    - Generate a new maven project 
+      - Mac 
+          mvn archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.3 -DgroupId=com.hyperskill -DartifactId=first-maven-app -DinteractiveMode=false 
+      - Windows 
+          mvn archetype:generate "-DarchetypeArtifactId=maven-archetype-quickstart" "-DarchetypeVersion=1.3" "-DgroupId=com.hyperskill" "-DartifactId=first-maven-app" "-DinteractiveMode=false"  
+    - POM file
+      - aka Project Object Model (POM)
+    - Important commands 
+      - Build (No clean. No tests)
+          mvn compile
+      - Build with tests (No clean)
+          mvn package
+      -*** Build with clean and tests
+          mvn clean package
+          or 
+          mvn clean install
+      //- Unlike npm, Maven automatically downloads dependencies for you 
+    - To build and run (Didn't work for me: NullPointerException)
+        mvn clean install 
+        java -cp target/first-maven-app-1.0-SNAPSHOT.jar com.hyperskill.App
 
-- Simplest maven project 
-  - Install Maven 
-    - Either download from website and add to ~/.bashrc, or 
-        brew install maven 
-  - Each project has these 3
-      groupId:artifactId:version
-  - Generate a new maven project 
-    - Mac 
-        mvn archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.3 -DgroupId=com.hyperskill -DartifactId=first-maven-app -DinteractiveMode=false 
-    - Windows 
-        mvn archetype:generate "-DarchetypeArtifactId=maven-archetype-quickstart" "-DarchetypeVersion=1.3" "-DgroupId=com.hyperskill" "-DartifactId=first-maven-app" "-DinteractiveMode=false"  
-  - POM file
-    - aka Project Object Model (POM)
-  - Important commands 
-    - Build (No clean. No tests)
-        mvn compile
-    - Build with tests (No clean)
-        mvn package
-    -*** Build with clean and tests
-        mvn clean package
-        or 
-        mvn clean install
-  //- Unlike npm, Maven automatically downloads dependencies for you 
-  - To build and run (Didn't work for me: NullPointerException)
-      mvn clean install 
-      java -cp target/first-maven-app-1.0-SNAPSHOT.jar com.hyperskill.App
-
-- Maven dependency management
-  - Just like gradle, Maven has scope for dependencies, e.g. "test"
-  //- Maven downloads dependencies to ~/.m2
-  - You need a build plugin to create an "uber-jar" aka "fat JAR" or "JAR with dependencies" or "executable JAR"
-    - Examples 
-      maven-assembly-plugin
-      maven-shade-plugin
-      onejar-maven-plugin
-
-
-- Logging 
-  - Common uses 
-    - troubleshooting
-    - auditing
-    - user-profiling and statistics
-  - Common levels 
-    - Debug - to debug problems
-    - Info - important events 
-    - Warn - potential problem not yet affecting user (e.g. repeated attempts to access a resource, missing secondary data, switching from a primary server to a back-up server)
-    - Error - error but does not terminate program 
-    - Fatal - error that terminates program
-- Standard logger
-  - java.util.logging
-      Logger class
-      FileHandler class
-      ConsolHandler class
-      SimpleFormatter
-      XMLFormatter
-      Level
-      LogRecord
-      LogManager
-  - Logger class 
-    - Standard practice is to create an instance for each class
-    - Levels (These do not match up to the "common levels" listed above. Missing fatal, error, debug)
-        Level.SEVERE    or    logger.severe("...")
-        Level.WARNING   or    logger.warning("...")
-        Level.INFO      or    logger.info("...")
-        Level.CONFIG    or    logger.config("...")
-        Level.FINE      or    logger.fine("...")
-        Level.FINER     or    logger.finer("...")
-        Level.FINEST    or    logger.finest("...")
-  - Handlers and Formatters
-    - Handlers - take the log to the outside world 
-    - Handler is an abstract class. 2 most important implementations are 
-      - ConsoleHandler - writes to System.err
-      - FileHandler - logs to a file 
-    - Formatter is an abstract class. 2 implemntations are 
-      - SimpleFormatter
-      - XMLFormatter
-  - Filter 
-    - Controls what levels you are interested in outputting right now so you don't get too many logs 
-  - Example 
-      import java.util.logging.*;
-      Logger logger = Logger.getLogger( Main.class.getName());
-      // filter
-      Filter filter = new FilterExample();
-      logger.setFilter(filter);
-      // handler
-      Handler fileHandler = new FileHandler("default.log");
-      logger.addHandler(fileHandler);
-      // formatter
-      fileHandler.setFormatter(new XMLFormatter());
-      // log something
-      logger.info("Info log message");
+  - Maven dependency management
+    - Just like gradle, Maven has scope for dependencies, e.g. "test"
+    - Maven downloads dependencies to ~/.m2
+    - You need a build plugin to create an "uber-jar" aka "fat JAR" or "JAR with dependencies" or "executable JAR"
+      - Examples 
+        maven-assembly-plugin
+        maven-shade-plugin
+        onejar-maven-plugin
 
 
 - JVM internals 
@@ -1154,72 +636,839 @@ https://hi.hyperskill.org/projects3
         System.out.println("Used memory (bytes): " + usedMemory);
  
 
+- Exception handling
+  - Exceptions 
+    - Exceptions are objects too (Of course, it's Java LOL)
+    - The base class for all exceptions is java.lang.Throwable.
+    - Useful methods 
+      - String getMessage()
+      - Throwable getCause()
+      - void printStackTrace()
+      - and several constructors 
+    - Throwable > Exception > RuntimeException (e.g. NullPointerException, NumberFormatException, ArrayIndexOutOfBoundsException.)
+    - Throwable > Error (exceptional events in JVM, for examples: OutOfMemoryError, StackOverFlowError, UnknownError)
+    - Exceptions 
+      - checked exceptions 
+        - extend java.lang.Exception
+        - If a method throws a checked exception, it needs to declare the exception. (e.g. method foo() throws bar)
+      - unchecked exceptions
+        - extend java.lang.RuntimeException
+      - Best practice - If a client can reasonably be expected to recover from an exception, make it a checked exception. If a client cannot do anything to recover from the exception, make it an unchecked exception.
 
-- Wrapper classes 
-  - Each primitive type has one 
-  - Wrapper classes are immutable (just like strings)
-  - Boxing, unboxing, autoboxing, auto-unboxing
-  - Boxing and unboxing 
+
+  - Exception handling 
+    - Syntax 
+        try {
+          // code throwing an exception
+        } catch (IndexOutOfBoundsException e) {
+          // handle this type of exception 
+        } catch(SQLException | IOException e) {
+          // handle either of these 
+        } catch (Exception e) {
+          // all other types of exceptions 
+        } finally {
+          // ***ALWAYS*** executed regardless of whether exception is thrown or not 
+        }
+    - Note: you can do try/finally without a catch 
+    - try-with-resources 
+      - Concise syntax created to solve common problem of trying to read a file and finally closing while also making sure not to throw more errors 
+      - Guarantees resource is closed, avoiding memory leaks, regardless of success or fail 
+          InputStream is = null;
+          try {
+              is = new FileInputStream("test.txt"); // creating an instance for reading from the file
+
+              // do something with the stream
+          } catch (IOException e) {
+              // process an exception
+          } finally {
+              try {
+                  if (is != null) {
+                      is.close(); // closing the stream
+                  }
+              } catch (IOException e) {
+                  // ignoring
+              }
+          }
+
+          v.s.
+
+          try (InputStream is = new FileInputStream("test.txt")) {
+              // do something with the stream
+          } catch (IOException e) {
+              // process an exception
+          }
+    - Rethrowing exceptions 
+      - Best practice: an exception should be handled in a method that has sufficient information to make the correct decision, otherwise, the exception must be thrown to the calling method
+      - It's best practice not to lose the original exceptions: 
+            // ....
+          } catch (Exception originalCause) {
+            throw new FooException("My message", originalCause);
+          }
+
+
+  - NullPointerException
+    - LOL this is the only way to make sure not to throw an NPE when comparing 2 strings
+      Objects.equals(s1, s2)
+
+      OR...
+
+      s1 != null && s2 != null && s1.equals(s2)
+
+
+  - Throwing exceptions
+    - Examples 
+        throw new RuntimeException("Something's bad.");
+        throw new Throwable("Something's bad.");
+        throw new Exception("An exception occurs");
+        throw new NullPointerException("The field is null");
+    - Checked exceptions - methods that throw checked exceptions need to declare it 
+        void myMethod() throws IOException {
+          throw new IOException("File not found");
+        }
+    - Unchecked exceptions - methods that throw unchecked exceptions do not need to declare it
+        void myMethod() { 
+          throw new IllegalArgumentException("Too large amount"); 
+        }
+    - When to throw an exception?
+        - The common practice is to throw an exception when and only when method preconditions are broken, i.e. it cannot be performed under the current conditions.
+
+  
+- Object oriented programming 
+  - Classes 
+    - Multiple classes per file - don't need to do anything fancy. Just make *only one* of the classes public 
+        public class PatientDemo { .... }
+        class Patient { .... }
+    - Null - don't forget any object instance can be set to null 
+        Patient p = null; 
+
+
+  - Packages
+    - If a class is in the same package, you don't need to import it 
+    - java.lang is always imported. Includes String, System, Long, Integer, NullPointerException, etc 
+    - You can avoid imports by specifying full name (very verbose)
+        java.util.Scanner scanner = new java.util.Scanner(System.in);
+    - You can import static members of a class and then use them without the class name. (Never seen this actually done)
+        import static java.util.Arrays.*; 
+        ....
+        sort()
+    - You should always specify the package name. If you don't, it's dumped into the default package and can't be imported into any class in a named package. It's really just useful for helloworld kind of stuff. 
+
+
+  - Constructors 
+    - Unlike JavaScript that names it "constructor", in Java, the constructor must have the exact same name as the class, with a captital letter 
+    - No return type, not even void 
+    - If you don't define a constructor, the compiler will make one with no prams for you 
+        class Nothing {
+          // ....
+        }
+
+
+  - Enums 
+    - Special kind of Java class that enables a variable to be a set of predefined constants
+    - Convention: PascalCase.UPPER_CASE
     - Example 
-        Integer reference = Integer.valueOf( x );
-        int y = reference.intValue();
-  - Autoboxing and auto-unboxing
-    - Example 
-        double x = 10.8;
-        Double wrapperDouble = x; // autoboxing
-        double y = wrapperDouble; // auto-unboxing
-    - Only works when they are same type 
-      - Example 
-          Long n3 = 10; // WRONG, assigning int to Long
-          Integer n4 = 10L; // WRONG assigning long to Integer
-  - Multiple constructors. String is the most popular 
-    ***NOTE: stop using these after Java 9 
-      Integer number = new Integer("10012");
-      Float f = new Float("0.01");
-      Long longNumber = new Long("100000000");
-      Boolean boolVal = new Boolean("true");
-  - Also other special methods to create 
-      Long longVal = Long.parseLong("1000");
-      Long anotherLongVal = Long.valueOf("1000");
-  - Comparing wrappers
-    - Just like strings, use .equals() instead of == (b/c that will only check memory address is same)
-  - NullPointerException.
-    - They can also throw NPE b/c they can now equal null!!!
-        Long longVal = null;
-        long primitiveLong = longVal; // It throws NPE
-  - Pros and cons 
-    - Primitives are faster and can't throw NPE 
-    - Wrappers can be used in collections 
-
-
-- Generics 
-  - Example (The part that is unique to me is the first line and the last lines)
-      class GenericType<T> { 
-        private T t;
-        public GenericType(T t) { this.t = t; }
-        public T get() { return t; }
-        public void set(T parameter) { T variable = parameter; }
+      public enum Season {
+        SPRING, SUMMER, AUTUMN, WINTER
       }
+    - You can use == or .equals()
+        summer == Season.SUMMER
+        summer.equals(Season.SUMMER)
+    - Useful methods 
+        Season[] seasons = Season.values(); // [SPRING, SUMMER, AUTUMN, WINTER]
+        Season season = Season.valueOf("SPRING"); // SPRING
+        Season winter = Season.valueOf("spring"); // IllegalArgumentException, valueOf is case-sensitive
+        String winter = Season.SPRING.name(); // SPRING
+        String autumn = Season.SPRING.toString(); // SPRING
+    - Great in switch statments
+        switch (season) {
+          case SPRING:
+            // .... 
+          case SUMMER:
+            // .... 
+          case AUTUMN:
+            // .... 
+          case WINTER:
+            // .... 
+        } 
+    - Enumerations can also include fields and methods
+        public enum TransactionStatus {
+          WAITING(false), 
+          PROCESSING(false), 
+          COMPLETED(true), 
+          ERROR(true);
+          
+          private boolean done;
 
-      GenericType<String> instance2 = new GenericType<String>("abc");
-  - Naming conventions 
-      T – Type
-      S, U, V etc. – 2nd, 3rd, 4th types
-      E – Element (used extensively by the Java Collections Framework)
-      K – Key
-      V – Value
-      N – Number 
+          TransactionStatus(boolean done) {
+            this.done = done;
+          }
 
-  - Instantiation 
-      GenericType<Integer> instance1 = new GenericType<Integer>(10);
-      OR more concisely... 
-      GenericType<Integer> instance1 = new GenericType<>(10);
+          public boolean isDone() {
+            return done;
+          }
+        }
 
-  - And with many types... 
-    GenericType<Type1, Type2, ..., TypeN> instance = new GenericType<>(...);
+        printFullStatus(TransactionStatus.WAITING); // false
 
-  - ***IMPORTANT*** primitives won't work. Must be reference types 
-      GenericType<int> instance1 = new GenericType<>(10); // int will cause an error 
+
+  - Access modifiers
+    - public, protected, default (package-private), private 
+      - private - available only inside a class;
+      - package-private (also known as default, implicit) - available for all classes in the same package;
+      - protected - for classes in the same package and for subclasses (will be covered later);
+      - public - available for all classes everywhere.  
+    - All four modifiers are available for class members, but only two of them, public and default, can be used with classes.
+    - Advice: use the most restrictive access level that makes sense for a particular member. 
+    - Constructors are usually public 
+    - What modifiers are admissible for a standard class (not nested, not inner, not static).
+      - public
+      - package-private (default)
+
+
+  - Getters and setters 
+    - Convention is to name fields getFoo and setFoo, except...
+    - Booleans are named foo, isFoo(), and setFoo() 
+
+
+  - Static members
+    - Class variable (static field)
+      - Same value is shared across all instances of the class 
+        - Good for "global variables shared by a class 
+      - Belongs to the class, rather than to an instance of the class
+      - Saves memory 
+      - Example 
+          class SomeClass {
+            public static int foo = 111;
+          }
+      - Can be accessed on the class or the instance 
+          SomeClass.foo = 222;
+
+          SomeClass obj = new SomeClass();
+          obj.foo = 222;
+    - Class constants
+      - Use the final keyword 
+    - Class methods
+      - Can only access static fields and methods, not instance ones 
+      - Can't reference "this" b/c it hasn't been instantiated 
+      - Often used for utility methods 
+
+
+  - Annotations
+    - Metadata on classes, methods, fields, variables, etc
+    - For compiler, development and code generation tools, and libraries and frameworks at runtime 
+    - 3 built-in general-purpose annotations
+      - @Deprecated - element is deprecated and should no longer be used. Causes a compile warning
+      - @SuppressWarnings - tells compiler to disable the compile-time warnings
+      - @Override - method that overrides a superclass method
+    - Syntax depends on the annotation
+        @Override
+        @SuppressWarnings(value = "unused")
+
+        // Can leave off argument name only if annotation has just one element and it is named value
+        @SuppressWarnings("unused")
+        @SuppressWarnings({"unused", "deprecation"})
+
+
+  - Multiple constructors / constructor overloading 
+    - Can have many constructors 
+    - All need to have same name as class and different args from each other 
+    - You can call a constructor from a constructor 
+        this();
+        this("arg1", "arg2");
+
+
+  - Initialization blocks
+    - Static initialization block
+      - Like a constructor but to initialize static fields and constants
+      - If you have multiple, they will be executed top to bottom 
+      - Just like static methods, they can only access other static fields and methods 
+      - Example 
+          public class MyClass {
+              static int field;
+              static {
+                  field = 50;
+              }
+          }
+    - Instance initialization block
+      - Similar but run whenever an instance is created
+      - Run *before* the constructor but *after* the superclass constructors
+      - Useful if you want complex initialization code to run regardless of which constructor is called 
+      - Example 
+          public class MyClass {
+              private int field;
+              {
+                  field = 50;
+              }
+          }
+
+
+
+  - Extending / inheritance / sublcasses 
+    - subclass = derived, extended, or child class 
+    - superclass = base, parent class 
+    - Java doesn't support multiple-classes inheritance. (Not same as "multi-level" which is supported.)
+    - A subclass DOES inherits all *public* and *protected* fields and methods from the superclass.
+    - A subclass DOES NOT inherit *private* fields and methods from the superclass. You'd need to use getters and setters 
+    - Constructors are NOT inherited by subclasses, but the superclass's constructor can be invoked from the subclass using the special keyword super.
+    - protected = use this if you'd like the base class members to be accessible from all subclasses but not accessible from outside code (excluding the same package)
+      - ***Fields seem to use *protected* when you plan to subclass 
+    - Is-a - Inheritance represents the IS-A relationship. A base class represents a general thing and subclass represents a particular thing.
+    - Final - cannot have subclasses
+
+
+  - Super
+    - super - Accessing superclass fields and methods
+      - Used to 
+        - access instance fields of the parent class
+        - invoke methods of the parent class
+        - invoke constructors of the parent class (no-arg or parameterized)
+        - Similar to the idea of "this", but it refers to the immediate parent class object
+      - Example 
+          super.field = 20; 
+    - super() - Invoking superclass constructor
+      - Constructors are not inherited by subclasses, but can be invoked with super()
+      - Must be the first statement in a subclass constructor
+      - Example 
+          super(name, yearOfBirth, address);
+
+
+  - Hiding and overriding
+    - You can overriding instance methods
+    - Must have same method signature and same or more permissive access modifier
+    - Private, static, final methods - cannot be overriden  
+      - Final - use final when you would like to prevent your methods being overridden 
+      - Static - static methods are hidden, not overridden 
+    - @Override 
+      - Use this to have the compiler warn you if you did not successfully override a super method 
+          class Animal {
+              public void say() { .... }
+          }
+          
+          class Cat extends Animal {
+              @Override                     // IMPORTANT - easy to forget this line but it's best practice 
+              public void say() { .... }
+          }
+  
+
+  - Covariant return types
+    - When overriding a superclasses methods, the signature has to be the same but the return type can be same or a subtype
+        class A {
+            public SomeType getType() { .... }
+        }
+        
+        class B extends A {
+            @Override
+            public XXXX getType() { .... }         // Return type can be either SomeType or SubType or SubSubType
+        }
+
+
+  - Protected modifier
+    - Remember the 4 access modifiers - public, default (aka package-private), private, protected
+      - protected - same package or descendants
+      - default - only classes from the same package
+      - public - any class, anywhere
+      - private - only the class itself
+    - Best practice. Use the most restrictive and loosen it if necessary 
+
+
+  - Referencing subclass objects
+    - You can type things more generally like this 
+        Person employeeAsAPerson = new Employee();
+    - But when you do, you can only reference the fields and methods on the superclass, e.g. Person 
+        employeeAsAPerson.getName();    // Works 
+        employeeAsAPerson.getSalary();  // Throws an error 
+    - You can cast it back to the subclass though 
+        Employee employeeAsEmployee = (Employee) employeeAsAPerson;
+    - Why would you ever type something more generally?
+      - Perhaps a method can process Persons but not Employees so you pass in the employee as a person and then cast it back after 
+      - Or maybe you have an array of Persons that includes both Employees and Clients 
+
+
+  - Polymorphism
+    - Kinds of polymorphism
+      - Java has two types of polymorphism 
+        - static (compile-time) - via method overloading
+        - dynamic (run-time) - via inheritance and method overriding
+      - Or you can look at it like this 
+        - Ad-hoc polymorphism
+        - Subtype polymorphism (aka subtyping)
+        - Parametric polymorphism (aka generics)
+    - Runtime polymorphic behavior
+      - If Dragon is a subclass of MythicalAnimal and you do this 
+          MythicalAnimal dragon = new Dragon();
+          dragon.speak();
+        It will call the dragon's method, not the MythicalAnimal's
+      - This is called "dynamic method dispatching"
+
+
+  - The Object class
+    - Object - the parent of all standard and custom classes
+      - Example 
+          Object obj1 = new Object();
+          Object obj2 = 1_000_000L;
+          Object obj3 = "str";
+      - When you make a class, it technically extends Object for you like this 
+          class A extends Object { .... }
+    - Methods provided by the Object class
+      - It provides instance methods for you 
+          - threads synchronization - wait, notify, notifyAll
+          - object identity - hashCode, equals
+          - object management - finalize, clone, getClass
+          - human-readable representation - toString
+
+
+  - toString 
+    - You probably want to @Override toString() or it might output something similar to this "org.demo.example.Account@27082746"
+    - Example 
+        @Override
+        public String toString() {
+          return "Account{id=" + id + ",code=" + code + ",balance=" + balance + "}";
+        }
+    - IDEs can autogenerate toString for you 
+    - Caveat - careful if there are circular references where A will print out B which will print out A which will...
+
+
+  - Abstract class
+    - Commonly used when you intend to make a bunch of classes with a set of common methods 
+    - You'd make an abstract parent class with the methods they share and then subclass it multiple times 
+    - Characteristics 
+      - You can't instantiate an abstract class directly. You need to instantiate one of the subclasses 
+      - It can have a constructor 
+      - It can extend other classes, abstract and normal 
+      - Methods can be static or instance, normal or abstract 
+        - Abstract methods require the subclass to implement them 
+    - Quick summary 
+      - No instances. Can have abstract methods
+    - Example 
+        public abstract class Pet {     // Abstract class
+            protected String name;
+        
+            protected Pet(String name) {
+                this.name = name;
+            }
+        
+            public abstract void say(); // Abstract method. No body 
+        }
+
+        class Cat extends Pet {
+            // It can have additional fields as well
+        
+            public Cat(String name) {
+                super(name);
+            }
+        
+            @Override                               // Note the @Override 
+            public void say() {
+                System.out.println("Meow!");
+            }
+        }
+
+        Pet pet = new Pet("Unnamed"); // Error - can't instantiate abstract classes 
+
+        Cat cat = new Cat("Tiger");
+        cat.say(); // "Meow!"
+
+
+  - Interface
+    - Intro
+      - Even more abstract than abstract 
+      - Can't be instantiated 
+      - Can contain:
+        - public constants
+        - abstract methods - without an implementation (the keyword abstract is not required here)
+        - default methods - with implementation (the keyword default is required)
+        - static methods - with implementation (the keyword static is required)
+      - Can't contain 
+        - Fields - only public constants 
+        - Constructors 
+        - Non-public methods 
+      - Example 
+          interface MyInterface {
+              int INT_CONSTANT = 0;         // automatically public static final 
+                  
+              void instanceMethod();        // abstract, not implemented
+              static void staticMethod() {  //implemented }
+              default void defaultMethod() { //implemented }
+          }
+
+    - Marker interfaces
+      - Interface with NO fields or methods 
+      - Example Serializable, Cloneable, Remote, etc
+    - Extending interfaces 
+      - Just like classes and subclasses, an interface can "extend" another interface 
+    - Implementing interfaces
+      - A class "implements" an interface (not "extend")
+      - Example 
+          class MyClass implements MyInterface {
+              @Override
+              public void instanceMethod() { .... }
+          }
+
+          MyInterface obj = new MyClass();
+
+    - Multiple interfaces
+      - Unlike extending superclasses, you can both extend and implement multiple interfaces 
+          interface A { }
+          interface B { }
+          interface C { }
+
+          class D implements A, B, C { }
+          interface E extends A, B, C { }
+
+      - Or you can both extend and implement 
+          abstract class A { }
+          interface B { }
+          interface C { }
+          class D extends A implements B, C { }
+
+      - Implementing multiple interfaces is common. String implements Serializable, Comparable, CharSequence
+
+
+  - Anonymous classes
+    - Intro 
+      - Declaring and instantiating a class in a single statement
+      - Useful when you're only going to use it once 
+      - Always implements an interface or extends another class
+      - Must override all abstract methods of the superclass if it has them 
+      - Must override all interface methods of an interface 
+      - Example - defines then instantiates an anonymous class that implements an interface
+          interface SpeakingEntity {
+              void sayHello();
+          }
+          SpeakingEntity englishSpeakingPerson = new SpeakingEntity() {   // Note the "new" and the () {
+            @Override
+            public void sayHello() { .... }
+          };                                                              // Note the ;
+    - Accessing context variables
+      - It can access the enclosing class's members or variables that are final/effectively-final
+    - Caveats 
+      - They cannot have 
+        - constructors
+        - static initializers or member interfaces
+        - static members, except the constant variables (final static fields)
+      - They can have instance initialization blocks though 
+    - When to use
+      - Only used once 
+      - Used immediately 
+      - Short body 
+    - Often used 
+      - With 3rd party libraries (e.g. Swing, Google Web Toolkit (GWT))
+      - To encapsulate some info and behavior and pass it to a method 
+    - Callbacks 
+      - When you create an instance of an anonymous class and pass it to a method
+      - In JavaScript, only functions are callbacks. In Java, they are anonymous classes 
+
+
+  - Abstract class vs interface
+    - They have become more similar. After Java 8, an interface can have default and static methods that contain an implementation
+    - Differences 
+      - Details 
+        - an abstract class can have abstract and non-abstract instance methods while an interface can have abstract or default instance methods;
+        - an abstract class can extend another abstract or regular class and an interface can only extend another interface;
+        - an abstract class can extend only one class while an interface can extend any number of interfaces;
+        - an abstract class can have final, non-final, static, non-static variables (regular fields) while an interface can only have static final variables;
+        - an abstract class can provide an implementation of an interface but an interface cannot provide an implementation of an abstract class;
+        - an abstract class can have a constructor and an interface cannot;
+        - in an abstract class, the keyword abstract is mandatory to declare a method as an abstract one while in an interface this keyword is optional.
+      - Summary 
+        - You can implement multiple interfaces but only extend one abstract class 
+        - Interfaces seem more limited than abstract 
+      - Purpose is very different 
+        - Interfaces - used to decouple the interface of a component (class) from the implementation 
+        - Abstract classes - used as base classes with common fields to be extended by subclasses
+    - Using abstract classes and interfaces together
+      - Often - multiple interfaces -> abstract class -> concrete class 
+
+
+  - Reflection basics
+    - Accessing and modifying the application at runtime
+    - Reflect package 
+      - Most important ways to modify name, value, datatype, return type, access modifier, parameter types, exception types 
+        - Field
+        - Method
+        - Constructor
+        - Modifier
+    - Class package 
+      - Useful methods 
+        - forName(String ClassName)
+        - getConstructors()
+        - getDeclaredConstructors()
+        - getFields()
+        - getDeclaredFields()
+        - getMethods()
+        - getDeclaredMethods()
+      - Return values vary - some return arrays, only public attributes, inherited attributes
+    - Example 
+        Class student = Student.class;
+        Constructor constructors[] = student.getConstructors();
+        for (Constructor c : constructors) {
+            System.out.println("Constructor " + c.getName());
+        }
+
+
+  - Retrieving Class instances
+    - There are several ways to get an object representing a Class
+      - The .class Syntax
+          Class stringClass = String.class;
+
+          // Works with primatives too 
+          Class intClass = int.class;
+          Class voidClass = void.class;
+
+      - From an object instance (Doesn't work for primatives)
+          Class instanceClass = "abc".getClass();
+
+      - From a name 
+          Class forName = Class.forName("java.lang.String");
+        
+          // Arrays - this is just weird 
+          Class floatArrayClass = Class.forName("[F");
+          Class objectArrayClass = Class.forName("[[Ljava.lang.Object;");
+          Class threeDimensionalLongArray = Class.forName("[[[J");
+          
+      - More methods that Return Classes
+          // Returns the super class for the given class
+          String.class.getSuperclass();
+          
+          // Returns all the public classes, interfaces, and enums that are members of the class
+          String.class.getClasses();
+          
+          // Returns all of the classes, interfaces, and enums that are explicitly declared in this class.
+          String.class.getDeclaredClasses();
+
+
+  - Modifiers
+    - Check if a field is public, private, static, final, etc 
+        Fields[] fields = object.getClass().getDeclaredFields();
+        
+        int modifiers = field.getModifiers();
+        Modifier.isPublic(modifiers))
+        Modifier.isProtected(modifiers))
+        Modifier.isPrivate(modifiers))
+        Modifier.isStatic(modifiers))
+        Modifier.isFinal(modifiers))
+      
+  
+  - Manipulating fields and methods
+    - Getting and setting field values
+        for (Field field : obj.getClass().getDeclaredFields()) {
+            // Make sure the field is accessible 
+            field.setAccessible(true);
+
+            //Change the value 
+            field.set(obj, 123);
+
+            // Access field name and value 
+            String name = field.getName();
+            String value = field.get(obj);
+        }
+      
+    - Invoking methods
+        for (Method method : obj.getClass().getDeclaredMethods()) {
+            // Make sure the method is accessible 
+            method.setAccessible(true);
+
+            // Invoke the method
+            method.invoke(item);
+        }
+
+    - Other useful examples 
+        MyClass.class.getMethod("hello").invoke(null);
+        obj.getClass().getField(fieldName).get(object);
+
+    - Why use reflection?
+      - Only use when there's no other way to do something 
+      - Examples
+        - Serializing an object that doesn't implement Serialized 
+        - Detecting annotations 
+
+
+  - Detecting annotations
+    - Indicate that some class, method or field has special properties
+    - getDeclaredAnnotations() - can use it on Class, Method, Field, and Constructor
+
+
+  - Creating instances
+    - Reflection can also be used to create instances of a class
+    - getDeclaredConstructors() - useful to find a constructor you like 
+    - getParameterTypes() - useful to find the parameters a constructor takes 
+    - Example 
+        for (Constructor constructor : MyClass.class.getDeclaredConstructors()) {
+            for (Class param : constructor.getParameterTypes()) {
+                System.out.println(param);
+            }
+            System.out.println();
+        }
+    - Creating an instance
+        Constructor constructor = itemClass.getDeclaredConstructor(String.class, int.class);
+        Object instance = constructor.newInstance("orange", 990);
+    - Or there is a deprecated method 
+        MyClass.class.newInstance() 
+
+
+  - Runtime type checking
+    - Ways to check if x is a Y 
+      - instanceof
+        - Returns true for both class and superclass
+            circle instanceof Circle; // true
+            circle instanceof Shape;  // true
+      - Reflection isInstance()
+        - Returns true for both class and superclass
+            Circle.class.isInstance(circle);  // true
+            Shape.class.isInstance(circle);   // true
+      - Reflection getClass()
+        - Only returns true for actual class, not superclass 
+            circle.getClass() == Circle.class;  // true
+            circle.getClass() == Shape.class;   // false
+
+
+  - hashCode() and equals()
+    - Equals 
+      - Remember for objects, the behavior of == only checks if two objects are stored in the same memory address 
+      - If you want to override equals() there are several steps 
+        1- Check if they are the same object with == 
+        2- Check if the 2nd object is null or of a different type 
+        3- Now you can compare all the fields and see if they are the same 
+      - Example 
+          class Person {
+              // fields, constructor, getters and setters
+          
+              @Override
+              public boolean equals(Object other) {
+                  // Same object?          
+                  if (this == other) return true;
+
+                  // Is not null and same type? 
+                  if (other == null || getClass() != other.getClass()) return false;
+          
+                  // Cast and then compare all fields 
+                  Person person = (Person) other;
+                  return age == person.age && Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName);
+              }
+          }
+
+      - hashCode
+        - If you override equals, you should always override hashCode as well so it works with things like HashMap, HashSet, HashTable
+        - Rules 
+          - Must return same hashCode if invoked multiple times 
+          - If two objects are equals(), then hashCode() must be same as well 
+          - Good but not required for unequal objects to have distinct hashCodes 
+        - How to implement 
+          - Joshua Bloch's book "Effective Java" has a good algorithm
+          - Or just use java.util.Objects.hash(field values...)
+          - But probably just ask IntelliJ to autogenerate it for you 
+
+
+  - Boxing and unboxing - Wrapper classes 
+    - Each primitive type has one 
+    - Wrapper classes are immutable (just like strings)
+    - Boxing, unboxing, autoboxing, auto-unboxing
+    - Boxing and unboxing 
+      - Example 
+          Integer reference = Integer.valueOf( x );
+          int y = reference.intValue();
+    - Autoboxing and auto-unboxing
+      - Example 
+          double x = 10.8;
+          Double wrapperDouble = x; // autoboxing
+          double y = wrapperDouble; // auto-unboxing
+      - Only works when they are same type 
+        - Example 
+            Long n3 = 10; // WRONG, assigning int to Long
+            Integer n4 = 10L; // WRONG assigning long to Integer
+    - Multiple constructors. String is the most popular 
+      ***NOTE: stop using these after Java 9 
+        Integer number = new Integer("10012");
+        Float f = new Float("0.01");
+        Long longNumber = new Long("100000000");
+        Boolean boolVal = new Boolean("true");
+    - Also other special methods to create 
+        Long longVal = Long.parseLong("1000");
+        Long anotherLongVal = Long.valueOf("1000");
+    - Comparing wrappers
+      - Just like strings, use .equals() instead of == (b/c that will only check memory address is same)
+    - NullPointerException.
+      - They can also throw NPE b/c they can now equal null!!!
+          Long longVal = null;
+          long primitiveLong = longVal; // It throws NPE
+    - Pros and cons 
+      - Primitives are faster and can't throw NPE 
+      - Wrappers can be used in collections 
+
+
+  - Serialization basics
+    - We need a way to save and restore data between runs of a program 
+    - Also useful for sending an object over a network to be used by another program 
+    - To be serializeable, your class must "implements Serializable"
+
+        class SomeClass implements Serializable {
+            // Transient - prevent a field from being serialzed 
+            private transient String nonSerialziedField;
+
+            // serialVersionUID - Best practice is to add a serialVersionUID that you increment whenever you change the class in your code 
+            private static final long serialVersionUID = 1L;
+        }
+
+    - Code to serialize 
+        ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(fileName)));
+        oos.writeObject(obj);
+        oos.close();
+
+    - Code to deserialize 
+        ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(fileName)));
+        Object obj = ois.readObject();
+        ois.close();
+        return obj;
+
+    - Notes 
+      - Static fields and fields you mark "transient" are not serialized 
+
+
+  - Custom serialization
+    - How to customize serialization? 
+      - Add these two methods
+      - They should not have @Override 
+          private void writeObject(ObjectOutputStream oos) throws Exception { .... }
+          private void readObject(ObjectInputStream ois) throws Exception { .... }
+    - Transient 
+      - You will probably want custom logic to initialize transient fields that would not have been stored 
+    - Why customize 
+      - Encrypt some data 
+      - Compress the info 
+    - Notes 
+      - You don't need to implement both. Maybe you just do readObject and initialize the transient fields or run some checks 
+
+
+- Generic programming
+  - Generics 
+    - Example (The part that is unique to me is the first line and the last lines)
+        class GenericType<T> { 
+          private T t;
+          public GenericType(T t) { this.t = t; }
+          public T get() { return t; }
+          public void set(T parameter) { T variable = parameter; }
+        }
+
+        GenericType<String> instance2 = new GenericType<String>("abc");
+    - Naming conventions 
+        T – Type
+        S, U, V etc. – 2nd, 3rd, 4th types
+        E – Element (used extensively by the Java Collections Framework)
+        K – Key
+        V – Value
+        N – Number 
+
+    - Instantiation 
+        GenericType<Integer> instance1 = new GenericType<Integer>(10);
+        OR more concisely... 
+        GenericType<Integer> instance1 = new GenericType<>(10);
+
+    - And with many types... 
+      GenericType<Type1, Type2, ..., TypeN> instance = new GenericType<>(...);
+
+    - ***IMPORTANT*** primitives won't work. Must be reference types 
+        GenericType<int> instance1 = new GenericType<>(10); // int will cause an error 
+
 
 - Collections framework
   - What are collections
@@ -1479,8 +1728,8 @@ https://hi.hyperskill.org/projects3
         - poll() - removes from front or returns null if empty 
         - element() - gets first element (without removing) or throws NoSuchElementException if empty
         - peek() - gets first element (without removing) or returns null if empty 
-- enqueue (which inserts an element) 
-- dequeue (which removes an element)
+        - enqueue (which inserts an element) 
+        - dequeue (which removes an element)
       - Implemented with linked list or a classic array (non-resizable) = O(1) time 
         
     - Stack 
@@ -1872,7 +2121,7 @@ https://hi.hyperskill.org/projects3
           - To transform a generalized stream into a primatives stream, use these: mapToInt, mapToLong, mapToDouble.
           - There is no CharStream in Java.
     - (The problems suck. They don't explain it well enough to enable you to do them.)
-  
+
   - Function composition
     - Combining functions to build more complicated functions
     - Standard functions, operators, predicates, and consumers have methods for combining them (but not suppliers!)
@@ -1923,7 +2172,7 @@ https://hi.hyperskill.org/projects3
         Consumer<Integer> devNull = (val) -> { int v = val * 2; };
         Consumer<Integer> combinedConsumer = devNull.andThen(devNull.andThen(printer));
         combinedConsumer.accept(100);  // Prints 100
-  
+
   - Filtering elements
     - The filter operation
       - Examples 
@@ -1944,7 +2193,7 @@ https://hi.hyperskill.org/projects3
             .filter(n -> n>=11)
             .filter(n -> n <=23)
             .collect(Collectors.toList());
-  
+
   - Map and flatMap
     - The map operation
       - Lazy operation that transforms elements in some way 
@@ -2032,64 +2281,64 @@ https://hi.hyperskill.org/projects3
           Function<IntUnaryOperator, IntBinaryOperator> sumF = (f) -> (a, b) -> f.applyAsInt(a) + f.applyAsInt(b);
           IntBinaryOperator sumOfSquares = sumF.apply(x -> x * x);
           long sum = sumOfSquares.applyAsInt(5, 10);
-  - An example of currying
-      Function<String, Consumer<String>> say = what -> whom -> System.out.println(what + ", " + whom);
+    - An example of currying
+        Function<String, Consumer<String>> say = what -> whom -> System.out.println(what + ", " + whom);
 
-      // The friends' context:
-      List<String> friends = Arrays.asList("John", "Neal", "Natasha");
-      Consumer<String> sayHi = say.apply("Hi");
-      friends.forEach(sayHi);
+        // The friends' context:
+        List<String> friends = Arrays.asList("John", "Neal", "Natasha");
+        Consumer<String> sayHi = say.apply("Hi");
+        friends.forEach(sayHi);
+        
+        // The partner's context:
+        List<String> partners = Arrays.asList("Randolph Singleton", "Jessie James");
+        Consumer<String> sayHello = say.apply("Hello");
+        partners.forEach(sayHello);
+    -*** Reminder to self: 
+      - When reading types, read from left to right 
+      - Function<Foo, Function<Bar, Baz>> is a function that takes a Foo and returns a function...
+      - Function<Bar, Baz> means a function that takes a Bar and returns a Baz 
+    - Quiz 
+      LongFunction<LongFunction<Long>> ff = x -> y -> 0L;
+      What type of a value will be returned after invoking ff.apply(10); ?
       
-      // The partner's context:
-      List<String> partners = Arrays.asList("Randolph Singleton", "Jessie James");
-      Consumer<String> sayHello = say.apply("Hello");
-      partners.forEach(sayHello);
-  -*** Reminder to self: 
-    - When reading types, read from left to right 
-    - Function<Foo, Function<Bar, Baz>> is a function that takes a Foo and returns a function...
-    - Function<Bar, Baz> means a function that takes a Bar and returns a Baz 
-  - Quiz 
-    LongFunction<LongFunction<Long>> ff = x -> y -> 0L;
-    What type of a value will be returned after invoking ff.apply(10); ?
-    
-    LongFunction<Long>
-  - Quiz 
-    (arg1) -> (arg2) -> arg1 - arg2;
-    Select all possible its types.
+      LongFunction<Long>
+    - Quiz 
+      (arg1) -> (arg2) -> arg1 - arg2;
+      Select all possible its types.
 
-    Function<Integer, Function<Integer, Integer>>
-    Function<Double, Function<Double, Double>>
-  - Problem 
-    Write f(x,y,z)=x+y∗y+z∗z∗z as a curried function 
-    (x) -> (y) -> (z) -> x + y*y + z*z*z;
+      Function<Integer, Function<Integer, Integer>>
+      Function<Double, Function<Double, Double>>
+    - Problem 
+      Write f(x,y,z)=x+y∗y+z∗z∗z as a curried function 
+      (x) -> (y) -> (z) -> x + y*y + z*z*z;
 
 
-- Reduction methods
-  - The reduce operation
-      - Terminal operation which combines elements of a stream into a single value
-      - Seed or identity and a function 
-      - Example 
-          int sum = numbers.stream().reduce(0, (acc, elem) -> acc + elem);
-      - Could use it to find min/max/sum but stream already has these features 
-          long sum = IntStream.of(3, 5, 6, 7).sum();
-          long min = IntStream.of(11, 12, 7, 3, 10, 22).min().orElse(Integer.MAX_VALUE);
-        The same code using the reduce method:
-          long min = IntStream.of(11, 12, 7, 3, 10, 22).reduce(Integer.MAX_VALUE, (x, y) -> x < y ? x : y);
-  - Quiz 
-      List<Person> persons = Arrays.asList(
-        new Person("Mary", 18),
-        new Person("John", 21),
-        new Person("Andrew", 31),
-        new Person("Julia", 19)
-      );
-      Person person = persons.stream().reduce(new Person("DEFAULT", 0), (p1, p2) -> p1.getAge() > p2.getAge() ? p1 : p2);
-      // Andrew, 31
-  - Quiz 
-      stream().reduce(a, (b, c) -> d);
-      // a - The default result if there are no elements in the stream
-      // b - The sum of all processed integers so far
-      // c - the next elements of the stream
-      // d - The result of the reduction if the stream has elements.
+  - Reduction methods
+    - The reduce operation
+        - Terminal operation which combines elements of a stream into a single value
+        - Seed or identity and a function 
+        - Example 
+            int sum = numbers.stream().reduce(0, (acc, elem) -> acc + elem);
+        - Could use it to find min/max/sum but stream already has these features 
+            long sum = IntStream.of(3, 5, 6, 7).sum();
+            long min = IntStream.of(11, 12, 7, 3, 10, 22).min().orElse(Integer.MAX_VALUE);
+          The same code using the reduce method:
+            long min = IntStream.of(11, 12, 7, 3, 10, 22).reduce(Integer.MAX_VALUE, (x, y) -> x < y ? x : y);
+    - Quiz 
+        List<Person> persons = Arrays.asList(
+          new Person("Mary", 18),
+          new Person("John", 21),
+          new Person("Andrew", 31),
+          new Person("Julia", 19)
+        );
+        Person person = persons.stream().reduce(new Person("DEFAULT", 0), (p1, p2) -> p1.getAge() > p2.getAge() ? p1 : p2);
+        // Andrew, 31
+    - Quiz 
+        stream().reduce(a, (b, c) -> d);
+        // a - The default result if there are no elements in the stream
+        // b - The sum of all processed integers so far
+        // c - the next elements of the stream
+        // d - The result of the reduction if the stream has elements.
 
 
   - Producing collections
@@ -2162,7 +2411,39 @@ https://hi.hyperskill.org/projects3
         // Sum transactions by account 
         List<Transaction> transactions = ...
         Map<String, Long> totalSumOfTransByEachAccount = transactions.stream().collect( t -> t.getAccount().getNumber(), summingLong(Transaction::getSum) );
-  
+    
+
+  - Streams of primitives
+    - IntStream, LongStream, DoubleStream - streams of primitives that avoid boxing so are more efficient 
+      - Don't exist - CharStream, ByteStream, ShortStream, FloatStream, BooleanStream
+    - Examples of creating 
+        IntStream ints = IntStream.of(1, 2, 3);
+        LongStream longs = LongStream.of(1, 2, 3);
+        DoubleStream doubles = DoubleStream.of(12.2, 18.1);
+
+        IntStream numbers = Arrays.stream(new int[]{1, 2, 3});
+
+        IntStream numbers = IntStream.range(10, 15); // from 10 (incl) to 15 (excl)
+        LongStream longs = LongStream.rangeClosed(1_000_000, 2_000_000); // it includes both borders
+
+        IntStream stream = "aibohphobia".chars(); // String -> IntStream
+
+        DoubleStream.generate(Math::random).limit(10).forEach(System.out::println);
+    - min, max, average, sum - return optionals because original stream might be empty 
+        int[] numbers = { 10, 11, 25, 14, 22, 21, 18 };
+        int max = IntStream.of(numbers).max().getAsInt();
+        double avg = IntStream.of(numbers).average().orElse(0.0);
+    - summaryStatistics
+        IntSummaryStatistics stat = IntStream.rangeClosed(1, 55_555).summaryStatistics();
+        System.out.println(String.format("Count: %d, Min: %d, Max: %d, Avg: %.1f", stat.getCount(), stat.getMin(), stat.getMax(), stat.getAverage()));
+    - Converting to another type 
+      - IntStream -> DoubleStream
+          IntStream.of(1, 2, 3, 4).asDoubleStream().forEach(System.out::println);
+      - IntStream -> Stream
+          Stream<Integer> streamOfNumbers = IntStream.range(1, 10).boxed();
+      - Stream -> IntStream 
+          int sum = List.of(1, 5, 9).stream().mapToInt(i -> i).sum();
+
 
   - Stream pipelines
     - Most used operations - filter, map, reduce 
@@ -2186,21 +2467,444 @@ https://hi.hyperskill.org/projects3
           .filter(r -> r > low && r < high) 
           .average() 
           .orElse(0); // default if no values
-  - Quiz
-      List<String> paradigms = Arrays.asList(
-        "Aspect-oriented programming",
-        "Functional programming",
-        "Object-oriented programming",
-        "Logical programming",
-        "Procedural programming",
-        "Automata-based programming"
-      );
-      List<String> filtered = paradigms.stream()
-        .filter(paradigm -> paradigm.contains("oriented") || paradigm.contains("Functional"))
-        .flatMap(paradigm -> Arrays.stream(paradigm.split("\\s+")))
-        .distinct()
-        .collect(Collectors.toList());
-      // Aspect-oriented, Functional, Object-oriented, programming
+    - Quiz
+        List<String> paradigms = Arrays.asList(
+          "Aspect-oriented programming",
+          "Functional programming",
+          "Object-oriented programming",
+          "Logical programming",
+          "Procedural programming",
+          "Automata-based programming"
+        );
+        List<String> filtered = paradigms.stream()
+          .filter(paradigm -> paradigm.contains("oriented") || paradigm.contains("Functional"))
+          .flatMap(paradigm -> Arrays.stream(paradigm.split("\\s+")))
+          .distinct()
+          .collect(Collectors.toList());
+        // Aspect-oriented, Functional, Object-oriented, programming
+
+
+  - Taking elements
+    - limit(n), skip(m) - useful for subset of streams 
+    - But what if you want to limit or skip until a condition is true?
+    - takeWhile
+      - Take until it finds the first inappropriate element, then discard the rest  
+          List<Integer> numbers = Stream.of(3, 5, 1, 2, 0, 4, 5)
+            .takeWhile(n -> n > 0)
+            .collect(Collectors.toList());
+    - dropWhile
+      - Exclude elements until the first match, then keep the rest 
+          List<Integer> numbers = Stream.of(3, 5, 1, 2, 0, 4, 5)
+            .dropWhile(n -> n > 0)
+            .collect(Collectors.toList());
+    - Don't use these with sets b/c sets don't have a deterministic order, so you can get different results every time 
+    - You will often want to run sort() before using these 
+
+
+  - Parallel streams
+    - Makes parallel data processing easy by doing threads for you 
+    - Uses ForkJoinPool
+    - Creating parallel streams
+      - parallelStream() instead of stream()
+          List<String> languages = List.of("java", "scala", "kotlin", "C#");
+          List<String> jvmLanguages = languages.parallelStream()
+                  .filter(lang -> !"C#".equals(lang))
+                  .collect(Collectors.toList());
+      - parallel() - converts a stream to a parallelStream 
+          long sum = LongStream
+            .rangeClosed(1, 1_000_000)
+            .parallel()
+            .sum();
+      - More methods
+        - isParallel() - returns true if the stream is parallel and false otherwise;
+        - sequential() - returns an equivalent sequential stream.
+    - Performance
+      - Not always faster. Not always the correct result. 
+      - Better for - lots of data, computers with more cores, arrays and arrayLists not linkedLists
+      - Use for map and filter, not distinct, sorted, limit
+    - Caveats 
+      - Be careful doing operations that will modify each stream 
+      - forEachOrdered - use this instead of forEach() if ordering matters to you 
+      - Be careful whenever ordering matters 
+
+
+- Essential standard classes
+  - Math library
+    - Common methods
+        abs(...)
+        sqrt(...)
+        cbrt(...)
+        pow(..., ...)
+        min(..., ...)
+        max(..., ...)
+        toRadians(...)
+        sin(...)
+        cos(...)
+        random()
+        floor(...)
+        ceil(...)
+    - Useful constants 
+        Math.PI
+        Math.E
+
+
+  - BigInteger (not BigInt)
+    - The size of a stored number is only limited by the available memory. (Wow!)
+    - Ints and longs aren't always large enough 
+        int y = 62957291795228763406253098; // compilation-error: integer number too large
+      or 
+        int a = Integer.MAX_VALUE; // 2147483647
+        a += 2; // -2147483647 - type-overflow 
+    - Immutable - so methods of the class always return new instances
+    - Only use when necessary - slower and less intuitive 
+    - Example 
+        import java.math.BigInteger;
+        BigInteger number = new BigInteger("62957291795228763406253098");
+        BigInteger number = BigInteger.valueOf(1_000_000_000);
+    - Useful constants:
+        BigInteger zero = BigInteger.ZERO; // 0
+        BigInteger one = BigInteger.ONE;   // 1
+        BigInteger ten = BigInteger.TEN;   // 10
+    - Use methods for math (again all return a new BigInt and don't change the original)
+        BigInteger eleven = ten.add(one);
+        BigInteger nine = ten.subtract(BigInteger.ONE); 
+        BigInteger oneHundredTen = ten.multiply(eleven); 
+        BigInteger twelve = oneHundredTen.divide(nine); // Note: remainder is lost. Just integer part kept 
+    - And more methods 
+        BigInteger negativeTen = ten.negate();
+        BigInteger positiveTen = negativeTen.abs();
+        BigInteger[] pair = oneHundredTen.divideAndRemainder(nine); // 12 and 2
+    - Even greatest common divisor
+        BigInteger three = BigInteger.valueOf(3);
+        BigInteger six = BigInteger.valueOf(6);
+        three.gcd(six); // 3
+
+
+  - Random
+    - Example 
+        import java.util.Random;
+        Random random = new Random();
+    - Or you can seed it yourself 
+      - IMPORTANT: it will result in the same sequence of numbers every time 
+        Random random = new Random(100000);  
+    - Useful methods 
+        nextInt()
+        nextInt(int) - 0 (inclusive) to n (exclusive);
+        nextLong()
+        nextDouble()
+        nextBytes(byte[]) - generates random bytes and places them into a user-supplied byte array
+    - Example 
+        // number between a and b (inclusive)
+        int from = scanner.nextInt();
+        int to = scanner.nextInt();
+        random.nextInt(to - from + 1) + from;
+
+
+  - LocalDate
+    - Date without a time 
+    - Example 
+        import java.time.LocalDate;
+        LocalDate now = LocalDate.now();
+        LocalDate date1 = LocalDate.of(2017, 11, 25); 
+        LocalDate date2 = LocalDate.parse("2017-11-25"); 
+    - Others
+        LocalDate.ofYearDay(2017, 33); // 33rd day of 2017  = 2017-02-02
+    - Get methods 
+        getYear()
+        getMonthValue()
+        getDayOfMonth()
+        getDayOfYear()
+    - Other methods 
+        lengthOfYear(); // 365
+        lengthOfMonth(); // 30
+    - And add or subtract - immutable so returns new instance 
+        plusDays(1)
+        minusDays(1)
+        plusYears(2)
+    - Modify just one piece - immutable so returns new instance 
+        withYear(2016)
+
+
+  - LocalTime
+    - Time without a date
+      - Hours: 0-23
+      - Minutes and seconds: 0-59
+    - Example 
+        import java.time.LocalTime;
+        LocalTime now = LocalTime.now();
+        LocalTime.of(11, 45);        // 11:45
+        LocalTime.of(11, 45, 30);    // 11:45:30
+        LocalTime.parse("11:45:30"); // 11:45:30
+    - Others 
+        LocalTime.ofSecondOfDay(100); // 100th second of the day
+        LocalTime.ofNanoOfDay(100);   // 100th nanosecond of the day 
+    - Constants 
+        LocalTime.MIN; // 00:00
+        LocalTime.MAX; // 23:59:59.999999999
+        LocalTime.NOON; // 12:00
+        LocalTime.MIDNIGHT; // 00:00
+    - Get methods 
+        getHour()
+        getMinute()
+        getSecond()
+        getNano()
+    - And add or subtract - immutable so returns new instance 
+        plusHours(5)
+        minusMinutes(10)
+        minusSeconds(30)
+    - Modify just one piece  - immutable so returns new instance 
+        withHour(23)
+        withMinute(50)
+        withSecond(0)
+
+
+  - LocalDateTime
+    - Combination of LocalDate and LocalTime without a time-zone, such as 2017-12-03T22:30
+    - Examples 
+        import java.time.LocalDateTime;
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime dt1 = LocalDateTime.of(2017, 11, 25, 22, 30); 
+        LocalDateTime dt2 = LocalDateTime.parse("2017-11-25T22:30");
+    - Or make it using a date and a time object 
+        LocalDateTime dt = LocalDateTime.of(localDate, localTime);
+    - Or set stuff 
+        LocalDateTime dt = dt.atTime(time); // 2017-11-25T21:30
+        LocalDateTime dt = dt.atDate(date); // 2017-11-25T21:30
+    - Get methods 
+        getMonthValue()
+        getDayOfMonth()
+        getHour()
+        getMinute()
+    - Convert to LocalDate or LocalTime 
+        toLocalDate()
+        toLocalTime()
+    - Set mehods 
+        (See same methods of LocalDate and LocalTime)
+
+
+  - Comparing dates and time
+    - Example - IMPORTANT, values are not -1,0,1. It's -x,0,x 
+        LocalDate date1 = LocalDate.parse("2017-01-02");
+        LocalDate date2 = LocalDate.parse("2017-12-12");
+        date1.compareTo(date1); // 0, date1 and date1 are equal
+        date1.compareTo(date2); // -11, date1 is less than date2
+        date2.compareTo(date1); // 11, date2 is greater than date1
+    - More convenient methods 
+        d1.isEqual(d1);
+        d1.isBefore(d2);
+        d1.isAfter(d2);
+    - All of them have all 4 of these methods except LocalTime doesn't have the method isEqual
+
+
+- Regex 
+  - Basics 
+    - Very different from JS 
+        String reg = "abc";
+        "abc".matches(reg);  // true
+        "abc1".matches(reg)); // false - weird: needs to match whole string perfectly 
+    - ? - reminder - question mark means preceeding character is optional 
+    - [^abc] - not a,b,c 
+    - [^1-6] - not 1-6 
+    - (abc|def|xyz) - abc or def or xyz 
+    - {0,1} is the same as ?
+    - {0, } is the same I think as * 
+    - {n} - exactly n repetitions 
+    - {n, m} - n-m 
+    - {n,} - >= n
+    - {,m} - <= m
+  - Pattern and matcher 
+    - More efficient and more options than string.matches(reg);
+    - Not compiled every time you use it.  
+    - Example 
+        import java.util.regex.Pattern;
+        import java.util.regex.Matcher;
+
+        String text = "We use Java to write modern applications";
+        Pattern pattern = Pattern.compile(".*[Jj]ava.*", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(text); 
+        boolean matches = matcher.matches();
+
+        // or more concisely
+
+        String text = "We use Java to write modern applications";
+        boolean matches =
+          Pattern
+            .compile(".*[Jj]ava.*", Pattern.CASE_INSENSITIVE)
+            .matcher(text)
+            .matches();
+
+        // or non-reusable but with flags 
+
+        Pattern.matches("(?i).*[Jj]ava.*", "We use Java to write modern applications");
+
+  - Other methods 
+    - find - unlike matches, it looks for substrings and doesn't need to match the whole thing 
+        String text = "Regex is a powerful tool for programmers";
+        Pattern pattern = Pattern.compile(".*[Jj]ava.*"); 
+        Matcher matcher = pattern.matcher(text); 
+        matcher.matches(); // false, the whole string does not match the pattern
+        matcher.find(); // true, there is a substring that matches the pattern
+  - replaceFirst and replaceAll
+    - // IMPORTANT: replace() is different. It does not support regex 
+    - With strings... 
+      - string.replaceFirst(regex, replacement);
+      - string.replaceAll(regex, replacement);
+    - With matchers...
+      - matcher.replaceFirst(replacement);
+      - matcher.replaceAll(replacement);
+
+  - Match results 
+    - Example 
+        String text = "Java supports regular expressions. LET'S USE JAVA!!!";
+        Pattern pattern = Pattern.compile("java", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(text);
+        matcher.find();   // true
+        
+        // Now *after* find() you can run the following
+        matcher.start();  // 0, the starting index of match
+        matcher.end();    // 4, the index followed the last index of match
+        matcher.group();  // "Java", a substring that matches the pattern
+    - Or you can use MatchResult (which honestly seems about the same thing)
+        // Again only if you found something 
+        MatchResult result = matcher.toMatchResult(); // a special object containing match results
+        result.start();   // 0
+        result.end();     // 4
+        result.group();   // "Java"
+    - To avoid errors, consider using this pattern 
+        if (matchter.find()) {
+          //....
+        }
+    - Or to iterate over each found instance. (Seems useful)
+        while (matcher.find()) {
+          //....
+        }
+
+
+- Logging 
+  - Standard logger
+    - Common uses 
+      - troubleshooting
+      - auditing
+      - user-profiling and statistics
+    - Common levels 
+      - Debug - to debug problems
+      - Info - important events 
+      - Warn - potential problem not yet affecting user (e.g. repeated attempts to access a resource, missing secondary data, switching from a primary server to a back-up server)
+      - Error - error but does not terminate program 
+      - Fatal - error that terminates program
+    - java.util.logging
+        Logger class
+        FileHandler class
+        ConsolHandler class
+        SimpleFormatter
+        XMLFormatter
+        Level
+        LogRecord
+        LogManager
+    - Logger class 
+      - Standard practice is to create an instance for each class
+      - Levels (These do not match up to the "common levels" listed above. Missing fatal, error, debug)
+          Level.SEVERE    or    logger.severe("...")
+          Level.WARNING   or    logger.warning("...")
+          Level.INFO      or    logger.info("...")
+          Level.CONFIG    or    logger.config("...")
+          Level.FINE      or    logger.fine("...")
+          Level.FINER     or    logger.finer("...")
+          Level.FINEST    or    logger.finest("...")
+    - Handlers and Formatters
+      - Handlers - take the log to the outside world 
+      - Handler is an abstract class. 2 most important implementations are 
+        - ConsoleHandler - writes to System.err
+        - FileHandler - logs to a file 
+      - Formatter is an abstract class. 2 implemntations are 
+        - SimpleFormatter
+        - XMLFormatter
+    - Filter 
+      - Controls what levels you are interested in outputting right now so you don't get too many logs 
+    - Example 
+        import java.util.logging.*;
+        Logger logger = Logger.getLogger( Main.class.getName());
+        // filter
+        Filter filter = new FilterExample();
+        logger.setFilter(filter);
+        // handler
+        Handler fileHandler = new FileHandler("default.log");
+        logger.addHandler(fileHandler);
+        // formatter
+        fileHandler.setFormatter(new XMLFormatter());
+        // log something
+        logger.info("Info log message");
+
+
+- Unit testing 
+  - JUnit and Mockito
+    - JUnit 
+      - Most popular unit testing framework 
+      - Annotations - @Test, @Before, @BeforeClass, @After, @AfterClass
+        @BeforeClass
+        public static void setUpClass() throws Exception { .... }
+
+        @Before
+        public void setUp() throws Exception { .... }
+
+        @After
+        public void tearDown() throws Exception { .... }
+
+        @AfterClass
+        public static void tearDownClass() throws Exception { .... }
+      - Assertions throw errors if not true 
+        - Common assertions 
+          - assertEquals
+          - assertTrue
+          - assertNotNull
+        - Example 
+          public class CalculatorTest {
+            @Test
+            public void testAdd() {
+              Calculator calculator = new Calculator();
+              int result = calculator.add(2, 2);
+              Assert.assertEquals(4, result);
+            }
+          }
+    - Mockito 
+      - Most popular mock library 
+      - Example 
+          public class UsdConverterTest {
+            @Mock
+            private ExchangeRateService service = Mockito.mock(ExchangeRateService.class);
+
+            private UsdConverter converter = new UsdConverter(service);
+
+            @Test
+            public void testConvertToUsed() {
+              Mockito.when(service.getUsd()).thenReturn(BigDecimal.valueOf(5));
+
+              BigDecimal result = converter.add(BigDecimal.valueOf(2));
+              BigDecimal expected = BigDecimal.valueOf(10);
+
+              Assert.assertEquals(expected, result);
+            }
+          }
+
+
+- IO Streams
+  - What are streams
+    - Sequences of data
+    - Two types of streams 
+      - char streams 
+        - Read/write data in characters according to the 16-bit Unicode format
+        - Useful for anything text related 
+      - byte streams 
+        - Read/write data in bytes
+        - Useful for other formats like multimedia 
+
+
+- Networking 
+  - Sockets 
+    - Ports 
+      - 0-65535, preferably > 1024
+    - 2 important classes - Socket, ServerSocket
+    - Lesson has a good example of a basic client+server app 
 
 
 - Spring Boot
@@ -2335,8 +3039,3 @@ QUESTIONS
   Arrays.asList(1,2,3);
   new ArrayList<>( Arrays.asList(1,2,3) );
 - Convert group of integers between array, list, arrayList, string
-  - For example 
-      String.join(" ", Arrays.asList(1,2,3)); 
-    doesn't work but 
-      String.join(" ", Arrays.asList("a","b","c")); 
-    does

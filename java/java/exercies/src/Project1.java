@@ -1,8 +1,6 @@
-package bot;
-
 import java.util.Scanner;
 
-public class Course1 {
+public class Project1 {
   final static Scanner scanner = new Scanner(System.in); // Do not change this line
 
   public static void main(String[] args) {
