@@ -1,0 +1,329 @@
+GRAPHQL
+12/2019
+
+
+Thoughts
+- Pros 
+  - One API - for all your apps and platforms 
+  - Less data transfer - query just the data you want
+  - Strongly typed
+  - Discoverable
+  - Self-documenting 
+- Cons 
+  - I've seen it slow new projects down considerably 
+  - Make sure productivity gains in the long run offset learning curve
+  - More complexity 
+- Misc 
+  - Hooks - Apollo hooks are cleaner than the HOCs and components syntaxes 
+  - Security - you would have to turn off the introspection for prod 
+  - See thoughts in Apollo notes 
+
+
+
+
+How best to learn GraphQL
+- https://www.howtographql.com/
+  - Start here. It has lots of fast videos and high-level overviews
+- https://graphql.org/learn/
+  - This next. Has more depth
+
+
+
+4 simple ways to call a GraphQL API
+https://blog.apollographql.com/4-simple-ways-to-call-a-graphql-api-a6807bcdb355
+- Curl works just fine
+    curl \
+    -X POST \
+    -H "Content-Type: application/json" \
+    --data '{ "query": "{ posts { title } }" }' \
+    https://1jzxrj179.lp.gql.zone/graphql
+- Fetch works too 
+    fetch('https://1jzxrj179.lp.gql.zone/graphql', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: '{ posts { title } }' }),
+    })
+    .then(res => res.json())
+    .then(res => console.log(res.data));
+- Get request might work too (From: https://graphql.org/learn/serving-over-http/)
+    http://myapi/graphql?query={me{name}}
+
+
+Absolutely Everything GraphQL in Under 10 Minutes 
+https://www.youtube.com/watch?v=o5eaci2vcb8
+- Video explaining what GraphQL is, why it's good, how it works, how to learn it, all under 10 minutes 
+
+
+GraphQL explained
+https://blog.apollographql.com/graphql-explained-5844742f195e
+- Intro 
+  - Schema - the data model. Types. What can be queried and relationships 
+  - Resolvers - where/how the data comes from 
+- Steps in every backend request
+  1- Parse
+  2- Validate 
+    - Automatic - unlike REST implementations, the GraphQL server does this for you automatically 
+  3- Execute
+    - Each query is tree shaped
+    - Queries start at the root and wait for each step to resolve (value or promise), then continues to next steps in tree
+- Makes the following much easier than REST - joins, filtering, argument validation, documentation
+- Apollo Engine 
+  - Helps with the following 
+    - Error tracking
+    - Query caching
+    - Field-level schema analysis
+    - Improved tracing
+
+
+GraphQL.org 
+
+- Queries and mutations - https://graphql.org/learn/queries/
+  - Queries - requesting data 
+    - Fields, nested fields, objects 
+    - Arguments 
+      - Every field and nested object can have arguments (e.g. height and height(unit: FOOT))
+    - Types - default types and enums 
+    - Aliases - lets you rename the result of a field to anything you want
+    - Fragments - pieces of queries you can compose to keep your code DRY 
+    - Operation name - name for a query 
+    - Variables 
+      - Pass variables into your queries
+      - Don't use string interpolation
+      - Start with $ symbol
+      - Required variables have !
+      - Default values 
+    - Directives 
+      - Start with @ symbol 
+      - It's a type of conditional - change the structure of the query based on a variable 
+      - Two default directives 
+        - @include(if: Boolean) - only field if true
+        - @skip(if: Boolean) - skip field if true
+      - You can define custom directives too 
+  - Mutations - changing data 
+    - Mutations 
+      - Can request back data after your change is executed 
+      - Pass in scalars or input objects 
+      - Query fields are run in parallel but mutation fields are run in series. Guarantees you don't have a race condition with yourself
+    - Inline fragements 
+      - Query data on the concrete implementation of union of interfaces 
+      - Starts with ...
+    - Meta fields 
+      - Example - __typename
+
+- Schemas and types - https://graphql.org/learn/schema/
+  - Intro 
+    - Custom language - "GraphQL schema language", similar to query language 
+    - GraphQL Object Type, fields, scalar types 
+    - Non-nullable fields have ! 
+    - Arguments 
+      - Every field can have >= 0 arguments 
+      - All arguments are named, not an ordered list 
+      - Required or optional 
+      - Optional arguments can have default values 
+    - Example 
+        type Starship {
+          id: ID!
+          name: String!
+          appearsIn: [Episode!]!                    # Array, never null. Only contains Episodes, never null's
+          length(unit: LengthUnit = METER): Float   # Length takes a "unit" argument with the default being meters 
+        }
+  - Query and mutation types 
+    - Entry types - there are two special types of objects, Query and Mutation 
+        schema {
+          query: Query
+          mutation: Mutation
+        }
+        type Query {
+          hero(episode: Episode): Character
+          droid(id: ID!): Droid
+        }
+    - Scalar types 
+      - Default types 
+        - Int     (not Integer or int)
+        - Float
+        - String
+        - Boolean
+        - ID
+      - Custom types 
+        - You can define - objects, scalars, and enums
+        - Example - scalar Date
+          - Then you'd need to specify how it is serialized, deserialized, and validated 
+        - Enums 
+            enum Episode {
+              NEWHOPE
+              EMPIRE
+              JEDI
+            }
+    - Interfaces
+      - You can define and implement interfaces 
+          interface Character {
+            // Some fields 
+          }
+
+          type Human implements Character {
+            // All the interface fields plus you can add more
+          }
+      - To query additional fields, you need to use fragements. See the documentation 
+    - Union types
+      - Similar to interfaces, but they can't have any fields in common (?)
+      - Can only make a union of concrete types. Can't make a union of unions or interfaces. 
+      - Example 
+          union SearchResult = Human | Droid | Starship
+      - Like interfaces, queries need to use fragements. See documentation
+    - Input types
+      - Used when you want to pass a complex object in a mutation to create/edit something 
+          input ReviewInput {
+            stars: Int!
+            commentary: String
+          }
+
+  - Validation 
+    - Common errors 
+      - Fragments that are circular
+      - Objects need subfields
+      - Scalars have no subfields 
+
+  - Exectution 
+    - Resolvers 
+      - Have 4 arguments 
+        - obj - the previous object. Not usually used on root 
+        - args - args for the query
+        - context - provided to every resolver. Current user, DB access, etc 
+        - info - field-specific information
+      - They are asynchronous, done with promises (aka Futures, Tasks, Deferred)
+      - List will usually use a map statement and return an array of promises to get each subitem 
+
+  - Introspection
+    - Useful to learn about what queries are available 
+        {
+          __schema {
+            types {
+              name
+            }
+          }
+        }
+
+  - Best practices
+    - Use HTTP, a single endpoint, JSON
+    - Don't version your API 
+    - There are different strategies for authentication, pagination
+    - Use batching and caching to avoid too many DB requests 
+
+  - Serving over HTTP - https://graphql.org/learn/serving-over-http/
+    - Most implementation include both GET and POST options 
+        http://myapi/graphql?query={me{name}}
+    - Response should look like this 
+        {
+          "data": { ... },
+          "errors": [ ... ]
+        }
+    - Node 
+      - Recommends you use 
+        - express-graphql 
+        - graphql-server.
+
+  - Authentication 
+    - Don't put auth logic in GraphQL resolvers. It should be in business layer 
+
+  - Pagination 
+    - A field that is plural usually indicates a connection to another type 
+    - Recommend cursors by opaque, base64 encoded strings 
+
+
+How to GraphQL
+- Core Concepts 
+  - Root types are Query, Mutation, and Subscription (for WebSockets)
+  - Example schema 
+      type Query {
+        allPersons(last: Int): [Person!]!
+        allPosts(last: Int): [Post!]!
+      }
+
+      type Mutation {
+        createPerson(name: String!, age: Int!): Person!
+        updatePerson(id: ID!, name: String!, age: Int!): Person!
+        deletePerson(id: ID!): Person!
+        createPost(title: String!): Post!
+        updatePost(id: ID!, title: String!): Post!
+        deletePost(id: ID!): Post!
+      }
+
+      type Subscription {
+        newPerson: Person!
+        updatedPerson: Person!
+        deletedPerson: Person!
+        newPost: Post!
+        updatedPost: Post!
+        deletedPost: Post!
+      }
+
+      type Person {
+        name: String!
+        age: Int!
+        posts: [Post!]!
+      }
+
+      type Post {
+        title: String!
+        author: Person!
+      }
+
+- Clients
+  - Caching - recommend normalizing your data on the front end 
+  - Recommended to put views and data dependencies in the same file 
+
+- Server 
+  - Batching is done via "loaders"
+      authorLoader = new AuthorLoader()
+      authorLoader.load(1);
+      authorLoader.load(2);
+      authorLoader.load(1); // repeated request
+      authorLoader.load(2); // repeated request 
+      // Result: fetch('/authors?ids=1,2')
+
+- More GraphQL Concepts
+  - Misc 
+    - Aliases can be used to name the result objects for multiple queries
+    - Fragments are useful for the structure and reusability of your GraphQL code
+    - Every field in a GraphQL type can be associated with zero or more arguments
+  - If you need to ask for multiple queries with same fields, you need to alias them 
+      // ERROR
+      {
+        User(id: "1") {
+          name
+        }
+        User(id: "2") {
+          name
+        }
+      }
+
+      // GOOD 
+      {
+        first: User(id: "1") {
+          name
+        }
+        second: User(id: "2") {
+          name
+        }
+      }
+
+- Tooling and ecosystem 
+  - To experiment with queries 
+    - GraphiQL
+    - GraphQL Playground
+
+- Security 
+  - How to prevent malicious queries 
+    - Max timeout - simple to implement but doesn't protect against denial of service attacks 
+    - Max depth - because you could query something cyclical like authors' posts' authors' posts' etc. 
+    - Query complexity - manually assign weights to fields 
+    - Throttling 
+
+- Common questions 
+  - Caching - still an unsolved problem for GraphiQL because each query can be very different 
+  - Authorization - seems a bit difficult as you may have permission for some fields but not others 
+  - Errors - the response object has an "errors" key. Not clear how or if HTTP status codes are used 
+    
+- Misc 
+  - gql`....` is a "tagged template literal". It is a function that processes and returns the `template literal` and variables passed in 
+  - GraphQL code can either be in a *.graphql file or in a TypeScript file with gql`....` 

@@ -23,7 +23,7 @@ Generated with Spring Initializr
 ## Features in this project
 - Devtools / hot reloading 
   - (This also adds H2 console at http://localhost:8080/h2-console/, with   jdbc_url=jdbc:h2:mem:testdb, user=sa, password=(blank))
-- Actuator
+- Actuator (health endpoint etc)
 - CommandLineRunner
 - Lazy initialization
 - Static files - webapp directory

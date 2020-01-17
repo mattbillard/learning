@@ -291,7 +291,7 @@ REACT
         - "Functional programming, pure functions, etc", but with useEffect, functional components are no longer pure with always the same inputs->outputs 
       - Confusing names 
       - useRef - Sometimes used for DOM refs. Sometimes used to hold variables you want to persist across renders. 
-      - useReducer - most people will probably assume this has something to do with Redux 
+      - useReducer - most people will probably assume this has something to do with Redux. Articles indicate it is not a good replacement for Redux in an app. 
 
 
   - useState 

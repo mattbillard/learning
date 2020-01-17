@@ -1,0 +1,98 @@
+APOLLO 
+1/2020
+
+
+Thoughts - Pros and cons
+  - Apollo is probably fantastic for webpages, but I'm not convinced that Apollo is the solution for complex apps with complex interactivity and local state
+  - Pros 
+    - Makes GraphQL queries/mutations easy 
+    - Caching 
+    - Batches your requests
+  - Cons 
+    - Poor separation of layers - data layer and view layers mixed together 
+    - Difficult debugging - any component can modify the store 
+    - Local store state seems to be an afterthought. Need to use @cache, etc
+    - Redux 
+      - Seems to violate everything that Redux argued for - clear flow of data, separation of layers. (Please please don't tell me Apollo uses Redux internally. That's not the point.)
+      - Any component can call client.writeData. Redux was created specifically to avoid unclear situations where every component competes to modify the store 
+      - Non trivial examples of useMutation often seem to mix a write, a read, and then a local store update (e.g. official tutorial does this in the BookTrips component)
+      - Apollo calls it a "cache" but also a "store". The 2 are different concepts mixed together 
+    - The examples actively encourage queries and mutations to be spread throughout the app on many components
+      - Makes understanding the data layer very very difficult and probably more difficult to refactor
+      - People seemed to like the Container vs Presentation pattern but this seems to largely discourage it
+  - Alternatives 
+    - Apollo 
+      - Use Apollo as basically a "GraphQL XHR" library 
+      - Call client.query() and client.mutation() from your Redux actions
+      - But you'd probably need to pass "client" to the actions b/c I think it's only available via <ApolloProvider>
+    - URQL 
+      - Seems very very basic
+      - Easy queries and caching
+      - But again it puts data queries/mutations in components rather than in a seperate layer 
+    - graphql.js
+      - Even more basic. Just sending queries and mutations 
+      - It's like a promise-based XHR library, so it would be very easy to make it work with Redux - action -> graphql.js -> reducer -> store 
+      - But it's not popular at all 
+
+
+
+- Tutorials
+  - Official
+    - https://www.apollographql.com/docs/tutorial/introduction/
+    - https://github.com/apollographql/fullstack-tutorial
+  - Other tutorials that are a bit outdated but use different techniques
+    - RWieruch - https://github.com/rwieruch/node-appollo-boost-github-graphql-api
+    - HowToGraphQL - https://www.howtographql.com/react-apollo/0-introduction/
+
+- Misc
+  - You can call client.query(....) manually. It even returns a promise.
+  - 3 ways to use queries and mutations 
+    - hooks (best)
+    - components and render props
+    - HOCs (feels similar to wrapping your component in Redux connect)
+
+- Hooks
+  - useApolloClient
+    - client.writeData() - write to store 
+  - useQuery
+    - fetchPolicy
+      - cache-first - default policy
+      - network-only
+  - useMutation
+    - onCompleted
+    - update 
+    - refetchQueries
+
+- Authorization 
+    const client = new ApolloClient({
+      ....
+      link: new HttpLink({
+        ....
+        headers: {
+          authorization: ....
+        }
+      })
+    });
+
+- Local state 
+  - Single source of truth - they recommend against using Redux 
+  - If you want to add state that doesn't come from the server you need to... 
+    - Resolvers - add this to client code 
+    - Warm cache - add default values when creating ApolloClient  
+    - @cache - use this annotation in your queries 
+  - useMutation has an update key to update the store afterwards
+
+- CLI 
+  - There's a CLI to generate code 
+
+- Apollo Link
+  - Middleware - to modify before request is sent 
+  - Afterware - middleware but after the reqeust
+  - Deduplication - automatic
+  - Query batching - automatic 
+
+
+
+
+
+
