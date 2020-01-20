@@ -1460,14 +1460,144 @@ https://hyperskill.org/knowledge-map/73?v=table
 
     - Instantiation 
         GenericType<Integer> instance1 = new GenericType<Integer>(10);
-        OR more concisely... 
+        
+        // OR more concisely, you don't need the type on the right side if it's defined on the left... 
         GenericType<Integer> instance1 = new GenericType<>(10);
 
+    - <> is called the "diamond operator"
     - And with many types... 
-      GenericType<Type1, Type2, ..., TypeN> instance = new GenericType<>(...);
-
+        GenericType<Type1, Type2, ..., TypeN> instance = new GenericType<>(...);
     - ***IMPORTANT*** primitives won't work. Must be reference types 
         GenericType<int> instance1 = new GenericType<>(10); // int will cause an error 
+
+
+  - Generics versus Object
+    - Although you might think you can use Object instead of a generic, generics are much better 
+      - If you used "Object" like this 
+          class NonGenericClass {
+              private Object val;
+              public NonGenericClass(Object val) { this.val = val; }
+              public Object get() { return val; }
+          }
+
+        You would need to cast it back to a string in order to use it or you'll get an error 
+          NonGenericClass instance1 = new NonGenericClass("abc");
+          String str = instance1.get(); // Compile-time error: Incompatible types
+
+        You could also get runtime errors if you weren't careful and stored something other than expected 
+          NonGenericClass instance1 = new NonGenericClass(new Integer(1));
+          String str = (String) instance2.get(); // throws java.lang.ClassCastException
+
+      - Far better just to use generics. No need to cast 
+          class GenericType<T> { 
+              private T t;
+              public GenericType(T t) { this.t = t; }
+              public T get() { return t; }
+          }
+
+          GenericType<String> instance3 = new GenericType<>("abc");
+          String str = instance3.get(); // "abc"
+
+      - But make sure to specify a type or you're back to using objects and the problems they create 
+          GenericType instance4 = new GenericType("my-string");
+
+    - Summary 
+      - Generics enchance type safety by shifting more type checking responsibilities to the compiler
+      - Generics make code work with objects of different classes without explicit type-casting
+
+
+  - Generic methods
+    - Static methods can't use a class's generic type... but you can declare it on the static method 
+        public static <T, U> void method(T t, U u) { 
+            // ....
+        }
+
+    - It's rare and not as flexible, but a non-generic class can still have generic instance methods too 
+        class SimpleClass {
+            // Fields can't be generic in this case but methods can 
+
+            public <T> T doSomething(T t) {
+                // ....
+            }
+        }
+
+    - An example of an instance method adding another type to a generic class 
+        class SimpleClass<T> {
+            public <U> T doSomething(T t, U u) {
+                // ....
+            }
+        }
+
+
+  - Type Bounds
+    - Sometimes you want the advantages of generics (see "Generics versus Object" above) but also want to put some limits
+        class Storage<T extends Books> {
+            // ....
+        }
+    - These are called "type bounds" and are part of the Get Put Principle (or PECS) covered more in "Wildcards" below
+    - Multiple bounds 
+      - A is a class or interface. The others are all interfaces. 
+          <T extends A & B & C & ...>
+    - Technical note - these two are the same 
+        class SomeClass<T> { .... }
+        class SomeClass<T extends Object> { .... }
+
+
+  - Wildcards 
+    - When a generic extends another generic, sometimes you have problems
+    - Example 
+      - List<String> is not a subclass of List<Object>
+          class ArrayList<E> implements List<E> {
+              boolean addAll(Collection<E> c) {...}
+          }
+          
+          List<String> strings = new ArrayList<>();
+          
+          List<Object> objects = new ArrayList<>();
+          objects.addAll(strings); // compile-time error!
+
+    - Wildcards are the solution 
+      - If S is a subtype of T then type List<S> is considered to be a subtype of List<? extends T>
+      - If S is a supertype of T then List<S> is considered to be a subtype of List<? super T>
+      - Extends - fixes the above 
+          boolean addAll(Collection<? extends E> c) { ... }
+
+      - Super - or if you wanted to go the opposite direction from strings to objects (more general)
+          boolean addAll(Collection<? super E> c) { ... }
+
+      - The "Get and Put Principle" can help you figure out whether to use extends or super, but the example they gave wasn't very clear 
+    - This lesson was not really well explained 
+
+
+  - Generics and Reflection
+    - Methods to help with generics and reflection 
+      - Class<T>
+        - getGenericSuperclass()
+        - getGenericInterfaces()
+      - Method
+        - getGenericParameterTypes()
+        - getGenericReturnType()
+        - toGenericString()
+      - Type
+        - GenericArrayType
+        - ParameterizedType
+        - TypeVariable
+        - WildcardType
+    - This lesson was not really well explained 
+
+
+  - Reification
+    - Some type information is erased during compilation, so not all types are available at runtime
+    - This lesson was not really well explained 
+
+
+  - Type Erasure
+    - In Java, generic type information is erased during compilation so all of the following will have the same types during runtime 
+        List list = new List();
+        List<Integer> list1 = new List<>();
+        List<String> list2 = new List<>();
+    - We write |T| for the erasure of type T
+
 
 
 - Collections framework
