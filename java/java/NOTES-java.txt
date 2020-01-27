@@ -1597,7 +1597,7 @@ https://hyperskill.org/knowledge-map/73?v=table
         List<Integer> list1 = new List<>();
         List<String> list2 = new List<>();
     - We write |T| for the erasure of type T
-
+    - This lesson was not really well explained 
 
 
 - Collections framework
@@ -3035,6 +3035,151 @@ https://hyperskill.org/knowledge-map/73?v=table
       - 0-65535, preferably > 1024
     - 2 important classes - Socket, ServerSocket
     - Lesson has a good example of a basic client+server app 
+
+
+- Design patterns
+  - Builder
+    - A type of creational design pattern
+    - To create complex objects without constructor pollution 
+    - Theory 
+      - Builder interface 
+      - ConcreteBuilder class implements Builder
+      - Director manages the object creation process
+      - Product is the complex object constructed
+    - Implementation 
+      - The example they give just has a "builder" class inside a regular class. Seems much simpler than the theory. 
+    - Results in nice neat code like this 
+        AlertDialog dialog = new AlertDialog.Builder()
+            .setTitle("The title")
+            .setText("The text")
+            .setApplyButton("Okay")
+            .setCancelButton("Cancel")
+            .build();
+    - Very powerful, especially in combination with Composite pattern, Fabric patterns, etc 
+
+
+  - Decorator
+    - Rather than extending more and more classes, wrap an object in layers of additional objects that add the extra behavior, functionality 
+    - Examples 
+      - caching the work results
+      - measuring the execution time of methods
+      - user access control
+    - Theory 
+      - Component interface 
+      - Multiple concrete Component class implements the interface 
+      - Decorator abstract class holds the component and overrides some methods 
+      - Multiple concrete Decorator extends Decorator class
+    - Summary 
+      - If you want to add attributes, behaviors, etc to a class but want to avoid an explosion subclass permutations for every possible combination 
+      - Wrap the original in multiple layers. Each layer adds one modification
+      - End result is you can mix and match wrapper layers for any possible permutation you could want to create 
+
+
+  - Template method
+    - A type of behavioral pattern 
+    - Defines the skeleton of an algorithm in an operation, leaving some steps to subclasses
+    - Theory 
+      - Abstract class describes primitive operations 
+      - Multiple concrete classes implements the primitive operations
+    - Summary
+      - It's basically an abstract class with some concrete and some abstract methods 
+      - Abstract class 
+        - Stuff that will be shared is a concrete method
+        - Stuff that will vary is an abstract method 
+      - Multiple concrete classes extend the abstract class
+        - They rely on its concrete methods that all have in common 
+        - But implement the abstract methods for their custom needs 
+
+
+  - Observer
+    - A type of behavioral pattern 
+    - Notify observers of updates and changes 
+    - Defines publisher-subscriber dependencies and the subscription mechanism
+    - Low coupling between publisher and subscriber 
+    - Theory 
+      - Observable - subscribes observers, removes them, and notifies them about the changes
+      - Concrete Observable - implements Observable operations and describes some states
+      - Observer - subscribes to Observable and listens to its notification
+      - Concrete Observer - implements Observer interface and reacts on update notification 
+
+
+  - Facade
+    - Unified interface to a group of subsystem interfaces
+    - Makes a complex set of systems easy to use 
+    - Example - a car 
+
+
+  - Singleton
+    - When you only want one instance of the class in the entire application 
+    - Example database connections, sockets, logger 
+    - Implementation 
+      - Constructor is private 
+      - Private static variable holds the only instance 
+      - Public static method returns this only instance 
+    - Example 
+        class Singleton {
+            private static Singleton instance = new Singleton();
+            private Singleton() { }
+            public static Singleton getInstance() { return instance; }
+        }
+    - Lazy initialization
+      - If it is slow to initialize, you can do so on the first call 
+          public static Singleton getInstance() {
+              if (instance == null) {
+                  instance = new Singleton();
+              }
+              return instance;
+          }
+    - Threads 
+      - By default singletons are not safe in multi-threaded environments 
+    - Criticism 
+      - Introduces global state to the application 
+      - So don't over use it 
+
+
+  - Strategy
+    - Useful if you have a tangled mess of conditionals and need to add a new one from time to time 
+    - It defines a family of algorithms, encapsulates each in a separate class and makes them interchangeable within that family
+    - Algorithms executed in different branches are moved into their own classes called strategies
+    - Classes represent algorithms, not entities 
+    - Steps 
+      - Create Strategy interface or abstract class
+      - Each algorithm belongs in its own class that implements the Strategy interface 
+      - Context class delegates execution to an instance
+    - Example 
+        interface Message {
+            void send();
+        }
+        
+        class SmsMessage implements Message {
+            @Override
+            public void send() { .... }
+        }
+        
+        class EmailMessage implements Message {
+            @Override
+            public void send() { .... }
+        }
+
+        class MessageSender {
+            private Message method;
+            
+            public void setMethod(Message method) { 
+                this.method = method;
+            }
+        
+            public void send() {
+                this.method.send();
+            }
+        }
+
+
+  - Encapsulating object creation
+    - 
+
+
+
+
 
 
 - Spring Boot
