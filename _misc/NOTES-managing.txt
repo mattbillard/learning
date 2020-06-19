@@ -1,0 +1,9 @@
+MANAGING
+
+How I think about solving problems
+http://brianyang.com/how-i-think-about-solving-problems/
+- Is this really a problem?
+- Does the problem need to be solved?
+- Does the problem need to be solved now?
+- Does the problem need to be solved by me?
+- Is there a simpler problem I can solve instead?

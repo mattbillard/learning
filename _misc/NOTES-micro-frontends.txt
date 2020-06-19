@@ -1,0 +1,190 @@
+2020-04
+
+
+https://micro-frontends.org/
+...
+
+https://www.youtube.com/watch?v=dTW7eJsIHDg
+...
+
+- Teams are organized by product - design, UI, BE 
+- Technically you could have different UI frameworks: Angular, React, Vue
+
+
+
+Micro Frontend Curry
+https://levelup.gitconnected.com/micro-frontend-curry-506b98a4cfc0
+- Decent, fast, very highlevel intro article to micro frontends 
+- Why we need Micro-frontend?
+  - Easier to upgrade a micro app than a large one 
+  - Mix and match, try out various tech stacks 
+  - Works well with backend microservices
+  - Teams are cross-discipline and focused on e2e delivery 
+- Implementation 
+  - iFrames 
+  - Web Components
+  - Readymade framework
+    - Single SPA 
+    - ARA Framework
+    - Tailor.js 
+
+
+Martin Fowler - Micro Frontends
+https://martinfowler.com/articles/micro-frontends.html
+- "An architectural style where independently deliverable frontend applications are composed into a greater whole"
+- Purpose 
+  - Scaling frontend development 
+  - Allow many teams can work simultaneously on a large and complex product
+- History 
+  - Monolithic backends -> microservices
+  - Inspired frontend to do simlarly 
+- Advantages
+  - Maintainable 
+    - Incremental upgrades
+    - Can try new technologies in small doses 
+    - Don't need to rewrite everything to add new technologies
+    - Smaller, more cohesive and maintainable codebases
+  - Independent deployment
+    - Should have separate CI/CD pipelines 
+    - Easier to develop, test deploy 
+    - Less risk when changing one app 
+  - Autonomous teams
+    - Scalable organizations
+    - Teams organized around vertical business functionality rather than horizontal technical capabilities
+    - Teams own a whole slice of customer value 
+    - Teams can move quickly, flexibly, easily 
+    - Teams don't conflict with each other 
+  - User experience 
+    - But still single, cohesive product / user-experience 
+- Architectural considerations 
+  - Need a container application 
+    - Common components - header and footer 
+    - Cross-cutting concerns - authentication and navigation
+    - Lays out and composes micro apps 
+  - Approaches 
+    - Server-side template composition
+      - Old fashioned, server side includes 
+    - Build-time integration
+      - List them as deps in a package.json 
+      - Build them into one SPA 
+      - Advantages 
+        - Can de-dupe common deps 
+        - Can enforce certain standards in the micro frontends 
+          - Security / up-to-date packages
+          - No global CSS 
+      - Disadvantages 
+        - Need to recompile and rerelease when any micro frontend changes 
+        - aka "lockstep release process"
+        - Ever larger build times 
+    - iFrames 
+      - A type of run-time integration 
+      - Advantages 
+        - Issolated styles and global vars 
+      - Disadvantages 
+        - Interaction between components 
+        - Routing, history, and especially deep-linking more complicated
+        - Responsive design 
+    - Run-time integration via JavaScript
+      - Each micro frontend included as a script tag with a global function or component as an entry-point 
+      - Container app determines which one to mount by calling its function or component 
+      - Better still, only download the script tag if necessary 
+      - This is the recommended approach 
+      - Advantages
+        - Each micro frontend can be deployed separately 
+        - They can interact with each other 
+      - Disadvantages 
+        - Duplicate deps across different micro frontends 
+      - Note - each micro frontend gets its own redux store 
+  - Styling
+    - Problem - teams that write global CSS will impact each other 
+    - Potential solutions 
+      - Naming conventions - e.g. BEM 
+      - CSS pre-processing (e.g. SASS) + nested CSS 
+      - CSS modules 
+      - CSS-in-JS 
+      - Shadow DOM 
+  - Shared component libraries
+    - Visual consistency and code reuse 
+    - Usually better to build over time than try to plan and build something predicting all future needs 
+  - Cross-application communication
+    - Recommend having them communicate as little as possible reduce tight-coupling 
+    - Send messages btw each other, not share state 
+    - Solutions 
+      - Custom JS events 
+      - React style - pass data and callbacks down 
+      - Use the address bar 
+    - Changes can break contracts between apps so be careful 
+      - Might require clear contracts and functional testing 
+  - Backend 
+    - See BFF - Backend For Frontend 
+  - Testing
+    - See Test Pyramid
+    - Use functional testing to 
+      - Ensure page is assembled correctly 
+      - User journeys across apps 
+  - Infrastructure
+    - Each micro frontend gets its own 
+      - Git repo 
+      - Travis CI pipeline 
+      - Amazon S3 bucket 
+- Example 
+  - The example is useful and good 
+  - Noteable 
+    - History is passed and shared between different React routers 
+    - React and react-dom are marked as 'externals' in the webpack configs so they are shared across all 
+- Downsides
+  - Duplicate deps / payload size 
+    - If you extract out common deps, the user doesn't need to download duplicate code 
+    - However, you need to coordinate across multiple projects when upgrading common packages 
+  - Environment differences
+    - It simplifies local development to able to run a micro frontend both as part of the whole and as standalone
+    - However, it makes it difficult to catch CSS conflicts 
+  - Operational and governance complexity
+    - More repos, pipelines, etc 
+    - Requires more automation 
+    - Goverance is more decentralized 
+    - Frontends may become more inconsistent 
+
+
+Thought Radar 
+https://www.thoughtworks.com/radar/techniques?blipid=201911056
+- Recommend against "front-end integration via artifact"
+  - Usually pub to npm registry, pull all into one, and then build
+  - However, any change to an artifact requires rebuilding whole thing
+  - Slow 
+
+
+Building Microfrontends
+https://medium.com/@_rchaves_/building-microfrontends-part-i-creating-small-apps-710d709b48b7
+https://medium.com/@_rchaves_/building-microfrontends-part-ii-joining-apps-together-dfa1b6f17d3e
+- This nomenclateur is good 
+  - Page > App > Component 
+  - Page - collection of apps 
+  - App - something that can be run by itself 
+  - Component - needs to be run in an app (e.g. date picker)
+- Example 
+  - A bit outdated at this point. Not a really good realworld SPA example 
+
+
+
+The Strengths and Benefits of Micro Frontends
+https://www.toptal.com/front-end/micro-frontends-strengths-benefits
+- iframes 
+  - Disadvantages
+    - Multiple network calls 
+    - CORS and code sharing between parents and children 
+
+
+
+
+- Thoughts 
+  - Parent app just injects child script tags and root component 
+    - What happens if instances of child on same page - same time and one after another 
+  - How to share authentication and global app state between micro frontends? 
+  - What about running just one micro frontend for local development?
+  - What if you want a micro frontend to use a widget from another group?... Do you have to head towards artifacts...or not...???
+    - Can you put a Vue app in another Vue app? or React in React?
+
+- More separate = harder to share UI components, events, data, widgets
+?- How do we mount and unmount components?
+

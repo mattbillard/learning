@@ -54,8 +54,16 @@
     const App = (props) => {
       return (
         <div>
-          <ExampleChildren><Bar name="ExampleChildren" /></ExampleChildren>
-          <ExampleRenderProps render={(x) => <Bar name={x} />} />
+          <ExampleChildren>
+            <Bar name="ExampleChildren" />
+          </ExampleChildren>
+
+          <ExampleRenderProps 
+            render={(x) => 
+              <Bar name={x} />
+            } 
+          />
+
           <ExampleHOC />
         </div>
       )
