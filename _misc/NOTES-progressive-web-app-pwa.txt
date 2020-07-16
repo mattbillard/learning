@@ -1,0 +1,23 @@
+PROGRESSIVE WEB APPS (PWA)
+2020-06
+
+MDN
+https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps
+- Technically app needs following 3 to be a PWA 
+  1. Secure contexts (HTTPS)
+  2. Service Worker(s)
+    - Used for caching 
+  3. Manifest file
+
+
+Making PWAs work offline with Service workers
+https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Offline_Service_workers
+- Useful example of how to do service workers + caching 
+
+
+What are Progressive Web Apps?
+https://web.dev/what-are-pwas/
+- This article defines PWAs as having the following (doesn't quite sync with Mozilla's definition)
+  1. App-like experience and capabilities
+  2. Offline capability
+  3. Installable 

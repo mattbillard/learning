@@ -1,0 +1,29 @@
+REACT - FORMS
+2020-07
+
+FORMIK
+- Makes forms easier with React 
+- Pros 
+  - Reduces boilerplate for 
+    - Initial values
+    - Validate on blur and on submit
+    - Show errors
+    - isSubmitting
+  - Clear validation logic
+  - Standardizes your apps' approach to forms
+- Cons 
+  - Assumes you are workign with default HTML components
+    - <Field> is not useful if you are using a UI toolkit with its own form components and form field wrappers
+  - It's really designed for forms that are submitted
+    - Not for form inputs that just change other componets in real tim
+    - Example - a search that filters other components or filters on the left of an e-commerce site 
+    - It's quite difficult to access the form values and change handlers outside the form component 
+  - Doesn't handle showing/hiding dependent fields
+    - Again, it's quite difficult to access the form values and change handlers outside the form 
+    - For example - the onChange prop has no callback and does not return a promise, so can't change a value and then figure out which fields should be visible 
+
+YUP
+- Very useful library that makes form validation a breeze 
+- Examples
+    yup.string().email()
+    yup.number().required().positive().integer()

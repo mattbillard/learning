@@ -1,0 +1,33 @@
+REACT - CSS-IN-JS
+2020-05
+
+- Pros
+  - CSS for a component is written in the file 
+  - Some solutions avoid global CSS 
+- Cons 
+  - Radically different from regular CSS without much benefit 
+  - New syntax - with many libs you can't write CSS. Need to transcribe into JavaScript objects 
+  - Many solutions require you to give a new name to *every* styled component. Instead of something simple like
+        <Button className={myClassName} />
+      You have something like this
+        const StyledButton = styled(Button)({myCSS....});
+        <StyledButton />
+  - Fads / locked in - when the next React CSS fad arrives, you'll have to rewrite all your styling
+  - Possibly slower - browser has to process JS and then make CSS 
+  - Possibly error prone - if JS fails, possbily no CSS 
+  - Good article about cons 
+    - https://medium.com/valtech-design/why-i-dislike-existing-css-in-js-solutions-for-react-7b81786e0fd5
+- Misc 
+  - JSS has no *exclusive* benefit other than that it keeps CSS in the same file as the component. Alternative solutions are better. 
+    - CSS modules + TypeScript - regular CSS syntax, avoid global CSS and conflicts, error checking during compilation 
+    - Noteably Vue solves all these problems automatically out of the box with actual CSS, in the same file as the component, with optional namespacing 
+  - Huge list of CSS-in-JS solutions. (Seems like everyone in the React community wanted to try writing their own)
+    - https://github.com/MicheleBertoli/css-in-js
+  - Graph of popularity
+    - https://npmcharts.com/compare/glamor,aphrodite,radium,glamorous,styled-components,jss,emotion
+  - Styled Components - most popular solution 
+    - https://styled-components.com/
+  - React Material-UI implements their framework with JSS 
+  - List of many different React CSS solution paradigms (e.g. inline styles, JSS, CSS modules, etc)
+    - https://survivejs.com/react/advanced-techniques/styling-react/
+    - https://www.robinwieruch.de/react-css-styling

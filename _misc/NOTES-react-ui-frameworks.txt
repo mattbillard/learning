@@ -1,9 +1,42 @@
 REACT UI FRAMEWORK RESEARCH
 2019-10-23
 
+
+
+BLUEPRINT JS 
+- Made by Palantir 
+- Pros 
+  - Strong emphasis on functionality and features 
+  - Extremely professional and thorough with many well thought out, subtle extras 
+  - Lots of component types, including some othes don't have
+    - Editable text
+    - Hotkeys 
+    - Resize sensor 
+    - Skeleton (gray boxes in the shape of content while content loads)
+    - Elipsis overflowed text 
+    - Tag input (tag search box)
+    - Context menu (right-click menu)
+    - Side drawer 
+    - Toast 
+    - Lots of date / time inputs 
+    - 300 icons 
+    - Lots of different selects with search, multi, etc 
+    - Table with sorting, virtualized windowing, selecting, editing (Not as powerful as AG-Grid)
+    - And more: Overflow list, Pannel stack 
+  - Often you can use a component or just add classes to a regular HTML component 
+  - In order to not conflict, they offer styled HTML tags that start with capital letters
+    - Example: <H1> <Pre> etc 
+  - Sketch files 
+  - Dark theme 
+- Cons 
+  - Not as much emphasis on design as Ant Design. Looks kind of plain. Seems like a project lead by engineers. 
+
+
 ANT DESIGN (web)
 - Pros 
-  - Great clean white design
+  - Design 
+    - Strong emphasis on design, design philosophy, etc 
+    - Great clean white design
   - Lots of extra features
     - Rate (stars)
     - Calendar 
@@ -13,9 +46,12 @@ ANT DESIGN (web)
     - Number input 
     - @mention 
     - Result ("Yay purchase complete" page)
+  - Stronger emphasis on design philosophy, color palette, etc 
 - Cons 
   - Typography - sometimes needs components (but it seems only required if you want it)
   - No clear documentation on navbar (or dark navbar) but it does exist 
+- Misc 
+  - Chinese company. Many pages are only in Chinese and have not yet been translated to English
 
 
 ANT DESIGN MOBILE 
@@ -48,7 +84,10 @@ MATERIAL UI
   - Some extra features
     - Mobile friendly datepicker and timepicker 
     - Bottom navigation
+  - Ready-made page templates - sign in, sign up, dashboard, etc 
 - Cons 
   - Typography - always requires components even for <p> tags! (e.g. <Typography component="p">)
-  - JSS is very awkward and annoying
+  - CSS-in-JS is very awkward and annoying
   - Need to do a lot of CSS yourself for padding and margins 
+  - Just seems... not as well designed, solid, complete as others 
+  - The site even has ads on it...

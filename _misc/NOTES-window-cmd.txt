@@ -1,0 +1,21 @@
+
+WINDOWS CMD
+2020-06
+
+- Add to PATH
+    set PATH=C:\foo\bar;%PATH%
+- Comment 
+    REM some comment 
+    :: some comment 
+- Execute one script from another
+    call example.cmd 
+    call npm run example
+- Kill process 
+    taskkill /F /im example.exe
+- Sleep
+    sleep 5
+- Start a process in the background
+    start /b node server.js 
+- Turn off echo 
+  - Put this at the top of every script 
+    @echo off 
