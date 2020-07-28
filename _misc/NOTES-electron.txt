@@ -1,0 +1,47 @@
+ELECTRON
+2020-07
+
+- Benefits
+  - Cross platform 
+    - Easy desktop app development 
+    - Code once, distribute everywhere - Windows, Mac, Linux
+    - One codebase. One team. Same product on all platforms. Solve bugs once. 
+    - Saves time and money 
+  - Use all the awesome open-source web software
+  - There are many web devs so there's a large pool of developers
+  - Node can access operating system 
+- History
+  - Created for Atom IDE. Supported by Github 
+  - Electron was formerly known as Atom Shell
+- Used to create 
+  - Visual Studio Code, Atom, and more 
+- Examples
+  - https://github.com/electron/electron-quick-start
+  - https://github.com/electron/electron-api-demos
+  - https://github.com/electron/fiddle
+- Development 
+  - npm run dev - opens Electron app with Chrome debugger open 
+  - Electron fiddle 
+    - Easy way to try out tests with Electron 
+    - Uses Electron Forge 
+    - https://www.electronjs.org/fiddle
+  - Electron Forge 
+    - Combines best build tools 
+    - Webpack, TypeScript 
+  - The main process does not have Chrome Devtools
+- Security 
+  - Electron gives you more power than when you are only in the browser
+  - Node can access the file system, shell, operating system, and more, so be careful 
+  - So be especially careful what code you incorporate into your project (e.g. packages or other code)
+  - Be more careful of the typical vulnerabilities of user input, injected content, eval, 3rd part script tags, cross-site-scripting, etc 
+  - // Which raises the question why there isn't more security around VSCode plugins as it is an Electron app
+  - Make sure to keep Electron and Node up-to-date to incorporate their latest security patches 
+  - // Does OpenFin limit access to make Electron more secure?
+  - They have great documentation on what not to allow and why 
+  - Electron automatically approves all permission requests (e.g. notification, location, etc)
+    - // Does OpenFin do this too 
+  - // Content-Security-Policy can be set with an html meta tag 
+  - By default, you can only use https 
+- Electron Forge 
+  - Seems to be the recommended tool to initialize a new project and build
+  - https://www.electronforge.io/
