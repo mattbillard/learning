@@ -1,0 +1,34 @@
+OPENFIN
+7/2020
+
+- Built on Chromium and Electron
+- Features
+  - Workspace management
+    - Layouts, tabs, windows, snapshots (groups of windows)
+  - Notifications 
+    - Collects all OpenFin apps' notifications in a notification center 
+  - Security 
+    - Apps are sandboxed from OS and each other 
+    - Administrators can control security - whitelist domain, control clipboard and ability to spawn processes 
+    - Versus Electron 
+      - OpenFin seems to be Electron + security (good configuration and some extras) + intended to be an ecosystem (e.g. workspaces, inter-app communication, etc)
+      - Remove Node as an option in the renderer process
+      - Prohibit exposure of any Electron API (private or public) to a third party app or website
+      - Supposedly Electron disables parts of the Chromium sandbox that OpenFin fixes 
+        - Ability to whitelist / blacklist certain domains 
+        - OpenFin applies Chromium group policies to OpenFin. Electron supposedly does not. 
+  - Adapters 
+    - Can embed Java, .NET, Adobe Air, and WPF (Windows UI framework)
+  - Interoperability 
+    - Works with Bloomberg, Excel, others 
+- License 
+  - Community (free) and Enterprise
+  - Requires a developer license 
+- Development 
+  - There is a CLI 
+  - Chrome debugger
+    - Can use Chrome's debugger if you go to http://localhost:9090
+    - Controlled by config.devtools_port
+  - Starter project 
+    https://github.com/openfin/starter-typescript-react-sass
+
