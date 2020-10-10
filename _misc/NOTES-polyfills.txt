@@ -1,0 +1,20 @@
+POLYFILLS
+9/2020
+
+- There seem to be multiple great ways to not force all browsers to load all of Core-JS (or other polyfill)
+  - https://webpack.js.org/guides/shimming/#loading-polyfills
+  - https://philipwalton.com/articles/loading-polyfills-only-when-needed/
+
+- Core-JS 
+  - Including part of Core-JS is only slightly smaller than the whole thing b/c there's a large "core" set of code 
+    https://medium.com/hackernoon/polyfills-everything-you-ever-wanted-to-know-or-maybe-a-bit-less-7c8de164e423
+  - So it seems like it might be simplest to just load all of Core-JS for older browsers and none for newest browsers rather than trying to pick individual small pieces
+  - Core-JS does not include Fetch. Seems like Github's whatwg-fetch is popular
+
+- Babel 
+  - babel-polyfill has been deprecated
+  - @babel/preset-env uses core-js
+
+- polyfill.io
+  - User's browser makes an XHR and gets just the polyfills it needs 
+  - Sounds awesome and easy but it's a blocking script and therefore slows your site down 

@@ -1,0 +1,187 @@
+WEBPACK
+9/2020
+
+
+Developer Guides 
+- Development 
+  - Webpack has 3 ways to run whenever there are changes
+    1. webpack's Watch Mode
+    2. webpack-dev-server - use this one most of the time 
+      - Doesn't write any output files after compiling
+      - It keeps bundle files in memory and serves them as if they were real files
+    3. webpack-dev-middleware
+      - Designed to be used with Express for more custom workflows 
+- Code splitting 
+  - Three general approaches to code splitting available:
+    1. Entry Points - Manually split code using entry configuration.
+      - Pros - Easiest. Most manual 
+      - Cons - any duplicate code will be included in each modules
+      - Tip - multiple entry points per page is not as good as 1 entry point with multiple imports
+    2. Prevent Duplication - Use the SplitChunksPlugin to dedupe and split chunks.
+      - Seems easy and automatic. Just a change to the webpack config 
+    3. Dynamic Imports - Split code via inline function calls within modules.
+      - await import(/* webpackChunkName: "lodash" */ 'lodash');
+      - Content will be loaded asynchronously 
+  - Prefetching/Preloading modules
+    - You can tell the browser to load something ahead of time 
+  - Webpack has an offical bundle analysis tool to show you what's largest 
+- Build Performance
+  ***- It has a lot of tips 
+- Scaffolding
+  - There is a webpack-cli to help scaffold new projects 
+- Dev vs prod 
+  - Dev - we want strong source mapping, localhost server with live reloading / HMR
+  - Prod - we want minified bundles, lighter weight source maps, optimized assets
+  - webpack-merge - used to merge multiple webpack configs together 
+- Lazy loading / dynamic imports 
+  - Need to use default export 
+- Shimming
+  - Global vars 
+    - In order to provide a global var like jQuery 
+      plugins: [
+        new webpack.ProvidePlugin({ 
+          $: 'jquery' 
+        })
+      ]
+  - Polyfills 
+    - Great section on how to only load polyfills for old browsers 
+- TypeScript 
+  - Imports
+    - In order to do import _ from 'lodash'; you need the following settings in tsconfig
+        "allowSyntheticDefaultImports":true 
+        "esModuleInterop":true
+      Otherwise you can do 
+        import * as _ from 'lodash';
+  - It has an example for handling typings of svg files 
+      // custom.d.ts
+      declare module "*.svg" {
+        const content: any;
+        export default content;
+      }
+- Progressive Web Application
+  - Has good example 
+- Public Path
+  - Defines the base path from which your app is served 
+  - Example of making a process env available to the JS (using same ProvidePlugin as we used for global vars like jQuery)
+      plugins: [
+        // This makes it possible for us to safely use env vars on our code
+        new webpack.DefinePlugin({
+          'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
+        }),
+      ],
+- CSS 
+  - It seems when you import CSS into JS, Webpack default to putting the CSS in the built JS file 
+  - To put built CSS in a CSS (not JS) file, you need to use a plugin like MiniCssExtractPlugin
+- Build errors 
+  - NoEmitOnErrorsPlugin - don't emit files if there is an error 
+
+
+Concepts 
+- Entry points 
+  - vendor 
+    - For webpack >= 4, it is not recommended to create a separate vendor entry point. Use the optimization.splitChunks option instead 
+  - multiple entry points 
+    module.exports = {
+      entry: {
+        pageOne: './src/pageOne/index.js',
+        pageTwo: './src/pageTwo/index.js',
+        pageThree: './src/pageThree/index.js'
+      }
+    };
+- Loaders 
+  - Transformations that are applied to the source code of a module 
+  - They are evaluated/executed from right to left (or from bottom to top)
+- Plugins
+  - Does what loaders cannot do 
+  - Written in Node. Has access to all the compiler life cycle hooks 
+  - You can write your own plugins to check and transform code 
+- Configuration 
+  - Can be written in TypeScript - or even CoffeeScript or JSX 
+- Module Resolution
+  - Imports can be written many ways 
+      import foo from 'path/to/module';
+      import '../src/file1';
+      import './file2';
+    - Also you can import from anywhere on your file system 
+      require('path/to/module');
+      import '/home/me/file';
+      import 'C:\\Users\\me\\file';
+- Targets
+  - Webpack can build for 
+    - Web (default)
+    - Node 
+  - You need separate configs for both 
+- Advantages over Grunt and Gulp
+  - Webpack is much newer and has much larger community
+  - Not 100% certain, but I don't believe Gulp or Grunt offer (At least they didn't when I used them years ago)
+    - Dev server, HMR 
+    - Tree shaking 
+    - Code splitting 
+    - Dynamic imports / lazy loading  
+    - Caching / manifest / PWA 
+
+
+- Useful loaders 
+  - babel-loader Loads ES2015+ code and transpiles to ES5 using Babel
+  - ts-loader Loads TypeScript 2.0+ like JavaScript
+  - icon-font-loader - convert SVGs to icon font 
+  - icons-loader - convert SVGs to icon font 
+- Useful plugins 
+  - duplicate-package-checker-webpack-plugin - warns when your bundle contains multiple versions of the same package
+  - purgecss - remove unused CSS classes 
+  - html-webpack-plugin - generates an HTML file which loads the JS output 
+  - clean-webpack-plugin - deletes the dist folder before each build 
+  - webpack-manifest-plugin - makes a manifest.json for caching 
+  - HtmlWebpackPlugin - Easily create HTML files to serve your bundles
+  - MiniCssExtractPlugin - creates a CSS file per JS file which requires CSS
+  - TerserPlugin - Uses Terser to minify the JS in your project
+  ***- npm-install-webpack-plugin - if you're missing an npm dep, it will auto install without you having to quit devServer (Very cool)
+  ***- ProfilingPlugin - helps determine why your Webpack build is slow 
+  - ProgressPlugin - shows build progress 
+  - SplitChunksPlugin - pull out code common to multiple modules 
+
+
+Webpack DevServer 
+- Useful options 
+  - port
+  - https: true 
+  - index: '', // Allows proxying when URI===''
+  - historyApiFallback: true  // Useful for HTML5 navigation. If page is 404, serves index 
+
+
+PARCEL QUESTIONS 
+- Compile to something other than ES5?
+- Supports...
+  Y- TypeScript
+  Y- React / JSX
+  Y- Sass
+  Y- Babel
+  Y- Dev server
+  Y- Source maps
+  Y- Code splitting (Automatically when it finds a dynamic import)
+?- Supports?
+  ?- Adding hash to filenames 
+  ?- Treeshaking 
+  ?- Minification + uglification 
+  ?- Globals like jQuery 
+  ?- Progressive web apps / service workers 
+  ?- Public Path / base path 
+  ?- imported CSS - put in JS or separate CSS file 
+  ?- Server side rendering 
+  ?- ProfilingPlugin
+  ?- DevServer proxy 
+- It even 
+  - Has instructions to debug in Chrome and VSCode 
+  - Will automatically install npm deps you require but haven't yet installed - all without quitting dev server 
+
+
+?- How does Parcel handle 
+  ?- Code splitting with de-duplication of common code 
+  ?- Better build errors?
+
+
+?- Try dropping Parcel into create-react-app
+  ?- Does it work? 
+  ?- Is it simpler, smaller, faster?
+  ?- Does Jest still work?
+

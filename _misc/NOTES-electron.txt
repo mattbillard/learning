@@ -45,3 +45,10 @@ ELECTRON
 - Electron Forge 
   - Seems to be the recommended tool to initialize a new project and build
   - https://www.electronforge.io/
+
+
+Alternatives
+- There seem to some competitors growing in this space 
+  - OpenFin 
+  - Flutter (by Google. Written in Dart)
+  - Tauri

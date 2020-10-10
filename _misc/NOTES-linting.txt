@@ -1,0 +1,65 @@
+LINTING
+9/2020
+
+- Options 
+  JSLint, JSHint, JSCS, StandardJS, ESLint, TSLint
+  https://www.npmtrends.com/eslint-vs-tslint-vs-jshint-vs-jscs-vs-standard
+- JSLint
+  - Oldest. 2002
+  - Not very configurable 
+  - Not much documentation 
+- JSHint
+  - Forked JSLint 
+  - More configurable 
+  - Better documentation 
+  - Rules are too relaxed 
+- JSCS
+  - Many possible presets 
+  - Only detects style, not potential bugs
+- ESLint
+  - Most flexible - configurable, extensible 
+  - Most rules 
+  - Clearest rules 
+  - Best support for ES6 
+- TSLint
+  - Deprecated - Palantir officially announced in 2019 that TSLint would be combined into ESLint 
+
+
+ESLint
+- Config 
+  - Filename 
+    - .eslintrc.{js,yml,json}
+    - .eslintrc.js seems most flexible b/c you can use logic (e.g. dev vs prod) and comments 
+  - Can also be eslintConfig field in a package.json
+  - Cascading - eslint will search up the folder tree, combining settings in the config files it finds, so for ex, tests folder could have slightly different settings 
+- Defaults 
+  - Recommended 
+    - eslint:recommended
+- Plugins 
+  - "foo" and "eslint-plugin-foo" are the same 
+  - Scoped packages are slightly different
+      "@jquery/jquery", // means @jquery/eslint-plugin-jquery
+      "@foobar" // means @foobar/eslint-plugin
+  - The syntax is pretty specific when referencing them as plugins, extends, rules, and envs 
+- Fixing 
+  - When you run ESLint there is a flag to auto-fix most issues 
+- TypeScript 
+  - TSLint officially announced they will be combining into ESLint 
+  - Official
+    - @typescript-eslint/eslint-plugin
+    - @typescript-eslint/parser
+    - repo - typescript-eslint
+- Prettier 
+  - eslint-config-prettier 
+  - eslint-plugin-prettier
+
+
+Stylelint
+- For linting and formatting CSS 
+- Filename 
+  - .stylelintrc.{json,yaml,yml,js}
+- No default rules. Need to turn on each rule 
+  - Popular defaults 
+    - stylelint-config-recommended
+    - stylelint-config-standard 
+

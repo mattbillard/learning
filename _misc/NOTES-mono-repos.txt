@@ -1,0 +1,93 @@
+MONO REPOS
+9/2020
+
+- "One Git repo per team", or even better "as few Git repos as possible to get the job done"
+
+Advantages
+- Easier to share code 
+- Easier refactoring 
+- Reliability
+  - Because commits are made across multiple packages, you can reliably say all packages worked for each commit 
+- Standardization / quality across multiple repos 
+  - Easier to enforce same or latest deps 
+- Easier to understand project end-to-end 
+  - Smarter architecture decisions
+  - Fewer bugs 
+  - Less duplication 
+- Publishing 
+  - Avoid problems with cascading publishing
+    - C needs to wait for release of B which needs to wait for release of A 
+    - Bug in A might take a long time to show up in C 
+  - npm link can get very complicated very quickly when one has multiple branches 
+  - Can still be developed and deployed independently 
+  - Less work - set up CI/CD once
+- Easier integration tests 
+
+
+Negatives 
+- Difficult to limit developer access to parts of code 
+
+
+Options
+- npm trends
+  https://www.npmtrends.com/lerna-vs-@microsoft/rush-vs-northbrook-vs-bolt-vs-bit-bin
+  - lerna is clear clear winner 
+- Yarn workspaces
+  - Low level. Helps install same dep across multiple parts of a project. Specifically not meant to compete with Lerna. Lerna actually uses Yarn workspaces 
+- Bolt 
+  - From the same people who made Lerna just not nearly as popular 
+  - Advantage - structures things a little differently to ensure all packages use same deps 
+- Bit 
+  - Makes it easier to collaborate on UI components 
+  - Notifies user teams when there are changes 
+  - Requires hosting code in their hub 
+
+
+Resources
+- Comparison of solutions
+  - https://gist.github.com/morewry/d3419a38d74590493042544d4afa49a7
+- Advantages of monorepos 
+  - https://rushjs.io/pages/intro/why_mono/
+  - http://blog.shippable.com/our-journey-to-microservices-and-a-mono-repository
+
+
+Lerna 
+- Popularity 
+  - About 10x more popular than Rush 
+- Examples of monorepos 
+  - Babel, React, Angular, Ember, Meteor, Jest
+- Useful commands 
+  - lerna init - create a new lerna repo or upgrade an existing repo
+  - lerna bootstrap - installing all dependencies and linking any cross-dependencies
+  - lerna import <pathToRepo> - import new package
+  - lerna publish
+  - lerna changed - check which packages have changed since the last release
+  - lerna diff [package?] - diff all packages or a single package since the last release
+  - lerna run [script] - run an npm script in each package that contains that script
+  - lerna ls - list all of the public packages in the current Lerna repo.
+
+
+Rush 
+- Common commands 
+  - build vs rebuild 
+    - rush rebuild - does a full, clean build of every project in the repository
+    - rush build - builds only the projects that have changed
+    - rush rebuild --to <project>
+    - rush rebuild --from <project>
+  - rushx ____ - alias for `npm run ____`
+  - rush check - checks if different projects are depending on different versions of a dep 
+  - rush purge - remove all the temporary files created by Rush
+- Advantages 
+  - Parallel builds 
+  - Uses pnpmp - downloads shared deps only once and symlinks them into each of your projects 
+  - Enterprise policies - ensure same version of dep in all projects, approve new deps, review email addresses of contributors, 
+- Gotchas
+  - Adding packages 
+    - Don't run the following or it will confuse Rush - npm install, npm update, npm link, npm dedupe
+    - Commands 
+      rush add --package example-lib
+      rush add --package example-lib@1.2.3
+      rush add --package example-lib@1.2.3 --make-consistent
+- Misc 
+  - Prettier - the Rush team seems to really like Prettier 
+

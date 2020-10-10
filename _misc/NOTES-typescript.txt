@@ -1,0 +1,73 @@
+TYPESCRIPT
+9/2020
+
+
+- TS code can be converted to JS with the TS compiler or Babel 
+- Repo for types 
+  - https://github.com/DefinitelyTyped/DefinitelyTyped
+- JS championed by the TS team 
+  - Optional chaining (?.)
+    - Returns undefined if property or method doesn't exist 
+        foo?.bar?.baz?.();
+  - Nullish coalescing operator (??)
+    - Returns left side if right is null or undefined 
+        0 ?? 42;      // 0
+        '' ?? 42;     // ''
+        false ?? 42;  // false
+    - Better than || operator if you actually want false, 0, or ''
+      - e.g. 0 || defaultYouDontWantRightNow   // defaultYouDontWantRightNow
+- TSConfig  
+  - flags 
+    --baseUrl - base URL for non-relative import paths 
+    --module - allows you to pick output (e.g. CommonJs, ESM, UMD, AMD, etc)
+    --jsx - Support JSX in .tsx files with a few useful options 
+
+
+Babel vs TypeScript 
+  - Official example from Microsoft 
+    - Babel + TypeScript
+      https://github.com/Microsoft/TypeScript-Babel-Starter
+    - Babel + TypeScript + React + Webpack 
+      https://github.com/a-tarasyuk/react-webpack-typescript-babel
+- Community has mixed opinions at this point...
+  - Opinion: the two work perfectly together
+    - After a year long, official collab between the teams, Babel 7 added support for TypeScript 
+    - Babel strips all the types so it's much faster for local development compilation 
+    - Just run your TS compilation check as a separate process 
+    - There are a few TS features not supported by Babel but they're not common, so it's not a big deal 
+    - Use @babel/preset-typescript
+    - Nice detail 
+      - Instead of specifying a target like es6, Create React App allows you to say "support the last X browser versions"
+  - Opinion: TypeScript is clear winner
+    - https://blog.logrocket.com/choosing-between-babel-and-typescript-4ed1ad563e41/
+    - Babel 7 added support for TypeScript 
+    - However, Babel doesn't check types... which defeats the purpose 
+    - Babel also deletes other things like decorators (mostly a problem for Angular), const enums (a specific subset of enums), 
+    - So you basically have to run tsc and then Babel 
+    - Babel is more extensible and has its uses: support cutting edge JS, strip out unused imports + other optimizations
+  - Subtle differences in output (with Babel being slightly more correct)
+    https://kevinwil.de/differences-in-output-of-typescript-compiler-and-babel-for-classes/
+  - Babel not necessary for Node (because you control the version of JS)
+    - https://stackoverflow.com/a/49624611
+
+
+Babel 
+- List of plugins 
+  https://github.com/babel/awesome-babel
+
+
+Core-JS 
+- Babel is a transpiler. Core-JS is a polyfill. They work really well together. Babel can automatically pick which parts of core-js are necessary 
+- https://medium.com/hackernoon/polyfills-everything-you-ever-wanted-to-know-or-maybe-a-bit-less-7c8de164e423
+
+
+Misc 
+- Webpack 
+  - ts-loader is faster than awesome-typescript-loader
+- TypeScript + Node 
+  - ts-node 
+    - Run TS files with Node
+  - ts-node-dev 
+    - Like ts-node but with a watch 
+    - Better than using Nodemon with ts-node 
+      nodemon --watch "src/**" --ext "ts,json" --ignore "src/**/*.spec.ts" --exec "ts-node src/index.ts"

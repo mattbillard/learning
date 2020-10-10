@@ -3,14 +3,18 @@ LEARNED - SVGs
 
 - Create-React-App shows you importing and using SVGs like this
 
-    import logo from './logo.svg';
-    <img src={logo} />
+  import logo from './logo.svg';
+  <img src={logo} />
 
 
 
 - There's another way that *might* allow for easier CSS styling (e.g. color)
   - From https://www.apollographql.com/docs/tutorial/introduction
   
-      import { ReactComponent as HomeIcon } from '../assets/icons/home.svg';
-      <HomeIcon />
+    import { ReactComponent as HomeIcon } from '../assets/icons/home.svg';
+    <HomeIcon />
+
+
+- Valid HTML
+  <img class="logo" src="./webpack-logo.svg" alt="webpack logo">
 

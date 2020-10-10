@@ -1,0 +1,81 @@
+MISCELLANEOUS
+9/2020
+
+- mrm
+  - Manage all your dot files (e.g. .gitignore, .eslintrc, etc) in one place 
+- node version managers 
+  - nvm - for Mac/Linux 
+  - nvm-windows - nvm for Windows 
+  - nvs - might work on both Mac and Windows 
+- npm-check-updates or npm-check 
+  - Upgrades your package.json dependencies to the latest versions
+- TypeDoc 
+  - Generates documentation automatically from comments 
+- Chat rooms 
+  - Gitter 
+  - Discord 
+- ShellJS
+  - Allows you to type out shell commands via node in Windows 
+- CommonJS, AMD, UMD, ES Modules 
+  - Fantastic and concise article outlining the differences
+    https://dev.to/iggredible/what-the-heck-are-cjs-amd-umd-and-esm-ikm
+  - CommonJS (aka require statements)
+    - This is older. Node started with this but supports ESM with Node v13 
+    - Browserify, RequireJS, SystemJS  - tools to enable code written for CommonJS to be used in the browser 
+  - ESM (aka import statements) seems to be the clear winner
+    - It is actually supported by most modern browsers and Node 
+      https://caniuse.com/es6-module
+  - CommonJS vs ESM 
+    - https://medium.com/webpack/the-state-of-javascript-modules-4636d1774358
+    - CommonJS is dynamic - require can change during runtime 
+    - ESM is static - imports and exports cannot change at runtime. They are evaluated before the rest of the code. 
+- .editorconfig 
+  - Use this to make sure IDEs follow the official formatting for your project 
+  - Seems like VSCode might need a plugin to support it 
+  - Seems like Prettier could enforce a bunch of this (e.g. indentation)
+- Yarn 
+  - Article about why yarn is no longer necessary with recent npm improvements 
+    https://iamturns.com/yarn-vs-npm-2018/
+- Locale formatting 
+  - JS has some built in methods to format numbers, currencies, dates, etc 
+  - date.toLocaleString()
+  - number.toLocaleString()
+- Intl.RelativeTimeFormat()
+  - Relative dates in words 
+- Lighthouse 
+  - Free tool from Google to assess your performance, accessibility, progressive web apps, SEO and more
+- Mermaid
+  - Markdown -> UML diagrams 
+- label
+  - JS equivalent of goto statement. Could be useful to break out of a map or forEach 
+- Sourcemaps 
+  - Useful intro article 
+    https://blog.teamtreehouse.com/introduction-source-maps
+    - Comment at the bottom of the JS file tells the browser where to find the source map 
+      //# sourceMappingURL=....
+- .browserslistrc 
+  - Convention - file where you list which browsers you'd like to support
+  - Babel and other tools look here (or in package.json) to figure out what features need to be polyfilled, etc 
+- CoffeeScript 
+  - Seems like a predecessor to ES6 
+  - Pros 
+    - Syntactic sugar - classes, lambdas (Made obsolete by ES6)
+    - Prevents bad code like global vars (Made obsolete by strict mode and later modular JS code)
+  - Cons 
+    - Slow compiler?
+    - Difficult to map JS back to CoffeeScript to debug 
+  - Was promoted by the Ruby community 
+  - White space was important (e.g. like Python)
+- Forward vs reverse proxies
+  - https://smartproxy.com/blog/the-difference-between-a-reverse-proxy-and-a-forward-proxy
+  - Forward proxy 
+    - Between client and internet 
+    - e.g. used by corporations to restrict internet traffic, hiding identity, avoiding firewalls 
+  - Reverse proxy 
+    - Between the server and clients 
+    - e.g. used as load balancer, caching, single point of access to micro-service architecture 
+- npm-run-all 
+  - Useful for running multiple npm commands either sequentially or in parallel
+
+
+
