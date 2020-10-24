@@ -1,0 +1,164 @@
+VSCODE
+9/2020
+
+
+DEBUGGING 
+Sample .vscode/launch.json config 
+- Seems like VSCode has improved considerably over the last 2-3 years. Configs have gotten simpler and generally just work. 
+    // npm run XXXX 
+    {
+      "name": "npm run XXXX",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "XXXX"],
+      "console": "integratedTerminal",
+    }
+
+    // node foo/bar.js
+    {
+      "name": "node foo/bar.js",
+      "type": "node",
+      "request": "launch",
+      "program": "./foo/bar.js",
+      "args": ["--args", "--if", "-u", "--need", "--them"],
+      "console": "integratedTerminal",
+    }
+
+    // Debug current test 
+    {
+      "name": "Debug current test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest",
+      "args": [
+        "--config",
+        "${workspaceRoot}/jest.config.js",
+        "--runInBand",
+        "-u",
+        "--coverage",
+        "false",
+        "${relativeFile}"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+    }
+
+
+
+
+- Options
+  - program vs runtimeExecutable
+    - program - a script run with Node 
+    - runtimeExecutable - something available on the path (e.g. npm)
+  - runtimeVersion
+    - If you use nvm or similar, VSCode will use it get the version of Node specified
+  - "console": "integratedTerminal"
+    - This setting is super useful/important
+    - If a program needs user input (e.g. Jest) or colored output, the default debugger window won't work 
+    - This setting runs the output in the terminal 
+    - Important - you need to stop the process in the terminal. Stopping the debugger isn't sufficient 
+  - env
+    - VSCode will pick up your .env file and/or override it with your config's env field 
+  - Remote dubugging 
+    - Useful if in Docker 
+  - Restart frame
+    - You can right-click on on a recent function in the "Call Stack" pannel, and click "Restart Frame" to replay a recent method 
+
+
+
+SETTINGS 
+{
+  // "debug.node.autoAttach": "on",
+  // "debug.javascript.autoAttachFilter": "always",
+  "editor.fontSize": 14,
+  "editor.minimap.enabled": false,
+  "editor.rulers": [100],
+  "editor.tabSize": 2,
+  "explorer.openEditors.visible": 0,
+  "telemetry.enableCrashReporter": false,
+  "telemetry.enableTelemetry": false,
+  "window.zoomLevel": 0,
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  "explorer.confirmDragAndDrop": false,
+  "workbench.settings.editor": "json",
+  "workbench.startupEditor": "newUntitledFile",
+  "files.associations": {
+    "*.css": "postcss",
+    "*.twig": "html",
+    "*.vue": "html"
+  },
+}
+
+
+
+
+SAMPLE CONFIG
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "_ npm run start",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "_ launch chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:1234",
+      "webRoot": "${workspaceFolder}",
+      "breakOnLoad": true,
+      "sourceMapPathOverrides":{
+        "../*": "${webRoot}/*",
+      }
+    },
+    {
+      "name": "node foo/bar.js",
+      "type": "node",
+      "request": "launch",
+      "program": "./foo/bar.js",
+      "args": ["--args", "--if", "-u", "--need", "--them"],
+      "console": "integratedTerminal",
+    },
+    {
+      "name": "npm run test",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "test"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "debug current test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest",
+      "args": [
+        "--config",
+        "${workspaceRoot}/jest.config.js",
+        "--runInBand",
+        "-u",
+        "--coverage",
+        "false",
+        "${relativeFile}"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceRoot}",
+    },
+  ],
+  "compounds": [
+    {
+      "name": "debug in chrome",
+      "configurations": [
+        "npm run start",
+        "launch chrome",
+      ]
+    }
+  ]
+}
+

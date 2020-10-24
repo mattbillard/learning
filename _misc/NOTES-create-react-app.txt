@@ -1,0 +1,43 @@
+CREATE-REACT-APP
+10/2020
+
+
+Features 
+- CSS modules 
+  - https://create-react-app.dev/docs/adding-a-css-modules-stylesheet/
+- https 
+  - https://create-react-app.dev/docs/using-https-in-development/
+  - Supports https easily. (See docs for various ways to do it)
+- serve vs http-server
+  - They seem mostly the same except
+  -*** serve works with HTML5 history navigation and http-server does not 
+  - https-server lists files and allows you to navigate folders like Apache servers do 
+- Bundle size 
+  - https://create-react-app.dev/docs/analyzing-the-bundle-size/
+  - Super easy. Makes a diagram showing which files are adding bloat. See instructions. 
+- react-app-rewired
+  - Allows you to edit the webpack config without ejecting the app 
+  - https://github.com/timarney/react-app-rewired
+
+
+
+- New project with TypeScript
+    npx create-react-app APP_NAME --template typescript
+- Templates 
+  - You can find a list of available templates by searching for "cra-template-*" on npm.
+
+
+
+With Parcel
+- It is absurdly easy to use CRA + Parcel 
+  - Use the official https://createapp.dev/parcel to make a new Parcel project 
+  - Delete /src 
+  - Also make a CRA project (optionally with TypeScript)
+  - Copy /src and /public into the Parcel project 
+  - Move /public/index.html to /src/index.html 
+  - In /src/index.html...
+    - Replace all: %PUBLIC_URL% -> ../public 
+    - Add the script tag for the JS (or TS) before the </body>
+        <script src="index.js"></script>
+- Builds are far far far faster 
+- Setting up CRA + Jest + Parcel takes a bit of extra work  
