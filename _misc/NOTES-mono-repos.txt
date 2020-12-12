@@ -60,11 +60,27 @@ Lerna
   - lerna init - create a new lerna repo or upgrade an existing repo
   - lerna bootstrap - installing all dependencies and linking any cross-dependencies
   - lerna import <pathToRepo> - import new package
+  - lerna add - add a dependency to a package or link one to another 
   - lerna publish
   - lerna changed - check which packages have changed since the last release
   - lerna diff [package?] - diff all packages or a single package since the last release
   - lerna run [script] - run an npm script in each package that contains that script
   - lerna ls - list all of the public packages in the current Lerna repo.
+- Instructions for new project 
+  - npm install --global lerna@3
+  - learna init 
+  - git add . && commit -m "New lerna repo"
+  - lerna import <pathToGitProject1>
+  - lerna import <pathToGitProject2>
+  - Add project2 to project1 
+      cd packages/project2 
+      lerna add project1
+  - Change a file in project 2 to either import or require from project 1, e.g. 
+      import project1 from 'project1'; 
+      const project1 = require('project1');
+  - In the root 
+      lerna bootstrap 
+  - It should install all the node_modules of all the packages and symlink package1 as packages/project2/node_modules/package1
 
 
 Rush 
@@ -90,4 +106,20 @@ Rush
       rush add --package example-lib@1.2.3 --make-consistent
 - Misc 
   - Prettier - the Rush team seems to really like Prettier 
+
+
+Lerna vs Rush 
+- Lerna 
+  - Much simpler 
+  - 10x more popular 
+  - Does NOT use pnpm - it downloads deps for each project separately = slower installs 
+- Rush 
+  - Much more complicated
+    - Doesn't automatically detect packages 
+    - It adds it's own .npmrc in common/config 
+    - Doesn't use .npmrc to specify node version 
+    - common/config 
+    - common/git-hooks 
+    - .travis-ci.yml (which you should just delete if you don't use Travis CI)
+  - Uses pnpm - deps are only downloaded once even if all your packages require it 
 

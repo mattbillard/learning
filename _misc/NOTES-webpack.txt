@@ -149,39 +149,45 @@ Webpack DevServer
   - historyApiFallback: true  // Useful for HTML5 navigation. If page is 404, serves index 
 
 
-PARCEL QUESTIONS 
-- Compile to something other than ES5?
+PARCEL 
+- Seems much simpler and much much much faster 
 - Supports...
-  Y- TypeScript
-  Y- React / JSX
-  Y- Sass
-  Y- Babel
-  Y- Dev server
-  Y- Source maps
-  Y- Code splitting (Automatically when it finds a dynamic import)
+  - TypeScript
+  - React / JSX
+  - Sass
+  - Babel
+  - Dev server
+  - Source maps
+  - Code splitting (Automatically when it finds a dynamic import)
+  - Adding hash to filenames (Yes and it is unchanged if the file is the same)
+  - Treeshaking (Automatic. For both CommonJS and ESM modules)
+  - Minification + uglification (Automatic.)
+  - https (Yes. Use the --https flag)
+  - Globals like jQuery (Absurdly easy. Literally just: import jQuery from 'jquery';   window.$ = jQuery;)
+  - Is imported CSS put in JS or separate CSS file. (Always a separate CSS file, unlike Webpack which puts it in a JS file quite often.)
+  - It even will automatically install npm deps you require but haven't yet installed - all without quitting dev server 
+- Cons 
+  - DevServer proxy - not supported by v1, but there seem to be community solutions like parcel-proxy-server. Vesion 2 will support it - https://v2.parceljs.org/features/api-proxy/
+  - Parcel seems to dump all assets in one dist folder with no subfolders. Supposedly being improved with v2
+  - It also hashes all static assets. There seem to be plugins like parcel-plugin-static-files-copy which solve this problem. 
+  - Base path for static assets - I was not able to find a solution
 ?- Supports?
-  ?- Adding hash to filenames 
-  ?- Treeshaking 
-  ?- Minification + uglification 
-  ?- Globals like jQuery 
-  ?- Progressive web apps / service workers 
-  ?- Public Path / base path 
-  ?- imported CSS - put in JS or separate CSS file 
+  ?- Compile to something other than ES5?
   ?- Server side rendering 
   ?- ProfilingPlugin
-  ?- DevServer proxy 
-- It even 
-  - Has instructions to debug in Chrome and VSCode 
-  - Will automatically install npm deps you require but haven't yet installed - all without quitting dev server 
+  ?- Progressive web apps / service workers 
+- I would...
+  - use Parcel if... I need much faster dev builds and don't mind some extra set up 
+  - might not use it if... I wanted to copy static assets with no changes to file names (I think there might be plugins though)
+  - would not use it if... I needed control over the folder structure of final assets 
 
+- Try dropping Parcel into create-react-app
+  Y- Does it work? 
+  Y- Is it simpler, smaller, faster?
+  Y- Does Jest still work?
+  - Anser - see my experiment on Github. The git commit history shows it does not take to much work to get both build and Jest working
+    https://github.com/mattbillard/parcel-create-react-app
 
-?- How does Parcel handle 
-  ?- Code splitting with de-duplication of common code 
-  ?- Better build errors?
-
-
-?- Try dropping Parcel into create-react-app
-  ?- Does it work? 
-  ?- Is it simpler, smaller, faster?
-  ?- Does Jest still work?
-
+- Alternatives 
+  - Parcel 
+  - Snowpack 

@@ -1,0 +1,244 @@
+GITLAB
+10/2020
+
+Gitlab vs Github 
+- Gitlab 
+  - Focus on devops, CI/CD tools
+  - Less expensive
+  - More popular with enterprise teams 
+- Github 
+  - Focus on team communication and other tools: bug tracking, feature requests, task management, wikis, feeds, followers, integrations
+  - More expensive 
+  - More popular with individual developers 
+  - Owned by Microsoft 
+- Articles 
+  https://hackernoon.com/gitlab-vs-github-key-differences-and-which-one-is-better-2020-update-rhaw3y3z
+  https://svitla.com/blog/gitlab-vs-github
+  https://www.upgrad.com/blog/github-vs-gitlab-difference-between-github-and-gitlab/
+  https://usersnap.com/blog/gitlab-github/
+
+
+Introduction to CI/CD
+https://docs.gitlab.com/ee/ci/introduction/index.html
+- Continuous Integration - for every change on every branch, run the build and make sure all the tests pass 
+- Continuious Delivery - continous integration... plus also deployed continuously (automatically or with human confirmation step)
+- /.gitlab-ci.yml
+  - Specifieds build, test, and deployment scripts
+  - Can run scripts in sequence or parallel 
+  - Where to deploy to 
+  - Specify to run automatically or manually 
+- DevOps life cycle 
+  - Verfiy, package, release 
+
+
+Pipeline Architecture
+https://docs.gitlab.com/ee/ci/pipelines/pipeline_architectures.html
+- Pipelines have multiple stages, each with multiple steps 
+  - Example - build, test, deploy 
+- There are 3 different strategies with some being faster but more complex 
+  - Basic runs all build steps in parallel, then runs all test steps in parallel, then all deploy steps in parallel 
+  - More advanced ones specify which steps depend on others, forming a dependency graph which Gitlab will run as fast as possible 
+  - Can also have parent/child pipelines where a pipeline will kick off multiple other pipelines 
+
+
+Create a GitLab Pages website from scratch
+https://docs.gitlab.com/ee/user/project/pages/getting_started/pages_from_scratch.html
+- workflow
+  - Tells Gitlab to run when something happens, e.g. changes are pushed to a branch 
+- rules 
+  - e.g. only run if branch == master
+- 3 default stages for GitLab CI/CD: build, test, and deploy
+- before_script
+  - Do stuff before every script 
+- cache
+  - Cache deps so you don't have to download them every time 
+
+
+https://docs.gitlab.com/ee/ci/migration/jenkins.html
+- Mentions a number of useful keywords 
+  - only: [chat]
+  - when: manual
+  - extends - reuse configuration between jobs
+  - include - reuse pipeline configurations in different projects
+  - artifacts - the files saved after a job 
+    - Can set when they expire_in 
+  - variables - entered using the Gitlab UI. e.g. username and password 
+- Templates 
+  - You can create a repository of job templates to be reused across your org
+  - Can permission them 
+
+
+Runners 
+https://docs.gitlab.com/runner/
+- Runners are the agents that run the CI/CD jobs
+- Shared, group, and project runners 
+- gitlab-ci.yml's `job` `tags` - identify which runner to use
+- Config
+  - config.toml - used to configure the runner 
+  - logging, cache, concurrency, memory, CPU limits, and more
+- Monitoring
+  - Use Prometheus
+
+
+Pipeline schedules
+https://docs.gitlab.com/ee/ci/pipelines/schedules.html
+- Pipelines can be scheduled to run at intervals, e.g. build dev/QA every hour 
+
+
+Pipeline Efficiency
+https://docs.gitlab.com/ee/ci/pipelines/pipeline_efficiency.html
+- Requires some amount of trial and error 
+- Some common factors 
+  - Number of steps and stages
+  - Series vs parallel 
+  - Time to install dependencies 
+- Suggestions 
+  - Look what fails frequently and move it earlier in the pipeline 
+  - Pipeline Insights
+    - See success and duration charts 
+  - More items in parallel -> need more runners 
+  - interruptible - older pipelines stop running when a new pipeline is pushed 
+  - Generally move validation first, then tests, then build so it fails quickly 
+  - Caching - cache node_modules and other dependencies 
+  - Docker 
+    - Use multiple, smaller docker images each specific to the job being run 
+    - Docker images should include all your tools rather than downloading them 
+    - Lots of articles on how to write very slim docker containers 
+
+  
+Cache dependencies in GitLab CI/CD
+https://docs.gitlab.com/ee/ci/caching/index.html
+- cache 
+  - Reusing deps from an older pipeline in the same project 
+  - Not same as artifacts 
+- artifacts 
+  - Passing results between different stages in a single pipeline 
+- Both define their paths relative to the project directory, and can’t link to files outside it
+- npm installs 
+  - npm ci 
+    - installs the exact deps from the package-lock.json (?)
+  - npm ci --cache 
+    - use cache for deps 
+
+
+Artifacts
+https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html
+- Browse artifacts 
+  - MR > Pipeline > Build step > on the right side of the page are "Browse" and "Download" buttons 
+  - On the pipelines page there is also a download icon next to each job 
+
+
+Auto DevOps
+https://docs.gitlab.com/ee/topics/autodevops/index.html
+- CI/CD templates. Meant to streamline creating new pipelines 
+- You need to use Docker and Kubernetes 
+https://www.youtube.com/watch?v=0Tc0YYBxqi4
+- Gitlab can auto scan deps, look for new licensing agreements, and do static analyis scans 
+- They provide some monitoring charts for your environments including http errors, latency, and throughput 
+
+
+Settings 
+- Integrations 
+  - You can integrate with Jira 
+- Repository settings 
+  - Default branch - develop 
+  - Branch name - can enforce branch starts with feature, hotfix, etc 
+- CI/CD 
+  - You can automatically deploy to lower envs and manually kick of pipelines to deploy to prod 
+
+
+Features 
+- Markdown static site editor 
+  - https://docs.gitlab.com/ee/user/project/static_site_editor/
+  - Uses Ruby Middleman 
+- Webhooks 
+  - https://docs.gitlab.com/ee/user/project/integrations/webhooks.html
+  - http request on an event, e.g. push 
+  - Allows integration with Slack or Twilio 
+- Visual reviews 
+  - https://docs.gitlab.com/ee/ci/review_apps/index.html#visual-reviews
+  - Every page in preview has a form on the right so non-devs can leave comments 
+- Operations Dashboard
+  - https://docs.gitlab.com/ee/user/operations_dashboard/
+  - There's a dashboard of pipeline and alert health 
+- Auto DevOps
+  - https://docs.gitlab.com/ee/topics/autodevops/index.html
+  - Auto detect project type and configure pipeline 
+  - See above 
+- GitLab CI/CD for GitHub
+  - https://about.gitlab.com/solutions/github/
+  - You can run pipelines for Github projects 
+- Security 
+  - Static Application Security Testing (SAST)- https://docs.gitlab.com/ee/user/application_security/sast/
+  - Dependency Scanning- https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
+  - Container Scanning- https://docs.gitlab.com/ee/user/application_security/container_scanning/
+    
+
+Pages (i.e. static code hosted on Gitlab)
+- Gitlab can host built static files (e.g. HTML, CSS, JS) so it could host a React project 
+- Instructions 
+  - Option 1 (fork an example)
+    - Fork an example from below
+    - Go to your project > CI/CD > Pages and confirm the pipelines succeed 
+    - Go to Settings > Pages. Click on the link to see your webpage 
+  - Option 2 (from scratch)
+    - Create a project on Gitlab
+    - Add SSH keys if prompted / you haven't set them up yet 
+    - Clone the project down to your computer 
+    - You may need to add a baseUrl/pathname to your project so it can work at something like 
+        username.gitlab.io/project-name
+    - Add a .gitlab-ci.yml to your project with at least the following 
+      - Source: https://gitlab.com/pages/plain-html/-/blob/master/.gitlab-ci.yml
+      - You'll need a docker image that supports Node + npm 
+      - Note: Gitlab Pages deploys /public
+
+          image: alpine:latest
+
+          pages:
+            stage: deploy
+            script:
+            - echo 'Nothing to do...'
+            artifacts:
+              paths:
+              - public
+              expire_in: 1 day
+            only:
+            - master
+
+    - Save, commit, and push 
+    - Go to your project > CI/CD > Pages and confirm the pipelines succeed 
+    - Go to Settings > Pages. Click on the link to see your webpage 
+    - From Settings > Pages you can also optionally connect a domain name
+      - There instructions are wrong. Lots of experimenting revealed instead of CNAME and TXT they recommended, it is 
+          TXT      _gitlab-pages-verification-code     gitlab-pages-verification-code=YOUR_CODE
+          A        @                                   35.185.44.232
+    - SSL - click the buttons to give it an SSL cert 
+    - Need to make it visible - Settings > General > Visibility and select Everyone in pages section
+    - Gitlab doesn't support Single Page Applications out of the box. You will want to modify your gitlab-ci.yml to 
+      cp build/index.html build/404.html 
+- Resources 
+  - General - https://docs.gitlab.com/ee/user/project/pages/index.html
+  - Instructions to clone a starter - https://docs.gitlab.com/ee/user/project/pages/getting_started/pages_forked_sample_project.html
+  - Very useful video - https://www.youtube.com/watch?v=TWqh9MtT4Bg
+  - Example projects to clone - https://gitlab.com/pages
+    - Most basic project example - https://gitlab.com/pages/plain-html
+  - From scratch - https://docs.gitlab.com/ee/user/project/pages/getting_started/pages_from_scratch.html
+  - Your project > Settings (bottom left) > Pages 
+- Domain
+  - URL - You can provide a domain or they will host it at username.gitlab.io/project 
+  - SSL - They generate free SSL certs with Let's Encrypt 
+- gitlab-ci.yml 
+  - There is a specific job type called "Pages" which gitlab recognizes
+  - You can install deps and build
+  - It will then deploy the /public dir to username.gitlab.io/project (or a domain of your choice if you set it up)
+    - I think you can change this with the `artifacts` field 
+  - Useful example gitlab-ci.yml files 
+    - https://gitlab.com/pages/gatsby/-/blob/master/.gitlab-ci.yml
+    - https://docs.gitlab.com/ee/user/project/pages/getting_started/pages_from_scratch.html
+
+
+Miscellaneous 
+- Feature flags - Gitlab has this capability 
+- runners - the hosts that run jobs
+- Auto dev ops - didn't really work and it was very slow
+- Keywords - - Stages, steps, image, artifacts, workflow, rules, before_script, cache, exclude, extends, includes, expire_in, variables, interruptible, tags
