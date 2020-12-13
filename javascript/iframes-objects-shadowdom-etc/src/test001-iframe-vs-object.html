@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+
+    <style>
+      iframe, embed, object {
+        border: solid 1px black;
+      }
+
+      h2 {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <h2>test001</h2>
+
+    <iframe id="iframe" src="./assets/iframe.html"></iframe>
+    <object id="object" data="./assets/object.html" type="text/html"></object>
+
+    <div id="test">....</div>
+
+    <script>
+      var text = 'from parent';
+      console.log(`....${text}`)
+
+      setTimeout(() => {
+        document.getElementById('iframe').contentDocument.getElementById('test').innerHTML = 'from parent';
+        document.getElementById('object').contentDocument.getElementById('test').innerHTML = 'from parent';
+      }, 1000)
+    </script>
+
+  </body>
+</html>

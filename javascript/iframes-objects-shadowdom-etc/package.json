@@ -1,0 +1,20 @@
+{
+  "name": "iframes-objects-shadowdom-etc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "_start:3000": "http-server ./src -p 3000",
+    "_start:3001": "http-server ./src -p 3001",
+    "_start:3002": "http-server ./src -p 3002",
+    "_start:open": "open http://localhost:3000",
+    "start": "run-p _start:*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^0.12.3",
+    "npm-run-all": "^4.1.5"
+  }
+}

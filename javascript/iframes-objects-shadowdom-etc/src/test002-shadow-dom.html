@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+
+  <style>
+    h2 {
+      color: red;
+    }
+
+    *,
+    div {
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Parent</h2>
+
+
+  <template id="myTemplate">
+    <style>
+      #shadowDomExample {
+        all: initial;
+      }
+    </style>
+
+    <!-- <link rel=stylesheet href=shadow-style.css type=text/css> -->
+
+    <div id="shadowDomExample">
+      <h2>Child: Shadow DOM example</h2>
+      <p>A paragraph</p>
+      <a href="#" id="linkForEvent">Click for event</a> <br>
+      <a href="#" onClick="goToGoogle()">Go to Google (child can force parent to navigate)</a> <br>
+
+      <script>
+        function goToGoogle() {
+          window.location = 'https://www.google.com';
+        }
+
+        console.log('\nChild:')
+        console.log('  window.location.href:', window.location.href);
+        localStorage.exampleLocalStorageKey = 'leaked from shadow dom';
+        window.globalExample = 'leaked from shadow dom';
+        document.cookie = "exampleCookie=leaked from shadow dom";
+      </script>
+    </div>
+  </template>
+
+  <div id="root"></div>
+
+  <script>
+    root
+      .attachShadow({ mode: 'open' })
+      .appendChild(myTemplate.content);
+
+    console.log('\nParent:');
+    console.log('  localStorage:', localStorage);
+    console.log('  window.globalExample:', window.globalExample);
+    console.log('  document.cookie:', document.cookie);
+
+    document.body.addEventListener('click', (event) => {
+      console.log('  leaked click event from: ', event.target);
+    });
+  </script>
+
+</body>
+
+</html>

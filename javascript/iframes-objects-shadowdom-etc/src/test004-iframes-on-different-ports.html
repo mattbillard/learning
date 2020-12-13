@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+
+    <style>
+      iframe {
+        border: solid 1px black;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h2>Testing what's shared between iframes running on different ports</h2>
+
+    <h3>Shared</h3>
+    <ul>
+      <li>Cookies</li>
+    </ul>
+
+    <h3>Not Shared</h3>
+    <ul>
+      <li>localStorage</li>
+      <li>sessionStorage</li>
+    </ul>
+
+    <h3>Never shared even if running on the same port</h3>
+    <ul>
+      <li>CSS</li>
+      <li>JS global vars</li>
+      <li>Events</li>
+    </ul>
+
+    <!-- <iframe id="iframe" src="port3001.html"></iframe> -->
+    <!-- <iframe id="iframe" src="port3002.html"></iframe> -->
+    <iframe id="iframe" src="http://localhost:3001/assets/port3001.html"></iframe>
+    <iframe id="iframe" src="http://localhost:3002/assets/port3002.html"></iframe>
+
+    <script>
+      setTimeout(() => {
+        console.log('From parent:');
+        console.log('  localStorage:', localStorage);
+        console.log('  document.cookie:', document.cookie);
+      })
+    </script>
+
+  </body>
+</html>

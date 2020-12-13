@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+
+    <style>
+      div {
+        border: solid 1px blue;
+        height: 800px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h2>iframe</h2>
+
+    <div id="test">....</div>
+
+    <script>
+      var text = 'iframe';
+      console.log(`....${text}`)
+
+      window.parent.document.getElementById('test').innerHTML += text;
+    </script>
+
+  </body>
+</html>
