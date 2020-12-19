@@ -1,32 +1,111 @@
+MICRO FRONTENDS 
 2020-04
+2020-12
 
 
-https://micro-frontends.org/
-...
+SUMMARY 
+- Goal
+  - Multiple teams and many repos all creating 1 seamless UI/UX
+- Challenge
+  - How to do that without clobbering each other’s CSS, JS, cookies, localStorage, etc
+- Quick history / context
+  - Building apps has made the following progression over time 
+    1) Monolith - Java (or other) + JavaScript in the same code base 
+    2) Separate front end and backend 
+    3) Microservices - split the backend into many services so each can be developed and deployed independently 
+    4) Micro frontends - split the frontend into many micro apps so each can be developed and deployed independently 
+- Possible solutions 
+  - Old solutions 
+    1) different app per page/section but they all import the same header/footer (super lazy solution)
+    2) using iframes (each app is isolated from each other)
+    3) Server-side rendering (not sure if this really counts)
+    4) Different script tag per app. Routes are mapped to different apps. Going to a route calls a method to mount the app
+    5) lazy loading different React bundle per page/section (Very little isolation from each other)
+  - New solutions
+    5) using custom elements to mix different teams' pieces into 1 experience (e.g. Spotify) (Minimal isolation from each other)
+      - If you add in shadow DOMs, the CSS is very encapsulated and JS quite encapsulated
+  - Opinion
+    - Best solutions 
+      - Server-side rendering - if SEO matters the most to you (Not the case for the jobs I've worked at where apps are internal or behind a login)
+      - Web components - best solution for a page made of multiple teams' work (e.g. Spotify, e-commerce site)
+      - Iframes - best solution if apps absolutely must be isolated from each other 
 
-https://www.youtube.com/watch?v=dTW7eJsIHDg
-...
 
-- Teams are organized by product - design, UI, BE 
-- Technically you could have different UI frameworks: Angular, React, Vue
+Orthogonal concerns / choices as you architect your micro frontend 
+- Same versus different UI framework 
+  - All same 
+  - Allow different - React, Vue, Svelte, Angular 
+- Client vs server rendered
+  - Client side rendering 
+  - Server side rendering 
+  - Both 
+- Build deploy 
+  - Separate
+  - Together - recommended against building together as it gets slower and slower (https://www.thoughtworks.com/radar/techniques?blipid=201911056)
+- Routing vs jiggsaw/mosaic 
+  - 1 page per app 
+  - Multiple micro frontends on 1 page 
+- Shared code 
+  - Shared UI components, services, etc 
+  - Completely separate (might provide for disjointed UI)
+- Isolation vs porous
+  - Very issolated - iframes (separate DOMs)
+  - Some issolation - shadow DOM has issolated CSS 
+  - No issolation - separate bundles (all in same DOM / runtime)
+- Breaking up or joining together
+  - Dividing 1 large app into many micro apps 
+  - Bringing multiple existing apps into 1 "portal" (in which case you might be more flexible on different UI designs, architectures)
+- Avoiding collisions 
+  - Namespaces / prefixes by team, project, etc (e.g. for cookies, localStorage, sessionStorage, global vars)
+  - Encapsulation - React/etc components, IIFE
+  - CSS - CSS modules, CSS-in-JS, nested CSS (e.g. with SASS), shadow DOM  
+  - Iframes 
 
 
+Iframes vs shadow DOM
+- See experiments: /javascript/iframes-objects-shadowdom-etc 
+- Iframe (very issolated/encapsulated)
+  - Dimensions: determined by parent
+  - Almost everything is issolated
+    - JS can pass through if both are running on the same domain or use the same `document.domain = 'xxxxx';`
+  - Shared vs issolated
+    - CSS: issolated
+    - URL: issolated
+    - JS global vars: issolated
+    - DOM selectors: issolated 
+    - events: only window.postMessage
+    - localStorage: only shared for same domain with same port
+    - sessionStorage: only shared for same domain with same port
+    - Cookies: shared? Needs more investigation
+- Shadow DOM (very porous)
+  - Dimensions: determined by child
+  - Almost everything except CSS and HTML selectors are porous 
+  - Shared vs issolated
+    - CSS: issolated
+    - URL: shared
+    - JS global vars: shared
+    - DOM selectors: issolated
+    - events: shared (except they seem to come from the shadow root, not the actual target)
+    - localStorage: shared
+    - sessionStorage: shared
+    - Cookies: shared
 
-Micro Frontend Curry
-https://levelup.gitconnected.com/micro-frontend-curry-506b98a4cfc0
-- Decent, fast, very highlevel intro article to micro frontends 
-- Why we need Micro-frontend?
-  - Easier to upgrade a micro app than a large one 
-  - Mix and match, try out various tech stacks 
-  - Works well with backend microservices
-  - Teams are cross-discipline and focused on e2e delivery 
-- Implementation 
-  - iFrames 
-  - Web Components
-  - Readymade framework
-    - Single SPA 
-    - ARA Framework
-    - Tailor.js 
+
+- Note on web components 
+  - "Web components" are several HTML5 technologies 
+    - Custom Elements (custom HTML tags)
+    - Shadow DOM 
+    - HTML Templates (<template> tag)
+    - HTML Imports (Deprecated. Not currently supported by any major browser.) 
+  - Custom element !== shadow DOM, but they do work very nicely together 
+    - Shadow DOM encapsulated CSS a lot and JS quite a lot 
+    - Custom element makes it easy to for another app to "add one of these here"
+
+
+BEST ARTICLES 
+- 2 long treatesies explaining almost everything you could want to know (notes below)
+  - https://micro-frontends.org/ 
+  - https://martinfowler.com/articles/micro-frontends.html
 
 
 Martin Fowler - Micro Frontends
@@ -81,19 +160,20 @@ https://martinfowler.com/articles/micro-frontends.html
       - Advantages 
         - Issolated styles and global vars 
       - Disadvantages 
-        - Interaction between components 
+        - Interaction between components is limited 
         - Routing, history, and especially deep-linking more complicated
         - Responsive design 
     - Run-time integration via JavaScript
       - Each micro frontend included as a script tag with a global function or component as an entry-point 
       - Container app determines which one to mount by calling its function or component 
       - Better still, only download the script tag if necessary 
-      - This is the recommended approach 
+      - This is his recommended approach 
       - Advantages
         - Each micro frontend can be deployed separately 
         - They can interact with each other 
       - Disadvantages 
-        - Duplicate deps across different micro frontends 
+        - Possibly duplicate deps across different micro frontends 
+        - Each can affect the other (e.g. localStorage, cookies, etc)
       - Note - each micro frontend gets its own redux store 
   - Styling
     - Problem - teams that write global CSS will impact each other 
@@ -102,7 +182,7 @@ https://martinfowler.com/articles/micro-frontends.html
       - CSS pre-processing (e.g. SASS) + nested CSS 
       - CSS modules 
       - CSS-in-JS 
-      - Shadow DOM 
+      - Shadow DOM - does a great job at encapsulating CSS 
   - Shared component libraries
     - Visual consistency and code reuse 
     - Usually better to build over time than try to plan and build something predicting all future needs 
@@ -136,6 +216,7 @@ https://martinfowler.com/articles/micro-frontends.html
   - Duplicate deps / payload size 
     - If you extract out common deps, the user doesn't need to download duplicate code 
     - However, you need to coordinate across multiple projects when upgrading common packages 
+    - And in comparsion to assets like images, songs, movies, a few kbs of JS might not be worth agonizing over 
   - Environment differences
     - It simplifies local development to able to run a micro frontend both as part of the whole and as standalone
     - However, it makes it difficult to catch CSS conflicts 
@@ -146,12 +227,205 @@ https://martinfowler.com/articles/micro-frontends.html
     - Frontends may become more inconsistent 
 
 
+Micro Frontends
+https://martinfowler.com/articles/micro-frontends.html
+- NOTE: has some really great diagrams 
+- Benefits
+  - Incremental upgrades
+    - Incrementally replace old code 
+    - Try new technology 
+    - New features developed rapidly without touching old code 
+    - Upgrades can be one one-by-one instead of all at once 
+  - Simple, decoupled codebases
+    - Smaller code bases are easier to work with 
+    - Firmer borders make it harder to have bad coupling 
+    - Force you to be deliberate about how data and events flow between parts of the app 
+  - Independent deployment
+    - Smaller deployments = less risk 
+    - Separate CI/CD pipelines that build and test each app separately 
+    - Each app can go to prod at any time 
+    - Another team breaking code should not impact your team 
+  - Autonomous teams
+    - Teams are arranged vertically around slices of functionality rather than capability 
+    - Each team is full-stack and very independent of others 
+- Integration approaches
+  - Server-side template composition
+    - This has been done for a long time
+  - Build-time integration
+    - Each app makes a package. The container pulls in all of them 
+    - Pros 
+      - Can deduplicate common deps 
+    - Cons 
+      - "lockstep release process"
+      - If one app is changed, the whole thing needs to be rebuilt and released
+      - Builds take longer and longer as more apps are added and they get larger 
+  - Run-time integration via iframes
+    - Pros 
+      - Simple 
+      - Issolated CSS and JS 
+    - Cons 
+      - Issolated = less flexible 
+      - Difficult to interact = harder to do routing, history, deep links 
+      - Responsive design 
+  - Run-time integration via JavaScript
+    - Different script tag per app. Routes are mapped to different apps. Going to a route calls a method to mount the app
+    - Pros 
+      - Each app is deployed separately 
+    - Cons 
+      - Same DOM = can affect each others' CSS, JS, and more 
+  - Run-time integration via Web Components
+    - Same as above but updated for HTML5 = uses custom elements
+- Styling
+  - CSS by default is global = each team can affect each other 
+  - Solutions that have been tried
+    - Strict naming (e.g. BEM)
+    - Nested selectors (e.g. with SASS)
+    - CSS modules 
+    - CSS-in-JS 
+    - Shadow DOM offers true CSS issolation 
+- Cross-cutting concerns 
+  - Shared component libraries
+  - Cross-application communication
+    - Recommedation: as little as possible to avoid tight coupling 
+    - Choices 
+      - Custom events 
+      - Event bus 
+      - "React style" pass props down, callbacks up 
+      - URL address bar 
+    - Not good choices 
+      - Shared Redux - each should have a separate store so it can be a separate app 
+      - Shared state - this is like a shared database/model = lots of coupling = hard to make changes 
+  - Think long and hard about the coupling you're introducing 
+    - How will you maintain the contract over time 
+    - Tight coupling = hard to make changes = requires coordinated upgrades 
+    - Integration tests - you'll need them 
+  - Backend communication
+    - Usually recommends each team be full stack, controlling both its front and backend code it needs 
+    - Cross cutting concerns by login would be handled by a container team 
+- Testing
+  - Will need some extra functional and e2e tests to make sure different microfrontends are working well together 
+- Example
+  - The container
+    - Container is create-react-app 
+    - Routes map to different micro frontends 
+  - The micro frontends
+    - Each micro frontend lives on a different subdomain or port, downloads a JS bundle and renders itself 
+    - CSS - uses CSS-in-JSS to encapsulate CSS (I think shadow DOM and  CSS modules are a better solution.)
+  - Cross-application communication via routing
+    - Router - router history is passed down to all micro frontends so they can navigate together 
+  - Common content
+    - UI components - they would all use the same UI component library
+    - Bundle size - React and React DOM are split out as externals so they are not included in each app's bundle 
+  - Infrastructure
+    - Hosted on AWS (S3 buckets, CloudFront distributions, domains, certificates, etc)
+    - Provisioned all at once using a centralised repository of Terraform code
+    - Each micro frontend has its own repo, CI/CD pipeline, S3 bucket 
+    - So they can be deployed independently 
+- Downsides
+  - Payload size
+    - Common dependencies 
+      - Repeated dependencies increases code downloaded but centralizing them makes apps more tightly coupled 
+      - Remember though that micro frontends still load much faster than monoliths 
+      - Also JS is small and fast in comparison to videos and slow database queries 
+  - Environment differences
+    - Usually each app can be run standalone versus together when deployed 
+    - Makes development faster and easier but makes it hard to spot bugs from collisions in prod 
+  - Operational and governance complexity
+    - More apps -> more complexity, more infrastructure, pipelines, releases, etc 
+
+
+
 Thought Radar 
+https://www.thoughtworks.com/radar/techniques/micro-frontends
 https://www.thoughtworks.com/radar/techniques?blipid=201911056
 - Recommend against "front-end integration via artifact"
   - Usually pub to npm registry, pull all into one, and then build
   - However, any change to an artifact requires rebuilding whole thing
   - Slow 
+
+
+Micro frontends—a microservice approach to front-end web development
+https://medium.com/@tomsoderlund/micro-frontends-a-microservice-approach-to-front-end-web-development-f325ebdadc16
+- Good introductory article 
+- Approaches 
+  - Single-SPA 
+    - Allows you to combine Angular, React, Vue 
+  - Multiple apps at different URLs but using npm packages for shared functionality / components 
+  - Iframes 
+    - Use window.postMessage to communicate 
+  - Modules using a shared event bus 
+    - (Not sure this is a complete appraoch. This is more of a method of communication.)
+  - Varnish Cache
+  - Web-components 
+  - Blackbox React components 
+
+
+The State of Micro Frontends
+https://blog.bitsrc.io/state-of-micro-frontends-9c0c604ed13a
+- Has best diagram explaining evolution of micro frontends 
+- Why
+  - Can develop, test, and deploy different parts of UI separately 
+  - Add/remove parts of UI without a rebuild 
+  - Use different technologies for different parts 
+  - Decoupling 
+  - Allows full-stack teams focused on parts of UI 
+  - Easier for multiple teams to work together on one cohesive experience 
+  - Faster developer speed 
+- Approaches 
+  - Client side 
+  - Server side rendering 
+- Helper libraries are needed 
+  - Routing 
+  - Communicating, event buses 
+  - Sharing dependencies to minimize bundle size 
+
+
+Ask HN: What do you use to build micro-front ends?
+https://news.ycombinator.com/item?id=13009285
+- Iframes 
+  - Cons 
+    - Bundle size is larger b/c you can't extract common dependencies. (This is mitigated somewhat if users typically only look at 1 or 2 sections of the site per visit)
+    - Can only have 2 levels of nested iframes (I confirmed this is not the case in Chrome. You can have up to 6 in some situations)
+- React black boxes 
+  - Cons 
+    - Everyone needs to be on the same version of React 
+    - Increased coupling 
+- Different apps at different URLs. Use npm packages to share functionality 
+- Web components 
+  - Shadow DOM has a lot of potential 
+
+
+
+Micro Frontends in Action
+https://www.manning.com/books/micro-frontends-in-action
+- Book on micro frontends 
+
+
+Interesting articles on how Spotify was building their player at one point 
+https://www.quora.com/What-is-the-technology-stack-behind-the-Spotify-web-client/answer/Andreas-Blixt
+https://www.quora.com/How-is-JavaScript-used-within-the-Spotify-desktop-application-Is-it-packaged-up-and-run-locally-only-retrieving-the-assets-as-and-when-needed-What-JavaScript-VM-is-used/answer/Mattias-Petter-Johansson
+
+
+Bringing componentization to the web: An overview of Web Components
+https://blogs.windows.com/msedgedev/2015/07/14/bringing-componentization-to-the-web-an-overview-of-web-components/
+- A little dated but useful for thinking through the concerns and also history 
+
+
+Micro Frontend Curry
+https://levelup.gitconnected.com/micro-frontend-curry-506b98a4cfc0
+- Decent introductory article
+- Why we need Micro-frontend?
+  - Easier to upgrade a micro app than a large one 
+  - Mix and match, try out various tech stacks 
+  - Works well with backend microservices
+  - Teams are cross-discipline and focused on e2e delivery 
+- Implementation 
+  - iFrames 
+  - Web Components
+  - Readymade framework
+    - Single SPA 
+    - ARA Framework
+    - Tailor.js 
 
 
 Building Microfrontends
@@ -166,7 +440,6 @@ https://medium.com/@_rchaves_/building-microfrontends-part-ii-joining-apps-toget
   - A bit outdated at this point. Not a really good realworld SPA example 
 
 
-
 The Strengths and Benefits of Micro Frontends
 https://www.toptal.com/front-end/micro-frontends-strengths-benefits
 - iframes 
@@ -177,14 +450,83 @@ https://www.toptal.com/front-end/micro-frontends-strengths-benefits
 
 
 
-- Thoughts 
-  - Parent app just injects child script tags and root component 
-    - What happens if instances of child on same page - same time and one after another 
-  - How to share authentication and global app state between micro frontends? 
-  - What about running just one micro frontend for local development?
-  - What if you want a micro frontend to use a widget from another group?... Do you have to head towards artifacts...or not...???
-    - Can you put a Vue app in another Vue app? or React in React?
 
-- More separate = harder to share UI components, events, data, widgets
-?- How do we mount and unmount components?
 
+ASSESSMENT OF DIFFERENT OPTIONS 
+2020-12
+- Honestly, not finding anything I love. 
+  - Single SPA is by far the most popular of the frameworks I found 
+  - All seem overly complicated 
+  - Beginning to wonder if they really need to be a framework or if a rather simple library could suffice 
+
+
+Single-SPA 
+- Seems the most popular with 10x the number of npm downloads 
+- Allows React, Vue, Angular, and more 
+- Allows pieces of page to each be a separate micro frontend (e.g. the classic "tractor store" example)
+- Based on routes?
+- Wants you to write the container app in Vanilla-JS 
+- Uses import maps 
+- Communicate between micro-frontends using standard browser events 
+- Allows for separate repos, builds, deployments, CI/CD 
+- Micro-apps are registered with the root-app 
+- Running the local version seems quite complicated with various over-rides and such 
+- Seems popular, well documented, and well made... but quite complicated 
+
+
+Luigi 
+- Resources
+    https://docs.luigi-project.io/docs/faq
+    https://fiddle.luigi-project.io/#/home/overview
+    https://github.com/SAP/luigi/tree/master/core/examples/luigi-example-react
+    https://medium.com/swlh/luigi-micro-fronteds-orchestrator-8c0eca710151
+    https://www.youtube.com/watch?v=fRYESd-YDhA&feature=emb_logo
+    https://sap.github.io/fundamental-styles/?path=/docs/introduction-overview--page
+- By SAP 
+- Based on iframes and routes
+- Uses SAP's UI "Fundamentals" UI framework 
+- Seems very specific to their usecase 
+- Not seeing a lot of features 
+  - Navigation 
+    - Register navigation items 
+    - Change parent URL to allow Deep Links 
+    - Programmatic navigation 
+  - Register search 
+  - Central localStorage 
+  - Single auth 
+  - UI 
+    - Loading indicators 
+    - Modals
+- Built in Svelte 
+
+
+Ara Framework / Airbnb Hypernova
+- Allows server-side rendering + client-side rendering in either React or Vue 
+- Not really seeing any other features at all...
+
+
+Piral 
+- Allows React, Vue, Angular, and more 
+- Allows pieces of page to each be a separate micro frontend (e.g. the classic "tractor store" example)
+- Not sure if it allows server side rendering
+- Seems kind of over-engineered with a multi-step CLI, build, and "feed" 
+- You build different pieces, upload and register them to the "feed", and stich them all together with proprietary Piral code 
+
+
+Qiankun
+- Chinese 
+- Says it's an improvement on Single-SPA making it production ready 
+- Local demo didn't run 
+
+
+Open Components 
+- By Open Table 
+- Very few montly downloads
+- Client and server side rendering 
+
+
+Other frameworks. Don't have many downloads 
+- Misk 
+- Nut Project 
+- Berial 
+- American Express One App 

@@ -11,17 +11,31 @@
       color: red;
     }
 
-    *,
-    div {
-      color: green;
+    #root {
+      border: solid 1px black;  
     }
   </style>
 </head>
 
 <body>
 
-  <h2>Parent</h2>
+  <h2>Testing what's shared between shadow DOM and "parent"</h2>
 
+  <p>Conclusion: unlike iframes, shadow DOMs are very porous.</p>
+
+  <h3>Shared</h3>
+  <ul>
+    <li>URL / navigation</li>
+    <li>JS global vars</li>
+    <li>Events (but they seem to come from the shadow DOM, not the actual target</li>
+    <li>localStorage</li>
+    <li>sessionStorage</li>
+  </ul>
+
+  <h3>Not Shared</h3>
+  <ul>
+    <li>CSS</li>
+  </ul>
 
   <template id="myTemplate">
     <style>
@@ -30,12 +44,11 @@
       }
     </style>
 
-    <!-- <link rel=stylesheet href=shadow-style.css type=text/css> -->
 
     <div id="shadowDomExample">
       <h2>Child: Shadow DOM example</h2>
       <p>A paragraph</p>
-      <a href="#" id="linkForEvent">Click for event</a> <br>
+      <a href="#" id="linkForEvent">Click for event (Parent sees the event coming from the shadow DOM, not the actual element you clicked)</a> <br>
       <a href="#" onClick="goToGoogle()">Go to Google (child can force parent to navigate)</a> <br>
 
       <script>
