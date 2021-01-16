@@ -1,0 +1,42 @@
+.flex-rows {
+  display: flex;
+  flex-direction: column;
+}
+.flex-rows > * {
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.flex-cols {
+  display: flex;
+  flex-direction: row;
+}
+.flex-cols > * {
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.flex-grow-1 {
+  flex-grow: 1; 
+  flex-shrink: initial;
+}
+
+.app {
+  font-family: Arial, Helvetica, sans-serif;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.top-bar { background: #fcc; height: 40px; }
+.content-area { background: #ffc; }  
+.bottom-bar { background: #cfc; }
+
+.left-col { background: #ccf; width: 100px; }
+.center-col { background: #cff; }
+.right-col { background: #fcf; }

@@ -1,0 +1,190 @@
+
+
+JAVASCRIPT CLIFF NOTES
+
+- Functions
+    var args = [].slice.call(arguments);
+- Numbers
+    - Misc
+        toFixed(n) provides n length after the decimal point
+        toPrecision(x) provides x total length
+    - Common methods
+        x = 123.456
+        x.toFixed(2);           //Returns 123.45. Probably what you wanted to round a number
+        x.toPrecision(2)        //Returns 120. Probably not what you wanted
+        parseInt()
+        parseFloat()
+        Number()
+    - Weird
+        5 + null    // returns 5         because null is converted to 0
+        "5" + null  // returns "5null"   because null is converted to "null"
+        "5" + 2     // returns 52        because 2 is converted to "2"
+        "5" - 2     // returns 3         because "5" is converted to 5
+        "5" * "2"   // returns 10        because "5" and "2" are converted to 5 and 2
+- Strings
+    - Misc
+        - Strings are immutable. Therefore all string methods return a new string.
+    - Substrings
+        slice(start, end)
+        substring(start, end)   //same but can't do negative args
+        substr(start, length)
+- Dates
+    - Check if something is a date
+        d instanceof Date
+    - Create
+        new Date()
+        new Date(milliseconds)
+        new Date("October 13, 2014 11:13:00");
+        new Date("2015-03-25T12:00:00");
+        new Date(year, month, day, hours, minutes, seconds, milliseconds)       //month is 0-11
+    - toString
+        d.toString()                //"Tue May 17 2016 20:11:11 GMT-0400 (EDT)"
+        d.toDateString()            //"Tue May 17 2016"
+        d.toTimeString()            //"20:11:11 GMT-0400 (EDT)"
+        d.toLocaleString()          //"5/17/2016, 8:11:11 PM"
+        d.toLocaleDateString()      //"5/17/2016"
+        d.toLocaleTimeString()      //"8:11:11 PM"
+    - Common methods
+        d.getDate()	                //Get the day as a number (1-31)
+        d.getDay()	                //Get the weekday as a number (0-6)
+        d.getFullYear()	            //Get the four digit year (yyyy)
+        d.getHours()	            //Get the hour (0-23)
+        d.getMilliseconds()	        //Get the milliseconds (0-999)
+        d.getMinutes()	            //Get the minutes (0-59)
+        d.getMonth()	            //Get the month (0-11)
+        d.getSeconds()	            //Get the seconds (0-59)
+        d.getTime()	                //Get milliseconds (since January 1, 1970)
+
+        d.set___() also works
+    - Misc
+        (new Date()).getTime() === Date.now()
+- Arrays
+    - Misc
+        - No such thing as an associative array in JS
+    - Bugs
+        new Array(40, 100);  // Creates an array with two elements (40 and 100)
+        new Array(40);       // Creates an array with 40 undefined elements !!!!!
+    - Check if something is an array
+        Array.isArray(arr)
+        arr instanceof Array
+    - Common methods
+        arr.length
+        arr.sort()                              //doesn't work for numbers
+        arr.sort(function(a, b){return a>b});   //works for numbers
+        arr.reverse()
+        arr.push()
+        arr.pop()
+        arr.shift()                             //removes from front
+        arr.unshift()                           //adds to front
+        arr.join()
+        arr.splice(idx, count);                 //removes
+        arr.splice(idx, 0, 'new', 'elements');  //adds elements
+        newArr = arr1.concat(arr2, arr3, arr4);
+        arr.slice(idx)                          //creates new arr without modifying old one
+        arr.slice(idx, endIdxExclusive)         //creates new arr without modifying old one
+        arr.toString() === arr.valueOf()
+- Comparison
+    - Weird
+        "2" > "12"      //true because you're comparing strings
+- Bitwise Operators
+    Operator	Description	    Example	        Same as	        Result	Decimal
+    &	        AND	            x = 5 & 1	    0101 & 0001	    0001	1
+    |	        OR	            x = 5 | 1	    0101 | 0001	    0101	5
+    ~	        NOT	            x = ~ 5	        ~0101	        1010	10
+    ^	        XOR	            x = 5 ^ 1	    0101 ^ 0001	    0100	4
+    <<	        Left shift	    x = 5 << 1	    0101 << 1	    1010	10
+    >>	        Right shift	    x = 5 >> 1	    0101 >> 1	    0010	2
+- Loops
+    for (var i=0; i<len; i++) { ... }
+    for (var key in obj) { ... }
+    while (i<len) { ... }
+    do { ... } while (i<len)
+- Types
+    - typeof
+        typeof NaN is number
+        typeof array is object
+        typeof date is object
+        typeof null is object
+        typeof undefinedVar is undefined
+- RegEx
+    - Common methods
+        str = 'ABCDEF';
+        str.search(/abc/gi)             //0
+        str.replace(/abc/gi, 'xyz')     //xyzDEF
+        str.match(/abc/gi)              //["ABC"]
+        /abc/gi.test(str)               //true
+        /abc/gi.exec(str)               //["ABC"]
+    - Patterns
+        [abc]	Find any of the characters between the brackets
+        [0-9]	Find any of the digits between the brackets
+        (x|y)	Find any of the alternatives separated with |
+        \d	    Find a digit
+        \s	    Find a whitespace character
+        \b	    Find a match at the beginning or at the end of a word
+        \uxxxx	Find the Unicode character specified by the hexadecimal number xxxx
+        n+	    Matches any string that contains at least one n
+        n*	    Matches any string that contains zero or more occurrences of n
+        n?	    Matches any string that contains zero or one occurrences of n
+        n{x}    n occurring x times
+        n{x,y}  n occurring x-y times
+- Errors
+    try {
+        throw { name:'eName', message:'eMessage' };             // or throw 'something bad'
+    } catch(err) {
+        console.error(err);
+    } finally {
+        console.log('finally');
+    }
+- Hoisting
+    http://www.w3schools.com/js/js_hoisting.asp
+- Strict mode
+    - Prevents accidental global vars. Need to use var when using a variable for first time.
+    - Might make your code run faster.
+    - Eval can't create variables.
+    - Prevents mistakes: duplicate keys, duplicate params, deleting undeletable stuff, misusing reserved words, modifying immutable stuff
+- Best practices and miscellaneous
+    - Avoid global variables, new, ==, eval()
+    - Declarations on Top
+    - Unlike most programming languages, JS does not create a new scope whenever you use {}'s (e.g. in a loop, if, etc)
+- Form validation
+    Constraint Validation CSS Pseudo Selectors
+    Selector	Description
+    :disabled	Selects input elements with the "disabled" attribute specified
+    :invalid	Selects input elements with invalid values
+    :optional	Selects input elements with no "required" attribute specified
+    :required	Selects input elements with the "required" attribute specified
+    :valid	    Selects input elements with valid values
+- Event listeners
+    .addEventListener()
+        - e.g. document.getElementById("myBtn").addEventListener("click", myFunction);
+        - Attaches an event handler to an element without overwriting existing event handlers.
+        - addEventListener(event, function, true);  //Will use "capturing" instead of "bubbling" and events will propagate down instead of up
+    .removeEventListener()
+        - e.g. element.removeEventListener("click", myFunction);
+- Promises
+    - e.g.
+        var deferred = $.Deferred(function(defer) {
+            setTimeout(function() {
+                defer.resolve(value);
+            });
+        });
+        return deferred.promise();
+    - e.g.
+        var defer = $q.defer();
+        $http.get('my/url').then(function(response) {
+            defer.resolve(response.data);
+        }, function() {
+            defer.reject();
+        });
+        var prom = defer.promise;
+    - e.g.
+        var proms = $q.all([prom1, prom2]);
+    - e.g.
+        var immediatelyResolvedProm = $q(function(resolve) { resolve(); });
+
+
+
+
+
+
+
