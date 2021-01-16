@@ -24,6 +24,8 @@ SUMMARY
   - New solutions
     5) using custom elements to mix different teams' pieces into 1 experience (e.g. Spotify) (Minimal isolation from each other)
       - If you add in shadow DOMs, the CSS is very encapsulated and JS quite encapsulated
+        - Note - experiments with shadow DOM indicate it is extemely difficult to target and work with DOM elements from JS inside the shadow DOM
+        - This could cause lots of problems for 3rd party libraries 
   - Opinion
     - Best solutions 
       - Server-side rendering - if SEO matters the most to you (Not the case for the jobs I've worked at where apps are internal or behind a login)
@@ -89,6 +91,12 @@ Iframes vs shadow DOM
     - localStorage: shared
     - sessionStorage: shared
     - Cookies: shared
+  - Sounds great in theory...
+    - Does an incredible job isolating CSS very easily but...
+    - JavaScript becomes very difficult
+      - I have found no good way for JS in the shadow DOM to find its context, the equivalent of "window" for itself
+      - This makes finding DOM nodes from inside a JS shadow DOM, extremely difficult
+      - Comments from others indicate 3rd party libraries have problems because of stuff like this
 
 
 - Note on web components 

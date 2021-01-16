@@ -78,5 +78,14 @@ MISCELLANEOUS
   - Useful for running multiple npm commands either sequentially or in parallel
 - Helm 
   - The package manager for kubernetes 
+- shx
+  - npm package that allows you to write cross-platform bash commands 
+  - e.g. in package.json 
+    "clean": "shx rm -rf dist"
+- shelljs 
+  - npm package that allows you to write cross-platform bash easily in node 
+  - Good for longer node files 
+- Redux-State-Sync 3
+  - Keep multiple tabs' redux stores in sync. Uses BroadcastChannel
 
 

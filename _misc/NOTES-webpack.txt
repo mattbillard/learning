@@ -177,9 +177,10 @@ PARCEL
   ?- ProfilingPlugin
   ?- Progressive web apps / service workers 
 - I would...
-  - use Parcel if... I need much faster dev builds and don't mind some extra set up 
+  - use Parcel if... I need much faster dev builds (e.g. monorepos, prototyping, large project)
   - might not use it if... I wanted to copy static assets with no changes to file names (I think there might be plugins though)
   - would not use it if... I needed control over the folder structure of final assets 
+  - would DEFINITELY not use it if... I was needing to package up a React component. This requires making it an external dependency in the component's webpack config and aliasing React in the consuming app's webpack config. 
 
 - Try dropping Parcel into create-react-app
   Y- Does it work? 

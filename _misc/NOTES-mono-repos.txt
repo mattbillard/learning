@@ -68,8 +68,8 @@ Lerna
   - lerna ls - list all of the public packages in the current Lerna repo.
 - Instructions for new project 
   - npm install --global lerna@3
-  - learna init 
-  - git add . && commit -m "New lerna repo"
+  - lerna init 
+  - git add . && git commit -m "New lerna repo"
   - lerna import <pathToGitProject1>
   - lerna import <pathToGitProject2>
   - Add project2 to project1 
