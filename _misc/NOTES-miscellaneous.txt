@@ -74,18 +74,22 @@ MISCELLANEOUS
   - Reverse proxy 
     - Between the server and clients 
     - e.g. used as load balancer, caching, single point of access to micro-service architecture 
-- npm-run-all 
-  - Useful for running multiple npm commands either sequentially or in parallel
 - Helm 
   - The package manager for kubernetes 
-- shx
-  - npm package that allows you to write cross-platform bash commands 
-  - e.g. in package.json 
-    "clean": "shx rm -rf dist"
-- shelljs 
-  - npm package that allows you to write cross-platform bash easily in node 
-  - Good for longer node files 
 - Redux-State-Sync 3
   - Keep multiple tabs' redux stores in sync. Uses BroadcastChannel
-
-
+- npm packages
+  - npm-run-all 
+    - Useful for running multiple npm commands either sequentially or in parallel
+  - live-server
+    - server + can do SPA 
+  - shelljs 
+    - npm package that allows you to write cross-platform bash easily in node 
+    - Good for longer node files 
+  - shx
+    - npm package that allows you to write cross-platform bash commands 
+    - e.g. in package.json 
+      "clean": "shx rm -rf dist"
+- CSS 
+  - Clipping paths generator 
+    - https://bennettfeely.com/clippy/

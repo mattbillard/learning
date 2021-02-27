@@ -21,3 +21,8 @@ https://web.dev/what-are-pwas/
   1. App-like experience and capabilities
   2. Offline capability
   3. Installable 
+
+
+Readymade "Recipies" for serviceworkers and caching by Mozilla
+https://serviceworke.rs/
+
